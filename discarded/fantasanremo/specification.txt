@@ -1,0 +1,15 @@
+The Artista class implements the following methods (for "extra points", no analogous method is needed):
+
+calcola_punteggioBM(self, punti_base: int) -> int: 
+This method returns the number of Bonus/Malus points the artist contributes to the team, 
+based on their role (starter/reserve/captain). For a reserve, it returns 0; 
+for others, it returns the base points (punti_base).
+
+calcola_punteggioPosizione(self, punti_base: int) -> int:
+ This method returns the number of position points the artist contributes to the team based on their role (starter/reserve/captain).
+It can return 0, the base points (punti_base), or double the base points (2 * punti_base).
+
+In case the artist is assigned an unknown role, the method should return 0.
+
+Refactoring with Strategy Pattern and Simple Factory
+

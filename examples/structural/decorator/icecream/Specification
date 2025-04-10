@@ -1,0 +1,6 @@
+An icecream is made up of a cone (1.00) or a cup (1.50) and 3 scoop flavours can be added
+chocolate (0.50), (strawberry 0.75), vanilla (0.60).
+More than 1 scoop can be added, the cost is the sum of the ingredients
+Also, a description of the ice cream should be given. 
+
+refactoring with decorator

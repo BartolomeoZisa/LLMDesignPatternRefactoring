@@ -1,0 +1,4 @@
+Factory method to create monsters made out of different arms and legs.
+The arms have a strength base and modifier, the legs have a speed base value and modifier
+The speed of the monster is the mean of the base speed*modifier
+The strengh is the sum of the base strenght*modifier

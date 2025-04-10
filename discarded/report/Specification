@@ -1,0 +1,19 @@
+simplified from
+
+The system must support the generation of environmental reports, exported in PDF format,
+customized for different types of users: citizens, local managers, and administrators. All reports
+refer to a given time interval (start date - end date). However, each type of user receives different details
+in the reports:
+
+Citizens receive a summary report showing pollution levels at the beginning and end of the interval.
+
+Local managers receive a detailed report with an analysis of environmental data, ongoing interventions
+at the end of the interval, or those completed within the interval.
+
+Administrators receive a strategic report with aggregated statistics, comparison with regulatory
+thresholds, and overall costs of interventions completed within the interval.
+
+if an invalid type is given, then throw valueError
+
+Simple factory for retrocompatibility and factory method
+

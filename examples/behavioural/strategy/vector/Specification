@@ -1,0 +1,3 @@
+A vector, add adds to the end, pop takes from the end, sort sorts the vector. 
+
+Refactored sort with strategy  

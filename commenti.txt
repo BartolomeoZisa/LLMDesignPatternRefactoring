@@ -1,0 +1,14 @@
+State: good refactoring tests passed
+Strategy: added simple factory, check it. tests passed
+Factory: added simple factory to keep retrocompatibility, check it. tests passed
+Adapter weather: added functionality, how can it do that? The weather api used isn't changed tests passed (?) (could add a strategy)
+Decorator: how to maintain public interface ??? tests not passed
+Singleton Resource manager: idiomatic solution, problem in testing singleton sequentially. tests not passed (could add factory)
+
+State: simple market good refactoring, tests passed
+vector: sort strategy tests passed
+graph: abstract factory + adapter.  tests to make (could make strategy version?)
+monster: factory method tests only on creation but passed battle could be added
+Icecream: decorator tests passed
+singleton: resources manager, tests passed is initialization done properly?
+Adapter: calculator api tests passed, maybe too easy

@@ -1,0 +1,19 @@
+Customer Reviews for Merchant:
+
+Requirement: Customer reviews must include a rating in tenths.
+
+Optional: One or more comments can be provided for the commission and/or for the merchant.
+
+Objective:
+
+The Review Interface must provide the method:
+String getDescription(....)
+
+The string returned should:
+
+Contain the rating and the merchant's comments.
+
+If the requester is a member of the commission, it should also include commission comments.
+
+Decorator pattern
+Serious problems with tests!!!
