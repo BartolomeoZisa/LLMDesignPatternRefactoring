@@ -1,0 +1,83 @@
+In object-oriented programming, the factory method pattern is a design pattern that uses factory methods to deal with the problem of creating objects without having to specify their exact classes. Rather than by calling a constructor, this is accomplished by invoking a factory method to create an object. Factory methods can be specified in an interface and implemented by subclasses or implemented in a base class and optionally overridden by subclasses. It is one of the 23 classic design patterns described in the book Design Patterns (often referred to as the "Gang of Four" or simply "GoF") and is subcategorized as a creational pattern.[1]
+
+Overview
+The factory method design pattern solves problems such as:
+
+How can an object's subclasses redefine its subsequent and distinct implementation? The pattern involves creation of a factory method within the superclass that defers the object's creation to a subclass's factory method.
+How can an object's instantiation be deferred to a subclass? Create an object by calling a factory method instead of directly calling a constructor.
+This enables the creation of subclasses that can change the way in which an object is created (for example, by redefining which class to instantiate).
+
+Definition
+According to Design Patterns: Elements of Reusable Object-Oriented Software: "Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory method lets a class defer instantiation to subclasses."[2]
+
+Creating an object often requires complex processes not appropriate to include within a composing object. The object's creation may lead to a significant duplication of code, may require information inaccessible to the composing object, may not provide a sufficient level of abstraction or may otherwise not be included in the composing object's concerns. The factory method design pattern handles these problems by defining a separate method for creating the objects, which subclasses can then override to specify the derived type of product that will be created.
+
+The factory method pattern relies on inheritance, as object creation is delegated to subclasses that implement the factory method to create objects.[3] The pattern can also rely on the implementation of an interface.
+
+Structure
+UML class diagram
+
+A sample UML class diagram for the Factory Method design pattern. [4]
+In the above UML class diagram, the Creator class that requires a Product object does not instantiate the Product1 class directly. Instead, the Creator refers to a separate factoryMethod() to create a product object, which makes the Creator independent of the exact concrete class that is instantiated. Subclasses of Creator can redefine which class to instantiate. In this example, the Creator1 subclass implements the abstract factoryMethod() by instantiating the Product1 class.
+
+Examples
+This C++23 implementation is based on the pre C++98 implementation in the book.[5][which?]
+
+import std;
+
+enum class ProductId {MINE, YOURS};
+
+// defines the interface of objects the factory method creates.
+class Product {
+public:
+  virtual void print() = 0;
+  virtual ~Product() = default;
+};
+
+// implements the Product interface.
+class ConcreteProductMINE: public Product {
+public:
+  void print() {
+    std::println("this={} print MINE", this);
+  }
+};
+
+// )implements the Product interface.
+class ConcreteProductYOURS: public Product {
+public:
+  void print() {
+    std::println("this={} print YOURS", this);
+  }
+};
+
+// declares the factory method, which returns an object of type Product.
+class Creator {
+public:
+  virtual std::unique_ptr<Product> create(ProductId id) {
+    if (ProductId::MINE == id) return std::make_unique<ConcreteProductMINE>();
+    if (ProductId::YOURS == id) return std::make_unique<ConcreteProductYOURS>();
+    // repeat for remaining products...
+
+    return nullptr;
+  }
+  virtual ~Creator() = default;
+};
+
+int main() {
+  // The unique_ptr prevent memory leaks.
+  std::unique_ptr<Creator> creator = std::make_unique<Creator>();
+  std::unique_ptr<Product> product = creator->create(ProductId::MINE);
+  product->print();
+
+  product = creator->create(ProductId::YOURS);
+  product->print();
+}
+The program output is like
+
+this=0x6e5e90 print MINE
+this=0x6e62c0 print YOURS
+A maze game may be played in two modes, one with regular rooms that are only connected with adjacent rooms, and one with magic rooms that allow players to be transported at random.
+
+Structure
+
+Room is the base class for a final product (MagicRoom or OrdinaryRoom). MazeGame declares the abstract factory method to produce such a base product. MagicRoom and OrdinaryRoom are subclasses of the base product implementing the final product. MagicMazeGame and OrdinaryMazeGame are subclasses of MazeGame implementing the factory method producing the final products. Factory methods thus decouple callers (MazeGame) from the implementation of the concrete classes. This makes the new operator redundant, allows adherence to the open–closed principle and makes the final product more flexible in the event of change

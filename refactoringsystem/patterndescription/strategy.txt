@@ -1,0 +1,98 @@
+In computer programming, the strategy pattern (also known as the policy pattern) is a behavioral software design pattern that enables selecting an algorithm at runtime. Instead of implementing a single algorithm directly, code receives runtime instructions as to which in a family of algorithms to use.[1]
+
+Strategy lets the algorithm vary independently from clients that use it.[2] Strategy is one of the patterns included in the influential book Design Patterns by Gamma et al.[3] that popularized the concept of using design patterns to describe how to design flexible and reusable object-oriented software. Deferring the decision about which algorithm to use until runtime allows the calling code to be more flexible and reusable.
+
+For instance, a class that performs validation on incoming data may use the strategy pattern to select a validation algorithm depending on the type of data, the source of the data, user choice, or other discriminating factors. These factors are not known until runtime and may require radically different validation to be performed. The validation algorithms (strategies), encapsulated separately from the validating object, may be used by other validating objects in different areas of the system (or even different systems) without code duplication.
+
+Typically, the strategy pattern stores a reference to code in a data structure and retrieves it. This can be achieved by mechanisms such as the native function pointer, the first-class function, classes or class instances in object-oriented programming languages, or accessing the language implementation's internal storage of code via reflection.
+
+Structure
+UML class and sequence diagram
+
+A sample UML class and sequence diagram for the Strategy design pattern.[4]
+In the above UML class diagram, the Context class does not implement an algorithm directly. Instead, Context refers to the Strategy interface for performing an algorithm (strategy.algorithm()), which makes Context independent of how an algorithm is implemented. The Strategy1 and Strategy2 classes implement the Strategy interface, that is, implement (encapsulate) an algorithm.
+The UML sequence diagram shows the runtime interactions: The Context object delegates an algorithm to different Strategy objects. First, Context calls algorithm() on a Strategy1 object, which performs the algorithm and returns the result to Context. Thereafter, Context changes its strategy and calls algorithm() on a Strategy2 object, which performs the algorithm and returns the result to Context.
+
+Class diagram
+
+Strategy Pattern in UML
+[5]
+
+
+Strategy pattern in LePUS3 (legend)
+
+
+Strategy and open/closed principle
+
+Accelerate and brake behaviors must be declared in each new car model.
+According to the strategy pattern, the behaviors of a class should not be inherited. Instead, they should be encapsulated using interfaces. This is compatible with the open/closed principle (OCP), which proposes that classes should be open for extension but closed for modification.
+
+As an example, consider a car class. Two possible functionalities for car are brake and accelerate. Since accelerate and brake behaviors change frequently between models, a common approach is to implement these behaviors in subclasses. This approach has significant drawbacks; accelerate and brake behaviors must be declared in each new car model. The work of managing these behaviors increases greatly as the number of models increases, and requires code to be duplicated across models. Additionally, it is not easy to determine the exact nature of the behavior for each model without investigating the code in each.
+
+The strategy pattern uses composition instead of inheritance. In the strategy pattern, behaviors are defined as separate interfaces and specific classes that implement these interfaces. This allows better decoupling between the behavior and the class that uses the behavior. The behavior can be changed without breaking the classes that use it, and the classes can switch between behaviors by changing the specific implementation used without requiring any significant code changes. Behaviors can also be changed at runtime as well as at design-time. For instance, a car object's brake behavior can be changed from BrakeWithABS() to Brake() by changing the brakeBehavior member to:
+
+brakeBehavior = new Brake();
+/* Encapsulated family of Algorithms
+ * Interface and its implementations
+ */
+public interface IBrakeBehavior {
+    public void brake();
+}
+
+public class BrakeWithABS implements IBrakeBehavior {
+    public void brake() {
+        System.out.println("Brake with ABS applied");
+    }
+}
+
+public class Brake implements IBrakeBehavior {
+    public void brake() {
+        System.out.println("Simple Brake applied");
+    }
+}
+
+/* Client that can use the algorithms above interchangeably */
+public abstract class Car {
+    private IBrakeBehavior brakeBehavior;
+
+    public Car(IBrakeBehavior brakeBehavior) {
+      this.brakeBehavior = brakeBehavior;
+    }
+
+    public void applyBrake() {
+        brakeBehavior.brake();
+    }
+
+    public void setBrakeBehavior(IBrakeBehavior brakeType) {
+        this.brakeBehavior = brakeType;
+    }
+}
+
+/* Client 1 uses one algorithm (Brake) in the constructor */
+public class Sedan extends Car {
+    public Sedan() {
+        super(new Brake());
+    }
+}
+
+/* Client 2 uses another algorithm (BrakeWithABS) in the constructor */
+public class SUV extends Car {
+    public SUV() {
+        super(new BrakeWithABS());
+    }
+}
+
+/* Using the Car example */
+public class CarExample {
+    public static void main(final String[] arguments) {
+        Car sedanCar = new Sedan();
+        sedanCar.applyBrake();  // This will invoke class "Brake"
+
+        Car suvCar = new SUV();
+        suvCar.applyBrake();    // This will invoke class "BrakeWithABS"
+
+        // set brake behavior dynamically
+        suvCar.setBrakeBehavior( new Brake() );
+        suvCar.applyBrake();    // This will invoke class "Brake"
+    }
+}

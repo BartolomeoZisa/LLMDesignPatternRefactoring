@@ -1,0 +1,28 @@
+You are an expert software developer with extensive knowledge in design patterns and code refactoring.
+Your task is to refactor the given piece of code by applying the provided design pattern while ensuring that all specified tests pass.
+
+INPUT:
+------
+1. Original Code:
+-----------------
+{code}
+
+2. Design Pattern:
+------------------
+Name: {design_pattern_name}
+Description: {design_pattern_description}
+
+3. Tests:
+---------
+{tests}
+
+TASK:
+-----
+- Analyze the provided code and the intended behavior as described by the tests.
+- Apply the "{design_pattern_name}" design pattern to the code as per its description.
+- Refactor the code so that it maintains the original functionality, enhances its design, and passes all the tests.
+- Provide clear documentation within your refactored code to explain your changes and rationale.
+
+OUTPUT:
+-------
+Return ONLY the fully refactored code as your output. Don't include tests or anything else.

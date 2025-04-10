@@ -1,0 +1,113 @@
+In object-oriented programming, the singleton pattern is a software design pattern that restricts the instantiation of a class to a singular instance. It is one of the well-known "Gang of Four" design patterns, which describe how to solve recurring problems in object-oriented software.[1] The pattern is useful when exactly one object is needed to coordinate actions across a system.
+
+More specifically, the singleton pattern allows classes to:[2]
+
+Ensure they only have one instance
+Provide easy access to that instance
+Control their instantiation (for example, hiding the constructors of a class)
+The term comes from the mathematical concept of a singleton.
+
+Common uses
+Singletons are often preferred to global variables because they do not pollute the global namespace (or their containing namespace). Additionally, they permit lazy allocation and initialization, whereas global variables in many languages will always consume resources.[1][3]
+
+The singleton pattern can also be used as a basis for other design patterns, such as the abstract factory, factory method, builder and prototype patterns. Facade objects are also often singletons because only one facade object is required.
+
+Logging is a common real-world use case for singletons, because all objects that wish to log messages require a uniform point of access and conceptually write to a single source.[4]
+
+Implementations
+Implementations of the singleton pattern ensure that only one instance of the singleton class ever exists and typically provide global access to that instance.
+
+Typically, this is accomplished by:
+
+Declaring all constructors of the class to be private, which prevents it from being instantiated by other objects
+Providing a static method that returns a reference to the instance
+The instance is usually stored as a private static variable; the instance is created when the variable is initialized, at some point before when the static method is first called.
+
+This C++23 implementation is based on the pre-C++98 implementation in the book [citation needed].
+
+import std;
+
+class Singleton {
+public:
+  // defines an class operation that lets clients access its unique instance.
+  static Singleton& get() {
+    // may be responsible for creating its own unique instance.
+    if (nullptr == instance) instance = new Singleton;
+    return *instance;
+  }
+  Singleton(const Singleton&) = delete; // rule of three
+  Singleton& operator=(const Singleton&) = delete;
+  static void destruct() {
+    delete instance;
+    instance = nullptr;
+  }
+  // existing interface goes here
+  int getValue() {
+    return value;
+  }
+  void setValue(int value_) {
+    value = value_;
+  }
+private:
+  Singleton() = default; // no public constructor
+  ~Singleton() = default; // no public destructor
+  static Singleton* instance; // declaration class variable
+  int value;
+};
+
+Singleton* Singleton::instance = nullptr; // definition class variable
+
+int main() {
+  Singleton::get().setValue(42);
+  std::println("value={}", Singleton::get().getValue());
+  Singleton::destruct();
+}
+The program output is
+
+value=42
+This is an implementation of the Meyers singleton[5] in C++11. The Meyers singleton has no destruct method. The program output is the same as above.
+
+import std;
+
+class Singleton {
+public:
+  static Singleton& get() {
+    static Singleton instance;
+    return instance;
+  }
+  int getValue() {
+    return value;
+  }
+  void setValue(int value_) {
+    value = value_;
+  }
+private:
+  Singleton() = default;
+  ~Singleton() = default;
+  int value;
+};
+
+int main() {
+  Singleton::get().setValue(42);
+  std::println("value={}", Singleton::get().getValue());
+}
+Lazy initialization
+A singleton implementation may use lazy initialization in which the instance is created when the static method is first invoked. In multithreaded programs, this can cause race conditions that result in the creation of multiple instances. The following Java 5+ example[6] is a thread-safe implementation, using lazy initialization with double-checked locking.
+
+public class Singleton {
+
+    private static volatile Singleton instance = null;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            synchronized(Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
