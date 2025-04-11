@@ -41,7 +41,7 @@ if __name__ == "__main__":
         
         #TODO: this is really ugly, it violates incapsulation of PromptCreator, maybe add a reader class?
         #filename is base_file without the path
-        #target_dir_path is the parent folder
+        #target_dir_path is parentfolder
 
         #TODO add an API call instead of doing it manually.
         # Collect multi-line input from the user

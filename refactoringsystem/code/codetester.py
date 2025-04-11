@@ -1,6 +1,7 @@
 import os
 import re
 import csv
+import json
 import pytest
 
 
@@ -20,6 +21,7 @@ class CodeTester:
         self.filename = filename
         self.target_dir_path = target_dir_path
         self.name_prefix = name_prefix
+        self.name = self.get_next_available_name()
 
     def get_next_available_name(self):
         """
@@ -45,6 +47,12 @@ class CodeTester:
         # Return the next available number (i.e., max(existing_numbers) + 1)
         next_number = max(existing_numbers) + 1
         return f"{self.name_prefix}{next_number}"
+    
+    def set_next_available_name(self):
+        """
+        Sets the next available name for the directory based on the existing directories in target_dir_path.
+        """
+        self.name = self.get_next_available_name()
 
     def create_structure(self):
         """
@@ -52,7 +60,7 @@ class CodeTester:
         where name{i} is dynamically determined like 'gpt1', 'gpt2', etc.
         """
         # Generate the next available name (e.g., 'gpt1', 'gpt2', etc.)
-        name_i = self.get_next_available_name()
+        name_i = self.name
 
         base_path = os.path.join(self.target_dir_path, name_i)
         
@@ -71,45 +79,48 @@ class CodeTester:
             pass  # Empty __init__.py
 
         # Write the refactored code to filename.py in the refactored directory
-        refactored_filename = os.path.join(refactored_path, f"{self.filename}.py")
+        refactored_filename = os.path.join(refactored_path, f"{self.filename}")
         with open(refactored_filename, 'w') as f:
             f.write(self.code)
 
         # Create a basic test file (this can be extended)
-        test_filename = os.path.join(test_refactored_path, f"test_{self.filename}.py")
+        test_filename = os.path.join(test_refactored_path, f"test_{self.filename}")
         test_code = self.testcode
         with open(test_filename, 'w') as f:
             f.write(test_code)
 
-
     def run_tests(self):
-        """
-        Runs pytest on the generated test files and saves the result to a CSV file.
-        """
-        test_dir = os.path.join(self.target_dir_path, f"{self.name_prefix}{self.counter - 1}/test_refactored")
-        
-        # Run pytest on the test files in the test_refactored directory
-        pytest_args = [test_dir]
-        result = pytest.main(pytest_args)
+        name_i = self.name
+        test_dir = os.path.join(self.target_dir_path, name_i, "test_refactored")
+        report_path = os.path.join(self.target_dir_path, name_i, f"{name_i}_report.json")
 
-        # Convert the pytest result to a CSV format
-        self.save_results_to_csv(result)
 
-    #TODO could use a strategy to save to different formats
-    def save_results_to_csv(self, result):
-        """
-        Saves pytest results to a CSV file.
-        """
-        test_results = []
-        for item in result:
-            test_results.append({
-                'test': item.nodeid,
-                'outcome': item.outcome,
-                'duration': item.duration,
-            })
-        
-        csv_filename = os.path.join(self.target_dir_path, f"{self.name_prefix}{self.counter - 1}_test_results.csv")
-        with open(csv_filename, 'w', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=["test", "outcome", "duration"])
-            writer.writeheader()
-            writer.writerows(test_results)
+        # Run pytest with the json report plugin
+        pytest_args = [test_dir, f"--json-report", f"--json-report-file={report_path}"]
+        pytest.main(pytest_args)
+
+        # Save results to CSV
+        self.save_results_to_csv(report_path, name_i)
+
+
+    def save_results_to_csv(self, report_path, name_i):
+        try:
+            with open(report_path, 'r') as f:
+                report = json.load(f)
+
+            test_results = []
+            for test in report.get("tests", []):
+                test_results.append({
+                    'test': test.get("nodeid", ""),
+                    'outcome': test.get("outcome", ""),
+                    'duration': test.get("duration", 0),
+                })
+
+            csv_filename = os.path.join(self.target_dir_path, name_i, f"{name_i}_test_results.csv")
+            with open(csv_filename, 'w', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=["test", "outcome", "duration"])
+                writer.writeheader()
+                writer.writerows(test_results)
+
+        except Exception as e:
+            print(f"Error saving results to CSV: {e}")
