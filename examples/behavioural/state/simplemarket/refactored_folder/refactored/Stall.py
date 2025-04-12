@@ -29,7 +29,6 @@ class StallState(ABC):
     def assign(self):
         pass
     
-    
     @abstractmethod
     def end_market(self):
         pass
@@ -49,18 +48,18 @@ class FreeState(StallState):
         self.stall.set_state(OccupiedState(self.stall))
     
     def end_market(self):
-        print("Market is not running.")
+        raise Exception("Market is not running.")
     
     def report_issue(self):
         print("Issue reported. Moving to maintenance.")
         self.stall.set_state(FreeMaintenanceState(self.stall))
     
     def finish_maintenance(self):
-        print("Already in a free state.")
+        raise Exception("Already in a free state.")
 
 class OccupiedState(StallState):
     def assign(self):
-        print("Cannot assign while occupied.")
+        raise Exception("Cannot assign while occupied.")
     
     def end_market(self):
         print("Market ended. Moving to free state.")
@@ -71,18 +70,18 @@ class OccupiedState(StallState):
         self.stall.set_state(OccupiedMaintenanceState(self.stall))
     
     def finish_maintenance(self):
-        print("Cannot finish maintenance in occupied state.")
+        raise Exception("Cannot finish maintenance in occupied state.")
 
 class OccupiedMaintenanceState(StallState):
     def assign(self):
-        print("Cannot assign. Stall is under maintenance.")
+        raise Exception("Cannot assign. Stall is under maintenance.")
     
     def end_market(self):
         print("Market ended, changing maintenance.")
         self.stall.set_state(FreeMaintenanceState(self.stall))
     
     def report_issue(self):
-        print("Already under maintenance.")
+        raise Exception("Already under maintenance.")
     
     def finish_maintenance(self):
         print("Maintenance finished. Moving to free state.")
@@ -90,13 +89,13 @@ class OccupiedMaintenanceState(StallState):
 
 class FreeMaintenanceState(StallState):
     def assign(self):
-        print("Cannot assign. Stall is under maintenance.")
+        raise Exception("Cannot assign. Stall is under maintenance.")
     
     def end_market(self):
-        print("Market is not running.")
+        raise Exception("Market is not running.")
     
     def report_issue(self):
-        print("Already under maintenance.")
+        raise Exception("Already under maintenance.")
     
     def finish_maintenance(self):
         print("Maintenance finished. Moving to free state.")

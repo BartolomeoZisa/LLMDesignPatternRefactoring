@@ -1,6 +1,5 @@
 import pytest
 from base.Stall import *
-# Assuming the Stall and state classes are already imported
 
 # Test case for the initial FreeState
 def test_initial_state():
@@ -22,70 +21,99 @@ def test_free_to_free_maintenance_on_report_issue():
 # Test transition from OccupiedState -> FreeState on end_market
 def test_occupied_to_free_on_end_market():
     stall = Stall()
-    stall.set_state(OccupiedState(stall))  # Moving to OccupiedState first
+    stall.set_state(OccupiedState(stall))
     stall.end_market()
     assert isinstance(stall.state, FreeState)
 
 # Test transition from OccupiedState -> OccupiedMaintenanceState on report_issue
 def test_occupied_to_occupied_maintenance_on_report_issue():
     stall = Stall()
-    stall.set_state(OccupiedState(stall))  # Moving to OccupiedState first
+    stall.set_state(OccupiedState(stall))
     stall.report_issue()
     assert isinstance(stall.state, OccupiedMaintenanceState)
 
 # Test transition from OccupiedMaintenanceState -> OccupiedState on finish_maintenance
 def test_occupied_maintenance_to_occupied_on_finish_maintenance():
     stall = Stall()
-    stall.set_state(OccupiedMaintenanceState(stall))  # Moving to OccupiedMaintenanceState first
+    stall.set_state(OccupiedMaintenanceState(stall))
     stall.finish_maintenance()
     assert isinstance(stall.state, OccupiedState)
 
 # Test transition from OccupiedMaintenanceState -> FreeMaintenanceState on end_market
 def test_occupied_maintenance_to_free_maintenance_on_end_market():
     stall = Stall()
-    stall.set_state(OccupiedMaintenanceState(stall))  # Moving to OccupiedMaintenanceState first
+    stall.set_state(OccupiedMaintenanceState(stall))
     stall.end_market()
     assert isinstance(stall.state, FreeMaintenanceState)
 
 # Test transition from FreeMaintenanceState -> FreeState on finish_maintenance
 def test_free_maintenance_to_free_on_finish_maintenance():
     stall = Stall()
-    stall.set_state(FreeMaintenanceState(stall))  # Moving to FreeMaintenanceState first
+    stall.set_state(FreeMaintenanceState(stall))
     stall.finish_maintenance()
     assert isinstance(stall.state, FreeState)
 
-# Test invalid transition: FreeState -> end_market should remain FreeState
-def test_free_to_free_on_end_market():
+
+# Test invalid transition: FreeState -> end_market should raise Exception
+def test_free_state_end_market_invalid():
     stall = Stall()
-    stall.end_market()
+    with pytest.raises(Exception, match="Market is not running."):
+        stall.end_market()
     assert isinstance(stall.state, FreeState)
 
 # Test invalid transition: OccupiedState -> end_market should move to FreeState
 def test_occupied_to_free_on_end_market():
     stall = Stall()
-    stall.set_state(OccupiedState(stall))  # Moving to OccupiedState first
+    stall.set_state(OccupiedState(stall))
     stall.end_market()
     assert isinstance(stall.state, FreeState)
 
-# Test invalid transition: OccupiedState -> finish_maintenance should remain OccupiedState
-def test_occupied_to_occupied_on_finish_maintenance():
+
+# Test invalid transition: OccupiedState -> finish_maintenance should raise Exception
+def test_occupied_finish_maintenance_invalid():
     stall = Stall()
-    stall.set_state(OccupiedState(stall))  # Moving to OccupiedState first
-    stall.finish_maintenance()
+    stall.set_state(OccupiedState(stall))
+    with pytest.raises(Exception, match="Cannot finish maintenance in occupied state."):
+        stall.finish_maintenance()
     assert isinstance(stall.state, OccupiedState)
 
-
-# Test invalid transition: OccupiedMaintenanceState -> report_issue should stay in OccupiedMaintenanceState
-def test_occupied_maintenance_to_occupied_maintenance_on_report_issue():
+# Test invalid transition: OccupiedMaintenanceState -> report_issue should raise Exception
+def test_occupied_maintenance_report_issue_invalid():
     stall = Stall()
-    stall.set_state(OccupiedMaintenanceState(stall))  # Moving to OccupiedMaintenanceState first
-    stall.report_issue()
+    stall.set_state(OccupiedMaintenanceState(stall))
+    with pytest.raises(Exception, match="Already under maintenance."):
+        stall.report_issue()
     assert isinstance(stall.state, OccupiedMaintenanceState)
 
-# Test invalid transition: FreeMaintenanceState -> report_issue should stay in FreeMaintenanceState
-def test_free_maintenance_to_free_maintenance_on_report_issue():
+# Test invalid transition: FreeMaintenanceState -> report_issue should raise Exception
+def test_free_maintenance_report_issue_invalid():
     stall = Stall()
-    stall.set_state(FreeMaintenanceState(stall))  # Moving to FreeMaintenanceState first
-    stall.report_issue()
+    stall.set_state(FreeMaintenanceState(stall))
+    with pytest.raises(Exception, match="Already under maintenance."):
+        stall.report_issue()
     assert isinstance(stall.state, FreeMaintenanceState)
+
+# Test invalid transition: FreeState -> finish_maintenance should raise Exception
+def test_free_finish_maintenance_invalid():
+    stall = Stall()
+    with pytest.raises(Exception, match="Already in a free state."):
+        stall.finish_maintenance()
+    assert isinstance(stall.state, FreeState)
+
+# Test invalid transition: OccupiedState -> assign should raise Exception
+def test_occupied_assign_invalid():
+    stall = Stall()
+    stall.set_state(OccupiedState(stall))
+    with pytest.raises(Exception, match="Cannot assign while occupied."):
+        stall.assign()
+    assert isinstance(stall.state, OccupiedState)
+
+# Test invalid transition: FreeMaintenanceState -> assign should raise Exception
+def test_free_maintenance_assign_invalid():
+    stall = Stall()
+    stall.set_state(FreeMaintenanceState(stall))
+    with pytest.raises(Exception, match="Cannot assign. Stall is under maintenance."):
+        stall.assign()
+    assert isinstance(stall.state, FreeMaintenanceState)
+
 

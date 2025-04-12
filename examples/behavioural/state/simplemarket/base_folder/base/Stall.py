@@ -13,20 +13,20 @@ class Stall:
             print("Stall assigned.")
             self.set_state(OccupiedState(self))
         elif isinstance(self.state, OccupiedState):
-            print("Cannot assign while occupied.")
+            raise Exception("Cannot assign while occupied.")
         elif isinstance(self.state, OccupiedMaintenanceState):
-            print("Cannot assign. Stall is under maintenance.")
+            raise Exception("Cannot assign. Stall is under maintenance.")
         elif isinstance(self.state, FreeMaintenanceState):
-            print("Cannot assign. Stall is under maintenance.")
+            raise Exception("Cannot assign. Stall is under maintenance.")
     
     def end_market(self):
         if isinstance(self.state, FreeState):
-            print("Market is not running.")
+            raise Exception("Market is not running.")
         elif isinstance(self.state, OccupiedState):
             print("Market ended. Moving to free state.")
             self.set_state(FreeState(self))
         elif isinstance(self.state, FreeMaintenanceState):
-            print("Market is not running.")
+            raise Exception("Market is not running.")
         elif isinstance(self.state, OccupiedMaintenanceState):
             print("Market ended, changing maintenance.")
             self.set_state(FreeMaintenanceState(self))
@@ -39,15 +39,15 @@ class Stall:
             print("Issue reported. Moving to maintenance.")
             self.set_state(OccupiedMaintenanceState(self))
         elif isinstance(self.state, OccupiedMaintenanceState):
-            print("Already under maintenance.")
+            raise Exception("Already under maintenance.")
         elif isinstance(self.state, FreeMaintenanceState):
-            print("Already under maintenance.")
+            raise Exception("Already under maintenance.")
     
     def finish_maintenance(self):
         if isinstance(self.state, FreeState):
-            print("Already in a free state.")
+            raise Exception("Already in a free state.")
         elif isinstance(self.state, OccupiedState):
-            print("Cannot finish maintenance in occupied state.")
+            raise Exception("Cannot finish maintenance in occupied state.")
         elif isinstance(self.state, FreeMaintenanceState):
             print("Maintenance finished. Moving to free state.")
             self.set_state(FreeState(self))
@@ -72,10 +72,10 @@ class OccupiedState(StallState):
         super().__init__(stall)
 
 
-
 class FreeMaintenanceState(StallState):
     def __init__(self, stall):
         super().__init__(stall)
+
 
 class OccupiedMaintenanceState(StallState):
     def __init__(self, stall):

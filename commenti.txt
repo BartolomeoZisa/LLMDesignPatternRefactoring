@@ -12,3 +12,10 @@ monster: factory method tests only on creation but passed battle could be added
 Icecream: decorator tests passed
 singleton: resources manager, tests passed is initialization done properly?
 Adapter: calculator api tests passed, maybe too easy
+
+graph discarded
+Singleton was a bit too hard, on hold
+
+Making refactoring process semiautomatic, a helper function finds triples (basecode, pattern, testsforRefactored).
+A prompt is generated including those and a pattern description. It can be then fed to a LLM by hand and the result is automatically
+tested by creating a folder structure where pytest is run.
