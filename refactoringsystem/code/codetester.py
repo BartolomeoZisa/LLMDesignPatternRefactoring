@@ -3,9 +3,12 @@ import re
 import csv
 import json
 import pytest
+import sys
 
 
 class CodeTester:
+    
+
     def __init__(self, code: str, testcode: str, filename: str, target_dir_path: str, name_prefix: str):
         """
         Initializes the CodeTester instance.
@@ -21,12 +24,15 @@ class CodeTester:
         self.filename = filename
         self.target_dir_path = target_dir_path
         self.name_prefix = name_prefix
-        self.name = self.get_next_available_name()
 
     def get_next_available_name(self):
         """
         Checks the current directories in the target_dir_path to find the next available name like 'gpt1', 'gpt2', etc.
         """
+        #if the target_dir_path doesn't exist, create it
+        if not os.path.exists(self.target_dir_path):
+            os.makedirs(self.target_dir_path)
+
         # List all directories in the target path
         existing_dirs = os.listdir(self.target_dir_path)
 
@@ -48,6 +54,8 @@ class CodeTester:
         next_number = max(existing_numbers) + 1
         return f"{self.name_prefix}{next_number}"
     
+    #TODO: shouldn't use set_next_avaible_name
+
     def set_next_available_name(self):
         """
         Sets the next available name for the directory based on the existing directories in target_dir_path.
@@ -84,7 +92,7 @@ class CodeTester:
             f.write(self.code)
 
         # Create a basic test file (this can be extended)
-        test_filename = os.path.join(test_refactored_path, f"test_{self.filename}")
+        test_filename = os.path.join(test_refactored_path, f"test_{self.name}_{self.filename}")
         test_code = self.testcode
         with open(test_filename, 'w') as f:
             f.write(test_code)
@@ -94,10 +102,34 @@ class CodeTester:
         test_dir = os.path.join(self.target_dir_path, name_i, "test_refactored")
         report_path = os.path.join(self.target_dir_path, name_i, f"{name_i}_report.json")
 
-
+        curr_dir = os.getcwd() 
+        print(f"Running tests in {test_dir} and saving report to {report_path}, from {curr_dir}")
+        
         # Run pytest with the json report plugin
-        pytest_args = [test_dir, f"--json-report", f"--json-report-file={report_path}"]
-        pytest.main(pytest_args)
+        # Use a more explicit path to the test file
+        pytest_args = [
+            test_dir,
+            f"--json-report", 
+            f"--json-report-file={report_path}",
+            # Add these to improve module resolution
+            "--import-mode=importlib",
+        ]
+
+        # Save the original path
+        save_path = sys.path.copy()
+        # Add the parent directory to the Python path to help with imports
+        parent_dir = os.path.dirname(test_dir)
+        sys.path.insert(0, parent_dir)
+        
+        try:
+            # Run the tests
+            pytest.main(pytest_args)
+        finally:
+            # Restore the original path
+            sys.path = save_path.copy()
+        
+        print(f"Original sys.path: {save_path}")
+        print(f"Current sys.path: {sys.path}")
 
         # Save results to CSV
         self.save_results_to_csv(report_path, name_i)

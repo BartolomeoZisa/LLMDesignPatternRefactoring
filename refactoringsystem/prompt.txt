@@ -21,7 +21,6 @@ TASK:
 - Analyze the provided code and the intended behavior as described by the tests.
 - Apply the "{design_pattern_name}" design pattern to the code as per its description.
 - Refactor the code so that it maintains the original functionality, enhances its design, and passes all the tests.
-- Provide clear documentation within your refactored code to explain your changes and rationale.
 
 OUTPUT:
 -------

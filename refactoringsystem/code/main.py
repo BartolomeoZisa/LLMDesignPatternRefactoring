@@ -3,6 +3,9 @@ from promptcreator import PromptCreator
 from codetester import CodeTester
 import os
 
+FOLDERPREFIX = "gpt"
+
+
 if __name__ == "__main__":
     project_root = "../../examples"
     matches = explore_folder_for_triples(project_root)
@@ -45,23 +48,32 @@ if __name__ == "__main__":
 
         #TODO add an API call instead of doing it manually.
         # Collect multi-line input from the user
-        print("Enter the refactored code (type 'DONE' to finish):")
-        refactored_code = ""
         while True:
-            line = input()
-            if line == "DONE":
-                break
-            refactored_code += line + "\n"
+            print("\nEnter the refactored code (type 'DONE' to finish, or 'SKIP' to move to next pattern):")
+            refactored_code = ""
+            while True:
+                line = input()
+                if line.strip() == "SKIP":
+                    refactored_code = None
+                    break
+                elif line.strip() == "DONE":
+                    break
+                refactored_code += line + "\n"
 
-        codeTester = CodeTester(
-            code = refactored_code,
-            testcode = prompt_creator.tests,
-            filename= os.path.basename(base_files[0]),
-            target_dir_path=parentfolder,            
-            name_prefix="gpt",
-        )
-        codeTester.create_structure()
-        codeTester.run_tests()
+            if refactored_code is None:
+                print("Skipping to the next pattern...")
+                break
+
+            codeTester = CodeTester(
+                code=refactored_code,
+                testcode=prompt_creator.tests,
+                filename=os.path.basename(base_files[0]),
+                target_dir_path=os.path.join(parentfolder, "llm"),
+                name_prefix=FOLDERPREFIX,
+            )
+            codeTester.set_next_available_name()
+            codeTester.create_structure()
+            codeTester.run_tests()
 
         
         
