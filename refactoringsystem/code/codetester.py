@@ -4,6 +4,7 @@ import csv
 import json
 import pytest
 import sys
+import subprocess
 
 
 class CodeTester:
@@ -104,36 +105,39 @@ class CodeTester:
 
         curr_dir = os.getcwd() 
         print(f"Running tests in {test_dir} and saving report to {report_path}, from {curr_dir}")
-        
-        # Run pytest with the json report plugin
-        # Use a more explicit path to the test file
-        pytest_args = [
+
+        # Build the command to run pytest via subprocess
+        pytest_cmd = [
+            sys.executable, "-m", "pytest",
             test_dir,
-            f"--json-report", 
+            "--json-report",
             f"--json-report-file={report_path}",
-            # Add these to improve module resolution
             "--import-mode=importlib",
         ]
 
-        # Save the original path
+        # Save original sys.path and set up environment
         save_path = sys.path.copy()
-        # Add the parent directory to the Python path to help with imports
         parent_dir = os.path.dirname(test_dir)
         sys.path.insert(0, parent_dir)
-        print(f"added dir sys.path: {sys.path}")
-        print(f"modules in sys.path: {sys.modules.keys()}")
-        try:
-            # Run the tests
-            pytest.main(pytest_args)
-        finally:
-            # Restore the original path
-            sys.path = save_path.copy()
         
+        # Copy current environment and add PYTHONPATH
+        env = os.environ.copy()
+        env["PYTHONPATH"] = parent_dir + os.pathsep + env.get("PYTHONPATH", "")
         
-        print(f"Current sys.path: {sys.path}")
-        #print(f"Current modules: {sys.modules.keys()}")
+        print(f"Using PYTHONPATH: {env['PYTHONPATH']}")
+        print(f"Running command: {' '.join(pytest_cmd)}")
 
-        # Save results to CSV
+        try:
+            result = subprocess.run(pytest_cmd, env=env, capture_output=True, text=True)
+            print("Test run output:\n", result.stdout)
+            if result.stderr:
+                print("Test run errors:\n", result.stderr)
+        except Exception as e:
+            print(f"Error running tests: {e}")
+        finally:
+            sys.path = save_path.copy()
+
+        print(f"Restored sys.path: {sys.path}")
         self.save_results_to_csv(report_path, name_i)
 
 

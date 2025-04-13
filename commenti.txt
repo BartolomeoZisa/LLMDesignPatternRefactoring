@@ -16,30 +16,53 @@ Adapter: calculator api tests passed, maybe too easy
 graph discarded
 Singleton was a bit too hard, on hold
 
+WEEK 3
+---------------------------------------------------
+
 Making refactoring process semiautomatic, a helper function finds triples (basecode, pattern, testsforRefactored).
 A prompt is generated including those and a pattern description. It can be then fed to a LLM by hand and the result is automatically
-tested by creating a folder structure where pytest is run.
+tested by creating a folder structure where pytest is run. I had to use subprocess.run to make the execution independent, else the module
+import causes problems.
 
 Adapter calculator: 
 GPT very simple, always the same result, doesn't create the interfaces (is it properly using the pattern?)
 Gemini, uses interfaces, textbook implementation of the pattern
+Copilot, tests passed but doesn't create interfaces, also creates things which aren't code!!
 --validation try adding another adapter? (problematic, the tests don't specify the interface name)
 (maybe add a test that check if there's a class that extends ABC to enforce the interface creation)
+Not really certain of a good way.
 
 Decorator icecream: 
 for GPT 1 failed, 2 and 3 passed the tests 
 Only 3 seems a good refactoring: in 2 the enum is kept instead of making a new concrete strategy
 Gemini: all tests passed but the names of the interfaces are different
+Copilot: tests passed but the names are different, test 2 didn't pass because of added comments
 --validation: code to check enums in this case or (better) test adding a concrete strategy/concrete decorator
 
 State Stall: 
 GPT all tests passed, very similar results
+Gemini: all tests passed
+Copilot: the prompt is too long, had to delete the description, all tests passed, no added comments
 --validation either add state or check for if and elifs, there should be a lot less
 
 Strategy Vector:
 GPT failed the first test due to the name of the strategy
+Gemini failed all tests due to the name of the strategy (my fault because in the tests i gave a lowercase class name?)
+Copilot all versions don't pass a test case since they use set_sort_strategy as a name instead of setSortStrategy
+this is probably because all the tests use underscore_case instead of camelCase
 --validation should check adding new strategy?
 
 Factory method monster:
-GPT all tests passed, but the methods are a bit different than expected, should the testing enforce all of the methods ?
+GPT all tests passed, but the methods are a bit different than expected, 
+Gemini all tests passed, the solutions are similar, but different from chatgpt and my solution. 
+Copilot 1 and 3 passed, 2 not passed due to ghoul, different from mine
+In the tests only create_monster is called (should the testing enforce all of the methods? the others would be private)
 --validation try to add new concrete classes and factories
+
+Chatgpt does well but not with the decorator
+
+Gemini seems to be the best one
+
+Documentation on copilot prompting is scarce
+Seems to ignore that it should only give the code as output expecially if it has a long input
+It has a smaller context window. 

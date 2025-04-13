@@ -3,7 +3,7 @@ from promptcreator import PromptCreator
 from codetester import CodeTester
 import os
 
-FOLDERPREFIX = "gemini"
+FOLDERPREFIX = "copilot"
 
 if __name__ == "__main__":
     project_root = "../../examples"

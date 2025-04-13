@@ -1,0 +1,4 @@
+test,outcome,duration
+examples/creational/factory/monster/llm/gemini3/test_refactored/test_gemini3_monster.py::test_zombie_factory_creates_correct_monster,passed,0
+examples/creational/factory/monster/llm/gemini3/test_refactored/test_gemini3_monster.py::test_skeleton_factory_creates_correct_monster,passed,0
+examples/creational/factory/monster/llm/gemini3/test_refactored/test_gemini3_monster.py::test_ghoul_factory_creates_mixed_monster,passed,0
