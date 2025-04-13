@@ -120,7 +120,8 @@ class CodeTester:
         # Add the parent directory to the Python path to help with imports
         parent_dir = os.path.dirname(test_dir)
         sys.path.insert(0, parent_dir)
-        
+        print(f"added dir sys.path: {sys.path}")
+        print(f"modules in sys.path: {sys.modules.keys()}")
         try:
             # Run the tests
             pytest.main(pytest_args)
@@ -128,8 +129,9 @@ class CodeTester:
             # Restore the original path
             sys.path = save_path.copy()
         
-        print(f"Original sys.path: {save_path}")
+        
         print(f"Current sys.path: {sys.path}")
+        #print(f"Current modules: {sys.modules.keys()}")
 
         # Save results to CSV
         self.save_results_to_csv(report_path, name_i)

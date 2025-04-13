@@ -1,0 +1,7 @@
+test,outcome,duration
+examples/structural/adapter/calculator/llm/gpt1/test_refactored/test_gpt1_calculator.py::test_add,passed,0
+examples/structural/adapter/calculator/llm/gpt1/test_refactored/test_gpt1_calculator.py::test_sub,passed,0
+examples/structural/adapter/calculator/llm/gpt1/test_refactored/test_gpt1_calculator.py::test_mul,passed,0
+examples/structural/adapter/calculator/llm/gpt1/test_refactored/test_gpt1_calculator.py::test_div,passed,0
+examples/structural/adapter/calculator/llm/gpt1/test_refactored/test_gpt1_calculator.py::test_division_by_zero,passed,0
+examples/structural/adapter/calculator/llm/gpt1/test_refactored/test_gpt1_calculator.py::test_unsupported_operation,passed,0
