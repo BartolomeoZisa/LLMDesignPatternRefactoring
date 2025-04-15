@@ -1,13 +1,18 @@
 from explore import explore_folder_for_triples
 from promptcreator import PromptCreator
 from codetester import CodeTester
+from responseStrategies import ResponseFromCLI
 import os
 
-FOLDERPREFIX = "copilot"
+FOLDERPREFIX = "gpt"
 PROMPTFILE = "../prompts/prompt1.txt"
 PATTERNDESCRIPTIONPATH = "../patternGOFjson"
 
 NUMITERATIONS = 1
+REFACTOREDCODEDIR = "llm1"
+
+
+
 
 if __name__ == "__main__":
     project_root = "../../examples"
@@ -44,36 +49,26 @@ if __name__ == "__main__":
         
         print("\nGenerated Prompt:")
         print(prompt)
-        print("length of prompt:", len(prompt.split(" ")))
+        prompt_len = len(prompt.split(" "))
+        print("length of prompt:", prompt_len)
         
         # Process the current pattern until explicitly skipped
-        while True:
-            print("\nEnter the refactored code (type 'DONE' to finish current refactor, or 'SKIP' to move to next pattern):")
-            refactored_code = ""
+        for _ in range(NUMITERATIONS):
             
-            # Collect multi-line input
-            while True:
-                line = input()
-                if line.strip() == "SKIP":
-                    refactored_code = "SKIP"
-                    break
-                elif line.strip() == "DONE":
-                    break
-                refactored_code += line + "\n"
-            
-            # Check if user wants to skip to the next pattern
-            if refactored_code == "SKIP":
-                print("Skipping to the next pattern...")
-                break
-            
-            print("lenght of refactored code:", len(refactored_code.split(" ")))
+            Response = ResponseFromCLI()
+            refactored_code = Response.process(prompt)
+            response_len = Response.length(refactored_code)
+            print("length of response:", response_len)
+            print("total length:", prompt_len + response_len)
+            #print("refactored code:")
+            #print(refactored_code)
 
             # Process the refactored code
             codeTester = CodeTester(
                 code=refactored_code,
                 testcode=prompt_creator.tests,
                 filename=os.path.basename(base_files[0]),
-                target_dir_path=os.path.join(parentfolder, "llm"),
+                target_dir_path=os.path.join(parentfolder, REFACTOREDCODEDIR),
                 name_prefix=FOLDERPREFIX,
             )
             codeTester.set_next_available_name()
