@@ -278,3 +278,69 @@ the TextView object and passes it to the TextShape constructor:
  Point& bottomLeft, Point& topRight
  ) const {
  Coord bottom, left, width, height
+ Coord bottom, left, width, height;
+
+ _text->GetOrigin(bottom, left);
+ _text->GetExtent(width, height);
+
+ bottomLeft = Point(bottom, left);
+ topRight = Point(bottom + height, left + width);
+ }
+
+ bool TextShape::IsEmpty () const {
+ return _text->IsEmpty();
+ }
+CreateManipulator's implementation doesn't change from the class adapter version,
+since it's implemented from scratch and doesn't reuse any existing TextView
+functionality.
+ Manipulator* TextShape::CreateManipulator () const {
+ return new TextManipulator(this);
+ }
+Compare this code to the class adapter case. The object adapter requires a little
+more effort to write, but it's more flexible. For example, the object adapter
+version of TextShape will work equally well with subclasses of TextView—the client
+simply passes an instance of a TextView subclass to the TextShape constructor.
+Design Patterns: Elements of Reusable Object-Oriented Software
+168
+Known Uses
+The Motivation example comes from ET++Draw, a drawing application based on ET++
+[WGM88]. ET++Draw reuses the ET++ classes for text editing by using a TextShape
+adapter class.
+InterViews 2.6 defines an Interactor abstract class for user interface elements
+such as scroll bars, buttons, and menus [VL88]. It also defines a Graphic abstract
+class for structured graphic objects such as lines, circles, polygons, and splines.
+Both Interactors and Graphics have graphical appearances, but they have different
+interfaces and implementations (they share no common parent class) and are
+therefore incompatible—you can't embed a structured graphic object in, say, a
+dialog box directly.
+Instead, InterViews 2.6 defines an object adapter called GraphicBlock, a subclass
+of Interactor that contains a Graphic instance. The GraphicBlock adapts the
+interface of the Graphic class to that of Interactor. The GraphicBlock lets a
+Graphic instance be displayed, scrolled, and zoomed within an Interactor
+structure.
+Pluggable adapters are common in ObjectWorks\Smalltalk [Par90]. Standard
+Smalltalk defines a ValueModel class for views that display a single value.
+ValueModel defines a value, value: interface for accessing the value. These are
+abstract methods. Application writers access the value with more domain-specific
+names like width and width:, but they shouldn't have to subclass ValueModel to
+adapt such application-specific names to the ValueModel interface.
+Instead, ObjectWorks\Smalltalk includes a subclass of ValueModel called
+PluggableAdaptor. A PluggableAdaptor object adapts other objects to the ValueModel
+interface (value, value:). It can be parameterized with blocks for getting and
+setting the desired value. PluggableAdaptor uses these blocks internally to
+implement the value, value: interface. PluggableAdaptor also lets you pass in
+the selector names (e.g., width, width:) directly for syntactic convenience. It
+converts these selectors into the corresponding blocks automatically.
+Design Patterns: Elements of Reusable Object-Oriented Software
+169
+Another example from ObjectWorks\Smalltalk is the TableAdaptor class. A
+TableAdaptor can adapt a sequence of objects to a tabular presentation. The table
+displays one object per row. The client parameterizes TableAdaptor with the set
+of messages that a table can use to get the column values from an object.
+Some classes in NeXT's AppKit [Add94] use delegate objects to perform interface
+adaptation. An example is the NXBrowser class that can display hierarchical lists
+of data. NXBrowser uses a delegate object for accessing and adapting the data.
+Meyer's "Marriage of Convenience" [Mey88] is a form of class adapter. Meyer
+describes how a FixedStack class adapts the implementation of an Array class to
+the interface of a Stack class. The result is a stack containing a fixed number
+of entries.
