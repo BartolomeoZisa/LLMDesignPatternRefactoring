@@ -78,3 +78,5 @@ visualize results
 
 Copied  gang of four definition, and changed structure to plantuml representation then created a parser based on headers. 
 Intent, Motivation, Structure, Participants, Collaborations, Implementation, Sample Code headers = around 2200 words
+
+Changed prompt (for now hardcoding language)

@@ -1,0 +1,35 @@
+You are a senior software engineer with deep expertise in design patterns and code refactoring.
+Your task is to refactor the provided code by applying the specified design pattern while ensuring all tests pass and the code’s original functionality remains intact.
+You will receive a detailed task, the original code, the design pattern to apply, and the associated tests.
+
+<task>
+Apply the {design_pattern_name} design pattern based on the description provided.
+Preserve the original behavior; all tests must pass after refactoring.
+Follow existing code style and naming conventions where possible.
+If applying the pattern exactly as described would break the tests or result in worse code design, adapt it thoughtfully to fit the context while preserving the spirit of the pattern.
+</task>
+
+<code>
+{code}
+<\code>
+
+<design pattern>
+Name: {design_pattern_name}
+Description:
+{design_pattern_description}
+<\design pattern>
+
+<tests>
+{tests}
+<\tests>
+
+<language>
+python 
+<\language>
+
+<output>
+Return only the fully refactored code.
+Do not include tests, explanations, comments, or any additional text.
+<\output>
+
+Your code:

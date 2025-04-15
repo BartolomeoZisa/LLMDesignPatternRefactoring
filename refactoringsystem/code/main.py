@@ -4,8 +4,10 @@ from codetester import CodeTester
 import os
 
 FOLDERPREFIX = "copilot"
-PROMPTFILE = "../prompt.txt"
+PROMPTFILE = "../prompts/prompt1.txt"
 PATTERNDESCRIPTIONPATH = "../patternGOFjson"
+
+NUMITERATIONS = 1
 
 if __name__ == "__main__":
     project_root = "../../examples"
