@@ -4,6 +4,8 @@ from codetester import CodeTester
 import os
 
 FOLDERPREFIX = "copilot"
+PROMPTFILE = "../prompt.txt"
+PATTERNDESCRIPTIONPATH = "../patternGOFjson"
 
 if __name__ == "__main__":
     project_root = "../../examples"
@@ -28,11 +30,11 @@ if __name__ == "__main__":
         
         # Creating a prompt for each match
         prompt_creator = PromptCreator(
-            prompt_template_path="../prompt.txt",
+            prompt_template_path=PROMPTFILE,
             code_path=base_files[0],  # Assuming base_files is a list of code files
             tests_path=refactored_tests[0],  # Assuming refactored_tests is a list of test files
             design_pattern_name=pattern_name[0],  # Assuming pattern_name is a list of design pattern names
-            design_pattern_description_folder="../patterndescription"
+            design_pattern_description_folder=PATTERNDESCRIPTIONPATH
         )
         
         # You might need to adjust the paths for the design pattern descriptions or other files
@@ -40,6 +42,7 @@ if __name__ == "__main__":
         
         print("\nGenerated Prompt:")
         print(prompt)
+        print("length of prompt:", len(prompt.split(" ")))
         
         # Process the current pattern until explicitly skipped
         while True:
@@ -61,6 +64,8 @@ if __name__ == "__main__":
                 print("Skipping to the next pattern...")
                 break
             
+            print("lenght of refactored code:", len(refactored_code.split(" ")))
+
             # Process the refactored code
             codeTester = CodeTester(
                 code=refactored_code,

@@ -34,10 +34,10 @@ Not really certain of a good way.
 
 Decorator icecream: 
 for GPT 1 failed, 2 and 3 passed the tests 
-Only 3 seems a good refactoring: in 2 the enum is kept instead of making a new concrete strategy
+Only 3 seems a good refactoring: in 2 the dictionary is kept instead of making a new concrete strategy
 Gemini: all tests passed but the names of the interfaces are different
 Copilot: tests passed but the names are different, test 2 didn't pass because of added comments
---validation: code to check enums in this case or (better) test adding a concrete strategy/concrete decorator
+--validation: code to check dictionaries in this case or (better) test adding a concrete strategy/concrete decorator
 
 State Stall: 
 GPT all tests passed, very similar results
@@ -66,3 +66,15 @@ Gemini seems to be the best one
 Documentation on copilot prompting is scarce
 Seems to ignore that it should only give the code as output expecially if it has a long input
 It has a smaller context window. 
+
+-----
+save input lenght and output length in words, input+output should be <4000
+in prompt infer interface from tests
+
+TODO: change prompt
+read from json (strategy to read)
+using chatgptAPI (strategy to create output)
+visualize results
+
+Copied  gang of four definition, and changed structure to plantuml representation then created a parser based on headers. 
+Intent, Motivation, Structure, Participants, Collaborations, Implementation, Sample Code headers = around 2200 words
