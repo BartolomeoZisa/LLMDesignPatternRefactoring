@@ -1,8 +1,8 @@
 import os
 from abc import ABC, abstractmethod
-import openai
+from openai import OpenAI
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("OPENAI_API_KEY")
 
 
 
@@ -19,6 +19,7 @@ class ResponseStrategy(ABC):
 class ResponseFromCLI(ResponseStrategy):
 
     def process(self, prompt):
+        print(prompt)
         print("\nEnter the refactored code (type 'DONE' to finish current refactor):")
         refactored_code = ""
         
@@ -34,22 +35,27 @@ class ResponseFromCLI(ResponseStrategy):
 
 
 class OpenAIResponse(ResponseStrategy):
+
+    def __init__(self):
+        # Initialize OpenAI client
+        self.client = OpenAI(api_key=api_key)
+
+
     def process(self, prompt):
         """Use the OpenAI API to get a response for the prompt."""
         print("Processing with OpenAI...")
         
         # Call OpenAI API with a single prompt, no conversation history or batching
         try:
-            response = openai.ChatCompletion.create(
-                model="gpt-4.0-mini",  # You can adjust the model as needed
+            response = self.client.chat.completions.create(
+                model="gpt-4o-mini-2024-07-18",  # You can adjust the model as needed
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=2000  # You can adjust this value depending on the output length
             )
             # Extract the generated response from OpenAI's API response
-            refactored_code = response['choices'][0]['message']['content']
+            refactored_code = response.choices[0].message.content
             return refactored_code
         
         except Exception as e:

@@ -1,7 +1,7 @@
 from explore import explore_folder_for_triples
 from promptcreator import PromptCreator
 from codetester import CodeTester
-from responseStrategies import ResponseFromCLI
+from responseStrategies import ResponseFromCLI, OpenAIResponse
 import os
 
 FOLDERPREFIX = "gpt"
@@ -47,15 +47,15 @@ if __name__ == "__main__":
         # You might need to adjust the paths for the design pattern descriptions or other files
         prompt = prompt_creator.generate_prompt()
         
-        print("\nGenerated Prompt:")
-        print(prompt)
+        #print("\nGenerated Prompt:")
+        #print(prompt)
         prompt_len = len(prompt.split(" "))
         print("length of prompt:", prompt_len)
         
         # Process the current pattern until explicitly skipped
         for _ in range(NUMITERATIONS):
             
-            Response = ResponseFromCLI()
+            Response = OpenAIResponse()
             refactored_code = Response.process(prompt)
             response_len = Response.length(refactored_code)
             print("length of response:", response_len)

@@ -104,7 +104,7 @@ class CodeTester:
         report_path = os.path.join(self.target_dir_path, name_i, f"{name_i}_report.json")
 
         curr_dir = os.getcwd() 
-        print(f"Running tests in {test_dir} and saving report to {report_path}, from {curr_dir}")
+        #print(f"Running tests in {test_dir} and saving report to {report_path}, from {curr_dir}")
 
         # Build the command to run pytest via subprocess
         pytest_cmd = [
@@ -124,7 +124,7 @@ class CodeTester:
         env = os.environ.copy()
         env["PYTHONPATH"] = parent_dir + os.pathsep + env.get("PYTHONPATH", "")
         
-        print(f"Using PYTHONPATH: {env['PYTHONPATH']}")
+        #print(f"Using PYTHONPATH: {env['PYTHONPATH']}")
         print(f"Running command: {' '.join(pytest_cmd)}")
 
         try:
@@ -137,7 +137,7 @@ class CodeTester:
         finally:
             sys.path = save_path.copy()
 
-        print(f"Restored sys.path: {sys.path}")
+        #print(f"Restored sys.path: {sys.path}")
         self.save_results_to_csv(report_path, name_i)
 
 
