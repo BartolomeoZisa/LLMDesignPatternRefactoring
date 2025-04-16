@@ -6,7 +6,7 @@ class Vector:
     def __init__(self):
         self.__elements = []
         self.size = 0
-        self.setSortStrategy(selectionSort())
+        self.set_sort_strategy(SelectionSort())
     
     def add(self, element):
         self.__elements.append(element)
@@ -17,7 +17,7 @@ class Vector:
         self.size -= 1
         return self.__elements.pop()
     
-    def setSortStrategy(self, strategy):
+    def set_sort_strategy(self, strategy):
         self.sort_strategy = strategy
     
     def sort(self):
@@ -37,7 +37,7 @@ class sortStrategy:
     def sort(self, vector):
         pass
 
-class selectionSort(sortStrategy):
+class SelectionSort(sortStrategy):
 
     def sort(self, array):
 
