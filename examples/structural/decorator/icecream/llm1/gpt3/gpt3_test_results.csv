@@ -1,0 +1,7 @@
+test,outcome,duration
+examples/structural/decorator/icecream/llm1/gpt3/test_refactored/test_gpt3_icecream.py::test_cone,failed,0
+examples/structural/decorator/icecream/llm1/gpt3/test_refactored/test_gpt3_icecream.py::test_cup,failed,0
+examples/structural/decorator/icecream/llm1/gpt3/test_refactored/test_gpt3_icecream.py::test_chocolate_decorator,failed,0
+examples/structural/decorator/icecream/llm1/gpt3/test_refactored/test_gpt3_icecream.py::test_strawberry_decorator,failed,0
+examples/structural/decorator/icecream/llm1/gpt3/test_refactored/test_gpt3_icecream.py::test_vanilla_decorator,failed,0
+examples/structural/decorator/icecream/llm1/gpt3/test_refactored/test_gpt3_icecream.py::test_multiple_decorators,failed,0

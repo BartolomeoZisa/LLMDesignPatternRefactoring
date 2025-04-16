@@ -81,7 +81,8 @@ Copied  gang of four definition, and changed structure to plantuml representatio
 Intent, Motivation, Structure, Participants, Collaborations, Implementation, Sample Code headers = around 2200 words
 
 Changed prompt (for now hardcoding language)
-Markdown is a big problem, it's adding backticks and "python", should i parse it by code?
+Markdown is a big problem, it's adding backticks and "python", parsed it by removing first and last line
 Is the json fine?
-
 cleaned code by indenting properly, and solving to copy paste errors with aspell
+
+Made plot_report util to print test results
