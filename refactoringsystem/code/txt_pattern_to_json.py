@@ -2,6 +2,9 @@ import json
 import re
 import os
 
+INPUTFOLDER = "../patternGOFtxtclean"
+OUTPUTFOLDER = "../patternGOFjson"
+
 def parse_text_to_json(input_file, output_file, ignore_headers=None):
     if ignore_headers is None:
         ignore_headers = []
@@ -63,8 +66,8 @@ def parse_text_to_json(input_file, output_file, ignore_headers=None):
 
 if __name__ == "__main__":
     # Parse every file in the folder
-    input_folder = "../patternGOFtxt"
-    output_folder = "../patternGOFjson"
+    input_folder = INPUTFOLDER
+    output_folder = OUTPUTFOLDER
     ignore_headers = ["Also Known As", "Applicability", "Known Uses", "Consequences"]
     os.makedirs(output_folder, exist_ok=True)
     for filename in os.listdir(input_folder):

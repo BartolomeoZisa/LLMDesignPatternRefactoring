@@ -1,0 +1,378 @@
+Intent
+Allow an object to alter its behavior when its internal state changes.The object
+will appear to change its class.
+Also Known As
+Objects for States
+Motivation
+Consider a class TCPConnection that represents a network connection.A
+TCPConnection object can be in one of several different states:Established,
+Listening, Closed. When a TCPConnection object receivesrequests from other objects,
+it responds differently depending on itscurrent state. For example, the effect
+of an Open request depends onwhether the connection is in its Closed state or
+its Establishedstate. The State pattern describes how TCPConnection can
+exhibitdifferent behavior in each state.
+The key idea in this pattern is to introduce an abstract class calledTCPState
+to represent the states of the network connection. TheTCPState class declares
+an interface common to all classes thatrepresent different operational states.
+Subclasses of TCPStateimplement state-specific behavior. For example, the
+classesTCPEstablished and TCPClosed implement behavior particular to
+theEstablished and Closed states of TCPConnection.
+Design Patterns: Elements of Reusable Object-Oriented Software
+339
+The class TCPConnection maintains a state object (an instance of asubclass of
+TCPState) that represents the current state of the TCPconnection. The class
+TCPConnection delegates all state-specificrequests to this state object.
+TCPConnection uses its TCPStatesubclass instance to perform operations particular
+to the state of theconnection.
+Whenever the connection changes state, the TCPConnection objectchanges the state
+object it uses. When the connection goes fromestablished to closed, for example,
+TCPConnection will replace itsTCPEstablished instance with a TCPClosed instance.
+Applicability
+Use the State pattern in either of the following cases:
+· An object's behavior depends on its state, and it must change itsbehavior
+at run-time depending on that state.
+· Operations have large, multipart conditional statements that depend onthe
+object's state. This state is usually represented by one or moreenumerated
+constants. Often, several operations will contain thissame conditional
+structure. The State pattern puts each branch of theconditional in a
+separate class. This lets you treat the object'sstate as an object in its
+own right that can vary independently fromother objects.
+Structure
+@startuml
+title State Pattern
+
+' Context
+class Context {
+    -state: State
+    +setState(s: State): void
+    +request(): void
+}
+
+' State Interface
+interface State {
+    +handle(context: Context): void
+}
+
+' Concrete States
+class ConcreteStateA implements State {
+    +handle(context: Context): void
+}
+
+class ConcreteStateB implements State {
+    +handle(context: Context): void
+}
+
+' Relationships
+Context --> State : "has a"
+@enduml
+Participants
+· Context (TCPConnection)
+o defines the interface of interest to clients.
+o maintains an instance of a ConcreteState subclass that defines
+thecurrent state.
+Design Patterns: Elements of Reusable Object-Oriented Software
+340
+· State (TCPState)
+o defines an interface for encapsulating the behavior associated with
+aparticular state of the Context.
+· ConcreteState subclasses (TCPEstablished, TCPListen, TCPClosed)
+o each subclass implements a behavior associated with a state ofthe
+Context.
+Collaborations
+· Context delegates state-specific requests to the current
+ConcreteStateobject.
+· A context may pass itself as an argument to the State objecthandling the
+request. This lets the State object accessthe context if necessary.
+· Context is the primary interface for clients. Clients can configure acontext
+with State objects. Once a context is configured, its clients don't have
+to deal with the State objects directly.
+· Either Context or the ConcreteState subclasses can decide which
+statesucceeds another and under what circumstances.
+Consequences
+The State pattern has the following consequences:
+1. It localizes state-specific behavior and partitionsbehavior for different
+states.The State pattern puts all behavior associated with a particular
+stateinto one object. Because all state-specific code lives in a
+Statesubclass, new states and transitions can be added easily by definingnew
+subclasses.
+An alternative is to use data values to define internal states andhave
+Context operations check the data explicitly. But then we'dhave look-alike
+conditional or case statements scattered throughoutContext's
+implementation. Adding a new state could requirechanging several
+operations, which complicates maintenance.
+The State pattern avoids this problem but might introduce another,because
+the pattern distributes behavior for different states acrossseveral State
+subclasses. This increases the number of classes and isless compact than
+a single class. But such distribution is actuallygood if there are many
+states, which would otherwise necessitate largeconditional statements.
+Like long procedures, large conditional statements are undesirable.They're
+monolithic and tend to make the code less explicit, whichin turn makes them
+Design Patterns: Elements of Reusable Object-Oriented Software
+341
+difficult to modify and extend. The State patternoffers a better way to
+structure state-specific code. The logic thatdetermines the state
+transitions doesn't reside in monolithicif or switch statements but instead
+is partitionedbetween the State subclasses. Encapsulating each state
+transition andaction in a class elevates the idea of an execution state
+to fullobject status. That imposes structure on the code and makes itsintent
+clearer.
+2. It makes state transitions explicit.When an object defines its current state
+solely in terms of internaldata values, its state transitions have no
+explicit representation;they only show up as assignments to some variables.
+Introducingseparate objects for different states makes the transitions
+moreexplicit. Also, State objects can protect the Context frominconsistent
+internal states, because state transitions are atomicfrom the Context's
+perspective—they happen by rebinding onevariable (the Context's State
+object variable), notseveral [dCLF93].
+3. State objects can be shared.If State objects have no instance variables—that
+is, the state theyrepresent is encoded entirely in their type—then contexts
+can sharea State object. When states are shared in this way, they
+areessentially flyweights (see Flyweight (218)) with nointrinsic state,
+only behavior.
+Implementation
+The State pattern raises a variety of implementation issues:
+1. Who defines the state transitions?The State pattern does not specify which
+participant defines thecriteria for state transitions. If the criteria are
+fixed, then theycan be implemented entirely in the Context. It is generally
+moreflexible and appropriate, however, to let the State
+subclassesthemselves specify their successor state and when to make
+thetransition. This requires adding an interface to the Context thatlets
+State objects set the Context's current state explicitly.
+Decentralizing the transition logic in this way makes it easy tomodify or
+extend the logic by defining new State subclasses. Adisadvantage of
+decentralization is that one State subclass will haveknowledge of at least
+one other, which introduces implementationdependencies between
+subclasses.
+2. A table-based alternative.In C++ Programming Style [Car92],
+Cargilldescribes another way to impose structure on state-driven code:
+Heuses tables to map inputs to state transitions. For each state, atable
+maps every possible input to a succeeding state. In effect,this approach
+Design Patterns: Elements of Reusable Object-Oriented Software
+342
+converts conditional code (and virtual functions, in thecase of the State
+pattern) into a table look-up.
+The main advantage of tables is their regularity: You can change
+thetransition criteria by modifying data instead of changing programcode.
+There are some disadvantages, however:
+o A table look-up is often less efficient than a (virtual)function
+call.
+o Putting transition logic into a uniform, tabular format makes
+thetransition criteria less explicit and therefore harder to
+understand.
+o It's usually difficult to add actions to accompany the
+statetransitions. The table-driven approach captures the states and
+theirtransitions, but it must be augmented to perform arbitrary
+computationon each transition.
+The key difference between table-driven state machines and the Statepattern
+can be summed up like this: The State pattern modelsstate-specific behavior,
+whereas the table-driven approach focuses ondefining state transitions.
+3. Creating and destroying State objects.A common implementation trade-off
+worth considering is whether(1) to create State objects only when they are
+needed and destroy themthereafter versus (2) creating them ahead of time
+and neverdestroying them.
+The first choice is preferable when the states that will be enteredaren't
+known at run-time, and contexts change stateinfrequently. This approach
+avoids creating objects that won't beused, which is important if the State
+objects store a lot ofinformation. The second approach is better when state
+changes occurrapidly, in which case you want to avoid destroying states,
+becausethey may be needed again shortly. Instantiation costs are paid
+onceup-front, and there are no destruction costs at all. This approachmight
+be inconvenient, though, because the Context must keepreferences to all
+states that might be entered.
+4. Using dynamic inheritance.Changing the behavior for a particular request
+could be accomplishedby changing the object's class at run-time, but this
+is not possiblein most object-oriented programming languages. Exceptions
+includeSelf [US87] and other delegation-based languages thatprovide such
+a mechanism and hence support the State pattern directly.Objects in Self
+can delegate operations to other objects to achieve aform of dynamic
+inheritance. Changing the delegation target atrun-time effectively changes
+the inheritance structure. Thismechanism lets objects change their
+behavior and amounts to changingtheir class.
+Design Patterns: Elements of Reusable Object-Oriented Software
+343
+Sample Code
+---
+
+The following example gives the C++ code for the TCP connection example described in the *Motivation* section. This example is a simplified version of the TCP protocol; it doesn't describe the complete protocol or all the states of TCP connections.
+
+---
+
+First, we define the class `TCPConnection`, which provides an interface for transmitting data and handles requests to change state.
+
+```cpp
+class TCPOctetStream;
+class TCPState;
+
+class TCPConnection {
+public:
+    TCPConnection();
+    void ActiveOpen();
+    void PassiveOpen();
+    void Close();
+    void Send();
+    void Acknowledge();
+    void Synchronize();
+    void ProcessOctet(TCPOctetStream*);
+
+private:
+    friend class TCPState;
+    void ChangeState(TCPState*);
+
+private:
+    TCPState* _state;
+};
+```
+
+`TCPConnection` keeps an instance of the `TCPState` class in the `_state` member variable. The class `TCPState` duplicates the state-changing interface of `TCPConnection`. Each `TCPState` operation takes a `TCPConnection` instance as a parameter, letting `TCPState` access data from `TCPConnection` and change the connection's state.
+
+```cpp
+class TCPState {
+public:
+    virtual void Transmit(TCPConnection*, TCPOctetStream*);
+    virtual void ActiveOpen(TCPConnection*);
+    virtual void PassiveOpen(TCPConnection*);
+    virtual void Close(TCPConnection*);
+    virtual void Synchronize(TCPConnection*);
+    virtual void Acknowledge(TCPConnection*);
+    virtual void Send(TCPConnection*);
+
+protected:
+    void ChangeState(TCPConnection*, TCPState*);
+};
+```
+
+`TCPConnection` delegates all state-specific requests to its `TCPState` instance `_state`. `TCPConnection` also provides an operation for changing this variable to a new `TCPState`. The constructor for `TCPConnection` initializes the object to the `TCPClosed` state (defined later).
+
+```cpp
+TCPConnection::TCPConnection () {
+    _state = TCPClosed::Instance();
+}
+
+void TCPConnection::ChangeState (TCPState* s) {
+    _state = s;
+}
+
+void TCPConnection::ActiveOpen () {
+    _state->ActiveOpen(this);
+}
+
+void TCPConnection::PassiveOpen () {
+    _state->PassiveOpen(this);
+}
+
+void TCPConnection::Close () {
+    _state->Close(this);
+}
+
+void TCPConnection::Acknowledge () {
+    _state->Acknowledge(this);
+}
+
+void TCPConnection::Synchronize () {
+    _state->Synchronize(this);
+}
+```
+
+`TCPState` implements default behavior for all requests delegated to it. It can also change the state of a `TCPConnection` with the `ChangeState` operation. `TCPState` is declared a friend of `TCPConnection` to give it privileged access to this operation.
+
+```cpp
+void TCPState::Transmit (TCPConnection*, TCPOctetStream*) { }
+
+void TCPState::ActiveOpen (TCPConnection*) { }
+
+void TCPState::PassiveOpen (TCPConnection*) { }
+
+void TCPState::Close (TCPConnection*) { }
+
+void TCPState::Synchronize (TCPConnection*) { }
+
+void TCPState::ChangeState (TCPConnection* t, TCPState* s) {
+    t->ChangeState(s);
+}
+```
+
+Subclasses of `TCPState` implement state-specific behavior. A TCP connection can be in many states: Established, Listening, Closed, etc., and there's a subclass of `TCPState` for each state. We'll discuss three subclasses in detail: `TCPEstablished`, `TCPListen`, and `TCPClosed`.
+
+```cpp
+class TCPEstablished : public TCPState {
+public:
+    static TCPState* Instance();
+
+    virtual void Transmit(TCPConnection*, TCPOctetStream*);
+    virtual void Close(TCPConnection*);
+};
+
+class TCPListen : public TCPState {
+public:
+    static TCPState* Instance();
+    virtual void Send(TCPConnection*);
+    // ...
+};
+
+class TCPClosed : public TCPState {
+public:
+    static TCPState* Instance();
+    virtual void ActiveOpen(TCPConnection*);
+    virtual void PassiveOpen(TCPConnection*);
+    // ...
+};
+```
+
+`TCPState` subclasses maintain no local state, so they can be shared, and only one instance of each is required. The unique instance of each `TCPState` subclass is obtained by the static `Instance` operation.
+
+Each `TCPState` subclass implements state-specific behavior for valid requests in the state:
+
+```cpp
+void TCPClosed::ActiveOpen (TCPConnection* t) {
+    // send SYN, receive SYN, ACK, etc.
+    ChangeState(t, TCPEstablished::Instance());
+}
+
+void TCPClosed::PassiveOpen (TCPConnection* t) {
+    ChangeState(t, TCPListen::Instance());
+}
+
+void TCPEstablished::Close (TCPConnection* t) {
+    // send FIN, receive ACK of FIN
+    ChangeState(t, TCPListen::Instance());
+}
+
+void TCPEstablished::Transmit (TCPConnection* t, TCPOctetStream* o) {
+    t->ProcessOctet(o);
+}
+
+void TCPListen::Send (TCPConnection* t) {
+    // send SYN, receive SYN, ACK, etc.
+    ChangeState(t, TCPEstablished::Instance());
+}
+```
+
+After performing state-specific work, these operations call the `ChangeState` operation to change the state of the `TCPConnection`. `TCPConnection` itself doesn't know a thing about the TCP connection protocol; it's the `TCPState` subclasses that define each state transition and action in TCP.
+
+---
+Known Uses
+Johnson and Zweig [JZ91] characterize theState pattern and its application to
+TCP connection protocols.
+Most popular interactive drawing programs provide "tools" forperforming
+operations by direct manipulation. For example, aline-drawing tool lets a user
+click and drag to create a new line. Aselection tool lets the user select shapes.
+There's usually a paletteof such tools to choose from. The user thinks of this
+activity aspicking up a tool and wielding it, but in reality the editor'sbehavior
+changes with the current tool: When a drawing tool is activewe create shapes;
+Design Patterns: Elements of Reusable Object-Oriented Software
+347
+when the selection tool is active we select shapes;and so forth. We can use the
+State pattern to change the editor'sbehavior depending on the current tool.
+We can define an abstract Tool class from which to define subclassesthat implement
+tool-specific behavior. The drawing editor maintains acurrent Tool object and
+delegates requests to it. It replaces thisobject when the user chooses a new tool,
+causing the behavior of thedrawing editor to change accordingly.
+This technique is used in both the HotDraw [Joh92] and Unidraw [VL90] drawing
+editor frameworks. It allows clients to define new kinds of tools easily. In HotDraw,
+the DrawingController class forwards the requests to the current Tool object.
+In Unidraw, the corresponding classes are Viewer and Tool. The following class
+diagram sketches the Tool and DrawingController interfaces:
+Coplien's Envelope-Letter idiom [Cop92] is related toState. Envelope-Letter is
+a technique for changing an object's class atrun-time. The State pattern is more
+specific, focusing on how to dealwith an object whose behavior depends on its
+state. 

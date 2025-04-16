@@ -75,6 +75,7 @@ TODO: change prompt
 read from json (strategy to read)
 using chatgptAPI (strategy to create output)
 visualize results
+TODO: save errors in report
 
 Copied  gang of four definition, and changed structure to plantuml representation then created a parser based on headers. 
 Intent, Motivation, Structure, Participants, Collaborations, Implementation, Sample Code headers = around 2200 words
@@ -82,4 +83,5 @@ Intent, Motivation, Structure, Participants, Collaborations, Implementation, Sam
 Changed prompt (for now hardcoding language)
 Markdown is a big problem, it's adding backticks and "python", should i parse it by code?
 Is the json fine?
-TODO: save errors in report
+
+cleaned code by indenting properly, and solving to copy paste errors with aspell
