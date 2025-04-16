@@ -55,9 +55,9 @@ if __name__ == "__main__":
         # Process the current pattern until explicitly skipped
         for _ in range(NUMITERATIONS):
             
-            Response = OpenAIResponse()
-            refactored_code = Response.process(prompt)
-            response_len = Response.length(refactored_code)
+            response = OpenAIResponse()
+            refactored_code = response.process(prompt)
+            response_len = response.length(refactored_code)
             print("length of response:", response_len)
             print("total length:", prompt_len + response_len)
             #print("refactored code:")

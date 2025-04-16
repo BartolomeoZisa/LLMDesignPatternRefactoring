@@ -9,10 +9,10 @@ api_key = os.getenv("OPENAI_API_KEY")
 class ResponseStrategy(ABC):
 
     @abstractmethod
-    def process(self, prompt): 
+    def process(self, prompt: str) -> str: 
         """Process the prompt and return a response."""
         pass
-    def length(self, response):
+    def length(self, response : str) -> int:
         """Returns the length of the response."""
         return len(response.split(" "))
 
@@ -50,13 +50,16 @@ class OpenAIResponse(ResponseStrategy):
             response = self.client.chat.completions.create(
                 model="gpt-4o-mini-2024-07-18",  # You can adjust the model as needed
                 messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=2000  # You can adjust this value depending on the output length
             )
             # Extract the generated response from OpenAI's API response
             refactored_code = response.choices[0].message.content
+            print(refactored_code)
             refactored_code = self.format_response(refactored_code)
+            print(refactored_code)
             return refactored_code
         
         except Exception as e:
@@ -73,3 +76,4 @@ class OpenAIResponse(ResponseStrategy):
         response = response[:-1]
         #join the lines
         response = "\n".join(response)
+        return response
