@@ -2,7 +2,7 @@ import os
 import shutil
 
 ROOTDIR = "../../examples/"
-FOLDERTODELETE = "llm1"
+FOLDERTODELETE = "gpt4"
 
 def delete_folder_by_name(root_path, folder_name_to_delete):
     """

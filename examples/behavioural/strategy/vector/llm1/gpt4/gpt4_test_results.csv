@@ -1,0 +1,7 @@
+test,outcome,duration
+examples/behavioural/strategy/vector/llm1/gpt4/test_refactored/test_gpt4_Vector.py::test_add,passed,0
+examples/behavioural/strategy/vector/llm1/gpt4/test_refactored/test_gpt4_Vector.py::test_pop,passed,0
+examples/behavioural/strategy/vector/llm1/gpt4/test_refactored/test_gpt4_Vector.py::test_sort,passed,0
+examples/behavioural/strategy/vector/llm1/gpt4/test_refactored/test_gpt4_Vector.py::test_get,passed,0
+examples/behavioural/strategy/vector/llm1/gpt4/test_refactored/test_gpt4_Vector.py::test_to_string,passed,0
+examples/behavioural/strategy/vector/llm1/gpt4/test_refactored/test_gpt4_Vector.py::test_set_sort_strategy,failed,0

@@ -50,16 +50,15 @@ class OpenAIResponse(ResponseStrategy):
             response = self.client.chat.completions.create(
                 model="gpt-4o-mini-2024-07-18",  # You can adjust the model as needed
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=2000  # You can adjust this value depending on the output length
             )
             # Extract the generated response from OpenAI's API response
             refactored_code = response.choices[0].message.content
-            print(refactored_code)
+            #print(refactored_code)
             refactored_code = self.format_response(refactored_code)
-            print(refactored_code)
+            #print(refactored_code)
             return refactored_code
         
         except Exception as e:

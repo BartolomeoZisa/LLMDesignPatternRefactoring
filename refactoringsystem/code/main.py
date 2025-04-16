@@ -11,6 +11,8 @@ PATTERNDESCRIPTIONPATH = "../patternGOFjson"
 NUMITERATIONS = 1
 REFACTOREDCODEDIR = "llm1"
 
+TOSKIP = ["factorymethod", "decorator", "state", "adapter"]
+
 
 
 
@@ -29,6 +31,10 @@ if __name__ == "__main__":
             print(f"  {f}")
         print(f"Pattern name: {pattern_name}")
         print(f"Folder: {parentfolder}")
+
+        if pattern_name[0] in TOSKIP:
+            print(f"Skipping pattern {pattern_name[0]}")
+            continue
         
         # TODO generalize for multiple files
         # For now assume only one file in base_files and refactored_tests, and delete __init__.py

@@ -11,25 +11,25 @@ If applying the pattern exactly as described would break the tests or result in 
 
 <code>
 {code}
-<\code>
+</code>
 
 <design pattern>
 Name: {design_pattern_name}
 Description:
 {design_pattern_description}
-<\design pattern>
+</design pattern>
 
 <tests>
 {tests}
-<\tests>
+</tests>
 
 <language>
 python 
-<\language>
+</language>
 
 <output>
 Return only the fully refactored code.
 Do not include tests, explanations, comments, or any additional text.
-<\output>
+</output>
 
 Your code:
