@@ -56,9 +56,20 @@ class OpenAIResponse(ResponseStrategy):
             )
             # Extract the generated response from OpenAI's API response
             refactored_code = response.choices[0].message.content
+            refactored_code = self.format_response(refactored_code)
             return refactored_code
         
         except Exception as e:
             print(f"Error during OpenAI API call: {e}")
             return None
 
+    def format_response(self, response):
+        """Format the OpenAI response to remove markdown"""
+        #the input is of type ```{languange} {code}```
+        response = response.split("\n")
+        #remove the first line
+        response = response[1:]
+        #remove the last line
+        response = response[:-1]
+        #join the lines
+        response = "\n".join(response)
