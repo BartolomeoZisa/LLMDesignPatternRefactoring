@@ -67,7 +67,8 @@ Documentation on copilot prompting is scarce
 Seems to ignore that it should only give the code as output expecially if it has a long input
 It has a smaller context window. 
 
------
+WEEK 4
+-------------------------------------------------------------------------------------------------
 save input lenght and output length in words, input+output should be <4000
 in prompt infer interface from tests
 
@@ -76,6 +77,8 @@ read from json (strategy to read)
 using chatgptAPI (strategy to create output)
 visualize results
 TODO: save errors in report
+
+-------
 
 Copied  gang of four definition, and changed structure to plantuml representation then created a parser based on headers. 
 Intent, Motivation, Structure, Participants, Collaborations, Implementation, Sample Code headers = around 2200 words
@@ -96,3 +99,8 @@ Before it performed better.
 What is the problem? 4omini? the prompt? the fact I'm using the api? the formmatted design pattern description? 
 The length of the input seems likely the tokens are more than string.split() words, input+output = 4000 for some examples
 checking the openai tokenizer https://platform.openai.com/tokenizer
+
+Changed the prompt to use xml to properly discern the parts, added the line 
+"Do not rename any classes, functions, or modules in a way that would break existing import statements in the tests."
+This seemed to make the adapter work (gpt 8-9)
+I have a feeling putting the tests after the descriptions, or the lengthy descriptions in general, could make it perform worse???

@@ -5,6 +5,7 @@ You will receive a detailed task, the original code, the design pattern to apply
 <task>
 Apply the {design_pattern_name} design pattern based on the description provided.
 Preserve the original behavior; all tests must pass after refactoring.
+Do not rename any classes, functions, or modules in a way that would break existing import statements in the tests.
 Follow existing code style and naming conventions where possible.
 If applying the pattern exactly as described would break the tests or result in worse code design, adapt it thoughtfully to fit the context while preserving the spirit of the pattern.
 </task>
@@ -13,11 +14,14 @@ If applying the pattern exactly as described would break the tests or result in 
 {code}
 </code>
 
-<design pattern>
-Name: {design_pattern_name}
-Description:
+<designPatternName>
+{design_pattern_name}
+</designPatternName>
+
+<designPatternDescription>
 {design_pattern_description}
-</design pattern>
+</description>
+</designPatternDescription>
 
 <tests>
 {tests}

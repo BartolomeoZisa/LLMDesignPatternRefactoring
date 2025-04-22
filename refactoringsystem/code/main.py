@@ -5,14 +5,13 @@ from responseStrategies import ResponseFromCLI, OpenAIResponse
 import os
 
 FOLDERPREFIX = "gpt"
-PROMPTFILE = "../prompts/prompt1.txt"
+PROMPTFILE = "../prompts/promptxml.txt"
 PATTERNDESCRIPTIONPATH = "../patternGOFjson"
 
 NUMITERATIONS = 1
 REFACTOREDCODEDIR = "llm1"
 
-TOSKIP = []
-#TOSKIP = ["factorymethod", "decorator", "state", "adapter"]
+ASKSKIP = False
 
 
 
@@ -33,9 +32,16 @@ if __name__ == "__main__":
         print(f"Pattern name: {pattern_name}")
         print(f"Folder: {parentfolder}")
 
-        if pattern_name[0] in TOSKIP:
-            print(f"Skipping pattern {pattern_name[0]}")
-            continue
+        if ASKSKIP:
+            user_input = input("Do you want to skip this pattern? (y/n): ").strip().lower()
+            if user_input == 'y':
+                print("Skipping this pattern.")
+                continue
+            elif user_input == 'n':
+                print("Continuing with this pattern.")
+            elif user_input != 'n':
+                print("Invalid input. Please enter 'y' or 'n'.")
+                continue
         
         # TODO generalize for multiple files
         # For now assume only one file in base_files and refactored_tests, and delete __init__.py
@@ -56,7 +62,10 @@ if __name__ == "__main__":
         
         #print("\nGenerated Prompt:")
         #print(prompt)
-        prompt_len = len(prompt.split(" "))
+        #write prompt to file
+        with open("written_prompt.txt", "w") as f:
+            f.write(prompt)
+        prompt_len = len(prompt.split(" ")) 
         print("length of prompt:", prompt_len)
         
         # Process the current pattern until explicitly skipped
