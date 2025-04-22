@@ -4,4 +4,4 @@ examples/behavioural/strategy/vector/llm1/gpt2/test_refactored/test_gpt2_Vector.
 examples/behavioural/strategy/vector/llm1/gpt2/test_refactored/test_gpt2_Vector.py::test_sort,passed,0
 examples/behavioural/strategy/vector/llm1/gpt2/test_refactored/test_gpt2_Vector.py::test_get,passed,0
 examples/behavioural/strategy/vector/llm1/gpt2/test_refactored/test_gpt2_Vector.py::test_to_string,passed,0
-examples/behavioural/strategy/vector/llm1/gpt2/test_refactored/test_gpt2_Vector.py::test_set_sort_strategy,failed,0
+examples/behavioural/strategy/vector/llm1/gpt2/test_refactored/test_gpt2_Vector.py::test_set_sort_strategy,passed,0

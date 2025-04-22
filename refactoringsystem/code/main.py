@@ -11,7 +11,8 @@ PATTERNDESCRIPTIONPATH = "../patternGOFjson"
 NUMITERATIONS = 1
 REFACTOREDCODEDIR = "llm1"
 
-TOSKIP = ["factorymethod", "decorator", "state", "adapter"]
+TOSKIP = []
+#TOSKIP = ["factorymethod", "decorator", "state", "adapter"]
 
 
 

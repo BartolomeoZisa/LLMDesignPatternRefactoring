@@ -56,7 +56,8 @@ def plot_histograms(histogram_data):
             ax = axes[idx]
             if 'outcome' in df.columns:
                 outcome_counts = df['outcome'].value_counts()
-                outcome_counts.plot(kind='bar', color=['green', 'red'], ax=ax)
+                colors = outcome_counts.index.map(lambda x: 'green' if x.lower() == 'passed' else 'red')
+                outcome_counts.plot(kind='bar', color=colors, ax=ax)
                 ax.set_title(f'{sub_name}')
                 ax.set_xlabel('Outcome')
                 ax.set_ylabel('Count')

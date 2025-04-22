@@ -1,6 +1,6 @@
 class SortStrategy:
     def sort(self, elements):
-        raise NotImplementedError("You should implement this method.")
+        raise NotImplementedError("Sort method not implemented")
 
 
 class SelectionSort(SortStrategy):

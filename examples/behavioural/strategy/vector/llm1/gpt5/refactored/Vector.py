@@ -1,6 +1,6 @@
 class SortStrategy:
     def sort(self, elements):
-        raise NotImplementedError("Sort method not implemented.")
+        raise NotImplementedError("Sort method not implemented")
 
 
 class SelectionSort(SortStrategy):
@@ -18,7 +18,7 @@ class Vector:
     def __init__(self):
         self.__elements = []
         self.size = 0
-        self.sort_strategy = SelectionSort()  # default strategy
+        self.sort_strategy = SelectionSort()  # Default strategy
     
     def add(self, element):
         self.__elements.append(element)
@@ -41,5 +41,5 @@ class Vector:
     def to_string(self):
         return str(self.__elements)
 
-    def set_sort_strategy(self, strategy):
+    def set_sort_strategy(self, strategy: SortStrategy):
         self.sort_strategy = strategy

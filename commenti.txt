@@ -85,4 +85,14 @@ Markdown is a big problem, it's adding backticks and "python", parsed it by remo
 Is the json fine?
 cleaned code by indenting properly, and solving to copy paste errors with aspell
 
-Made plot_report util to print test results
+Made plot_report util to print test results.
+
+Calculator doesn't work because I'm importing OldCalculator, and it changes names to Calculator
+Icecream is sometimes not declaring stuff it's using
+Monster is sometimes working, sometimes not (in one case it was putting less legs than necessary)
+Vector is working by changing the names to follow underscore_case
+
+Before it performed better.
+What is the problem? 4omini? the prompt? the fact I'm using the api? the formmatted design pattern description? 
+The length of the input seems likely the tokens are more than string.split() words, input+output = 4000 for some examples
+checking the openai tokenizer https://platform.openai.com/tokenizer

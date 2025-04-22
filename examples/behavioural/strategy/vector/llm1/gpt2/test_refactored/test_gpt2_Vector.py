@@ -70,7 +70,7 @@ def test_to_string():
 def test_set_sort_strategy():
     """Test setting a different sorting strategy."""
     vec = Vector()
-    vec.setSortStrategy(selectionSort())  # Ensure it doesn't break the class
+    vec.set_sort_strategy(SelectionSort())  # Ensure it doesn't break the class
     vec.add(4)
     vec.add(2)
     vec.add(3)
