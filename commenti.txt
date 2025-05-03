@@ -5,6 +5,10 @@ Adapter weather: added functionality, how can it do that? The weather api used i
 Decorator: how to maintain public interface ??? tests not passed
 Singleton Resource manager: idiomatic solution, problem in testing singleton sequentially. tests not passed (could add factory)
 
+
+WEEK 2
+-----------------------------------------------------
+
 State: simple market good refactoring, tests passed
 vector: sort strategy tests passed
 graph: abstract factory + adapter.  tests to make (could make strategy version?)
@@ -90,8 +94,8 @@ cleaned code by indenting properly, and solving to copy paste errors with aspell
 
 Made plot_report util to print test results.
 
-Calculator doesn't work because I'm importing OldCalculator, and it changes names to Calculator
-Icecream is sometimes not declaring stuff it's using
+Calculator doesn't work because I'm importing OldCalculator, and it changes names to Calculator (sometimes it's an interface, sometimes it's not)
+Icecream is sometimes not declaring stuff it's using (like cone or cup)
 Monster is sometimes working, sometimes not (in one case it was putting less legs than necessary)
 Vector is working by changing the names to follow underscore_case
 
@@ -104,3 +108,22 @@ Changed the prompt to use xml to properly discern the parts, added the line
 "Do not rename any classes, functions, or modules in a way that would break existing import statements in the tests."
 This seemed to make the adapter work (gpt 8-9)
 I have a feeling putting the tests after the descriptions, or the lengthy descriptions in general, could make it perform worse???
+
+-------------------------------------------------------
+For the LLMs we want to set
+Temperature
+Model name
+Context length (In Openai it's not settable, max token is settable)
+
+scegliere header da escludere nella descrizione, scegliere parti del prompt da escludere (?)
+
+change naming convention in the tester
+
+csv with parameters should be created?
+
+prompt creation and response (not testing) should be handled in a class called RefactorFrontEnd, which should be called by itself by command line passing arguments code_path, refactored_tests_path, pattern_name, prompt_file_path: optional args should be parsed  for Temperature, Model name, Context length, if not present put the default 
+
+Reloading from prompt necessary???
+Saving result is necessary, so a folder is needed as input #TODO
+Change openai signature.
+

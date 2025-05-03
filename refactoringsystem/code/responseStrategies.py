@@ -7,6 +7,12 @@ api_key = os.getenv("OPENAI_API_KEY")
 
 
 class ResponseStrategy(ABC):
+    
+    def __init__(self, model_name: str = "gpt-4o-mini-2024-07-18", temperature: float = 1, max_length: int = 2048):
+        self.model_name = model_name
+        self.temperature = temperature
+        self.max_length = max_length
+
 
     @abstractmethod
     def process(self, prompt: str) -> str: 
@@ -37,6 +43,7 @@ class ResponseFromCLI(ResponseStrategy):
 class OpenAIResponse(ResponseStrategy):
 
     def __init__(self):
+        super().__init__()
         # Initialize OpenAI client
         self.client = OpenAI(api_key=api_key)
 
