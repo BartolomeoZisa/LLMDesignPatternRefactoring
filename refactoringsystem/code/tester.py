@@ -1,6 +1,5 @@
 import os
 import argparse
-import config
 from codetester import CodeTester
 
 class TesterFrontEnd:

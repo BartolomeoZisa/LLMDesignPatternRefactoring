@@ -1,10 +1,16 @@
 # config.py
 
-FOLDERPREFIX = "gpt"
-PROMPTFILE = "../prompts/promptxml.txt"
+#this is for the refactorer
 PATTERNDESCRIPTIONPATH = "../patternGOFjson"
+
+
+#this is for the main
+PROMPTFILE = "../prompts/promptxml.txt"
 NUMITERATIONS = 1
-REFACTOREDCODEDIR = "llm1"
+REFACTOREDCODEDIR = "llm2"
 ASKSKIP = False
 PROJECT_ROOT = "../../examples"
-WRITTEN_PROMPT_FILE = "written_prompt.txt"
+TEMPERATURE = 1
+MODEL_NAME = "gpt-4o-mini-2024-07-18"
+MAX_LENGTH = 2048
+STRATEGY = "openai"

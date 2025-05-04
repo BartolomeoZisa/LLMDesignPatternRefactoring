@@ -1,12 +1,10 @@
-from explore import explore_folder_for_triples
-from promptcreator import PromptCreator
-from codetester import CodeTester
-from responseStrategies import ResponseFromCLI, OpenAIResponse
+import subprocess
 import os
+import sys
+from explore import explore_folder_for_triples
 import config
 
-
-if __name__ == "__main__":
+def main():
     matches = explore_folder_for_triples(config.PROJECT_ROOT)
     print(f"Found {len(matches)} matches:")
 
@@ -15,7 +13,7 @@ if __name__ == "__main__":
         print("Base files:")
         for f in base_files:
             print(f"  {f}")
-        print("test files:")
+        print("Test files:")
         for f in refactored_tests:
             print(f"  {f}")
         print(f"Pattern name: {pattern_name}")
@@ -26,8 +24,6 @@ if __name__ == "__main__":
             if user_input == 'y':
                 print("Skipping this pattern.")
                 continue
-            elif user_input == 'n':
-                print("Continuing with this pattern.")
             elif user_input != 'n':
                 print("Invalid input. Please enter 'y' or 'n'.")
                 continue
@@ -35,41 +31,53 @@ if __name__ == "__main__":
         base_files = [f for f in base_files if "__init__.py" not in f]
         refactored_tests = [f for f in refactored_tests if "__init__.py" not in f]
 
-        prompt_creator = PromptCreator(
-            prompt_template_path=config.PROMPTFILE,
-            code_path=base_files[0],
-            tests_path=refactored_tests[0],
-            design_pattern_name=pattern_name[0],
-            design_pattern_description_folder=config.PATTERNDESCRIPTIONPATH
-        )
+        code_path = base_files[0]
+        test_path = refactored_tests[0]
+        pattern = pattern_name[0]
 
-        prompt = prompt_creator.generate_prompt()
+        # Call RefactorFrontEnd
+        refactor_cmd = [
+            sys.executable, "refactor_frontend.py",  # Adjust if file is named differently
+            code_path,
+            test_path,
+            pattern,
+            config.PROMPTFILE,
+            config.SAVEFOLDERPATH,
+            "--temperature", str(config.TEMPERATURE),
+            "--model_name", config.MODEL_NAME,
+            "--max_length", str(config.MAX_LENGTH),
+            "--strategy", config.STRATEGY
+        ]
 
-        with open(config.WRITTEN_PROMPT_FILE, "w") as f:
-            f.write(prompt)
+        try:
+            print("[INFO] Running refactor step...")
+            result = subprocess.run(refactor_cmd, capture_output=True, text=True, check=True)
+            refactored_file_path = result.stdout.strip().splitlines()[-1]  # last line = path
+        except subprocess.CalledProcessError as e:
+            print(f"[ERROR] Refactor step failed:\n{e.stderr}")
+            continue
 
-        prompt_len = len(prompt.split(" ")) 
-        print("length of prompt:", prompt_len)
+        # Construct path to test file (already known)
+        refactored_test_path = test_path
 
-        for _ in range(config.NUMITERATIONS):
-            response = OpenAIResponse()
-            refactored_code = response.process(prompt)
-            response_len = response.length(refactored_code)
-            print("length of response:", response_len)
-            print("total length:", prompt_len + response_len)
+        # Call TesterFrontEnd
+        tester_cmd = [
+            sys.executable, "tester_frontend.py",  # Adjust if file is named differently
+            refactored_file_path,
+            refactored_test_path
+        ]
 
-            codeTester = CodeTester(
-                code=refactored_code,
-                testcode=prompt_creator.tests,
-                filename=os.path.basename(base_files[0]),
-                target_dir_path=os.path.join(parentfolder, config.REFACTOREDCODEDIR),
-                name_prefix=config.FOLDERPREFIX,
-            )
-            codeTester.set_next_available_name()
-            codeTester.create_structure()
-            codeTester.run_tests()
+        try:
+            print("[INFO] Running test step...")
+            subprocess.run(tester_cmd, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"[ERROR] Test step failed:\n{e.stderr}")
+            continue
 
-            print("\nYou can enter another refactored version or type 'SKIP' to move to the next pattern.")
+        print("\nDone with this pattern.\nYou can enter another refactored version or type 'SKIP' to move to the next pattern.")
+
+if __name__ == "__main__":
+    main()
 
         
         
