@@ -127,6 +127,8 @@ change naming convention in the tester
 
 prompt creation and response (not testing) should be handled in a class called RefactorFrontEnd, which should be called by itself by command line passing arguments code_path, refactored_tests_path, pattern_name, prompt_file_path: optional args should be parsed  for Temperature, Model name, Context length, if not present put the default 
 
+What do I put in the frontend class?
+What is a command line option, what should be set by settings
 Reloading from prompt necessary???
 
 
