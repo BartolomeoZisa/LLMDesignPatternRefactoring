@@ -69,7 +69,7 @@ All outputs are saved in a timestamped directory named as:
 ```
 <source_filename>_<pattern>_<model_name>_<timestamp>/
 ├── refactored/
-    ├── filename.py
+│   ├── filename.py
 │   └── __init__.py
 ├── prompt.txt
 └── parameters.json

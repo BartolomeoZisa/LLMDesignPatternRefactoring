@@ -2,6 +2,7 @@ import argparse
 import os
 import datetime
 import json
+import sys
 from promptcreator import PromptCreator
 from responseStrategies import OpenAIResponse
 import config
@@ -21,13 +22,15 @@ class RefactorFrontEnd:
         self.full_save_path = ""
         self.refactored_code = ""
         self.prompt = ""
+        self.prompt_length = 0
+        self.response_length = 0
         self.timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
         if self.strategy not in ["openai", "oolama"]:
             raise ValueError(f"Unsupported strategy: {self.strategy}")
 
     def generate_prompt(self):
-        print("[INFO] Generating prompt...")
+        print("[INFO] Generating prompt...", file=sys.stderr)
         prompt_creator = PromptCreator(
             prompt_template_path=self.prompt_file_path,
             code_path=self.code_path,
@@ -36,7 +39,8 @@ class RefactorFrontEnd:
             design_pattern_description_folder=config.PATTERNDESCRIPTIONPATH
         )
         self.prompt = prompt_creator.generate_prompt()
-        print(f"[INFO] Prompt length: {len(self.prompt.split())} words")
+        self.prompt_length = len(self.prompt.split())
+        print(f"[INFO] Prompt length: {self.prompt_length} words", file=sys.stderr)
 
     def prepare_save_directory(self):
         base_name = os.path.splitext(os.path.basename(self.code_path))[0]
@@ -55,29 +59,25 @@ class RefactorFrontEnd:
             raise NotImplementedError("Oolama strategy is not yet implemented.")
 
     def generate_refactored_code(self):
-        print(f"[INFO] Using strategy: {self.strategy}")
+        print(f"[INFO] Using strategy: {self.strategy}", file=sys.stderr)
         response = self.get_response_strategy()
         self.refactored_code = response.process(self.prompt)
 
-        prompt_len = len(self.prompt.split())
-        response_len = response.length(self.refactored_code)
-        print(f"[INFO] Response length: {response_len} words")
-        print(f"[INFO] Total token length: {prompt_len + response_len}")
+        self.response_length = response.length(self.refactored_code)
+        print(f"[INFO] Response length: {self.response_length} words", file=sys.stderr)
+        print(f"[INFO] Total token length: {self.prompt_length + self.response_length}", file=sys.stderr)
 
     def save_outputs(self):
         with open(os.path.join(self.full_save_path, "prompt.txt"), "w") as f:
             f.write(self.prompt)
 
-        #has the same name as the original file
         original_file_name = os.path.basename(self.code_path)
         refactored_file = os.path.join(self.full_save_path, "refactored", original_file_name)
         with open(refactored_file, "w") as f:
             f.write(self.refactored_code)
-        # Create init.py files to mark directories as Python packages
+
         with open(os.path.join(self.full_save_path, "refactored", "__init__.py"), 'w') as f:
             pass
-
-        # should add prompt length and response length
 
         metadata = {
             "code_path": self.code_path,
@@ -88,20 +88,25 @@ class RefactorFrontEnd:
             "model_name": self.model_name,
             "max_length": self.max_length,
             "strategy": self.strategy,
-            "timestamp": self.timestamp
+            "timestamp": self.timestamp,
+            "prompt_length": self.prompt_length,
+            "response_length": self.response_length
         }
 
         with open(os.path.join(self.full_save_path, "parameters.json"), "w") as f:
             json.dump(metadata, f, indent=4)
 
-        print(f"[INFO] Files saved to: {self.full_save_path}")
+        print(f"[INFO] Files saved to: {self.full_save_path}", file=sys.stderr)
+
+        # Return the final refactored file path for stdout output
+        return refactored_file
 
     def run(self):
         self.generate_prompt()
         self.prepare_save_directory()
         self.generate_refactored_code()
-        self.save_outputs()
-        print("[INFO] Done.")
+        refactored_file = self.save_outputs()
+        print(refactored_file)  # Final output to stdout only
 
 
 if __name__ == "__main__":
@@ -131,5 +136,4 @@ if __name__ == "__main__":
         save_folder_path=args.save_folder_path
     )
     frontend.run()
-
 
