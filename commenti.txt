@@ -111,19 +111,22 @@ I have a feeling putting the tests after the descriptions, or the lengthy descri
 
 -------------------------------------------------------
 For the LLMs we want to set
-Temperature
-Model name
-Context length (In Openai it's not settable, max token is settable)
+Temperature 🗸
+Model name 🗸
+Context length (In Openai it's not settable, max token is settable) 🗸
+csv with parameters should be created? 🗸 (json for now)
+Saving result is necessary, so a folder is needed as input 🗸
+Change openai signature. 🗸 ?
 
-scegliere header da escludere nella descrizione, scegliere parti del prompt da escludere (?)
+
+scegliere header da escludere nella descrizione
+scegliere parti del prompt da escludere (?)
 
 change naming convention in the tester
 
-csv with parameters should be created?
 
 prompt creation and response (not testing) should be handled in a class called RefactorFrontEnd, which should be called by itself by command line passing arguments code_path, refactored_tests_path, pattern_name, prompt_file_path: optional args should be parsed  for Temperature, Model name, Context length, if not present put the default 
 
 Reloading from prompt necessary???
-Saving result is necessary, so a folder is needed as input #TODO
-Change openai signature.
+
 

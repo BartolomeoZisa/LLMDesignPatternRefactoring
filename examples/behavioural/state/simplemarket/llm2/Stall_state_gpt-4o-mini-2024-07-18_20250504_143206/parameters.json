@@ -1,0 +1,11 @@
+{
+    "code_path": "/home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/base_folder/base/Stall.py",
+    "refactored_tests_path": "/home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/refactored_folder/test_refactored/test_Stall.py",
+    "pattern_name": "state",
+    "prompt_file_path": "/home/bartolomeo/projects/Tesi/refactoringsystem/prompts/promptxml.txt",
+    "temperature": 1.0,
+    "model_name": "gpt-4o-mini-2024-07-18",
+    "max_length": 2048,
+    "strategy": "openai",
+    "timestamp": "20250504_143206"
+}

@@ -68,9 +68,13 @@ class RefactorFrontEnd:
         with open(os.path.join(self.full_save_path, "prompt.txt"), "w") as f:
             f.write(self.prompt)
 
-        refactored_file = os.path.join(self.full_save_path, "refactored", "refactored_code.py")
+        #has the same name as the original file
+        original_file_name = os.path.basename(self.code_path)
+        refactored_file = os.path.join(self.full_save_path, "refactored", original_file_name)
         with open(refactored_file, "w") as f:
             f.write(self.refactored_code)
+
+        # should add prompt length and response length
 
         metadata = {
             "code_path": self.code_path,

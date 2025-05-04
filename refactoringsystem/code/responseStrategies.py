@@ -42,7 +42,7 @@ class ResponseFromCLI(ResponseStrategy):
 
 class OpenAIResponse(ResponseStrategy):
 
-    def __init__(self):
+    def __init__(self, model_name: str = "gpt-4o-mini-2024-07-18", temperature: float = 1, max_length: int = 2048):
         super().__init__()
         # Initialize OpenAI client
         self.client = OpenAI(api_key=api_key)
