@@ -117,6 +117,9 @@ Context length (In Openai it's not settable, max token is settable) 🗸
 csv with parameters should be created? 🗸 (json for now)
 Saving result is necessary, so a folder is needed as input 🗸
 Change openai signature. 🗸 ?
+Add __init__.py in tester 🗸
+
+Best to put the file creation in the backend or frontend?
 
 
 scegliere header da escludere nella descrizione

@@ -64,6 +64,17 @@ All outputs are saved in a timestamped directory named as:
 <source_filename>_<pattern>_<model_name>_<timestamp>
 ```
 
+## Example Output Structure
+
+```
+<source_filename>_<pattern>_<model_name>_<timestamp>/
+├── refactored/
+    ├── filename.py
+│   └── __init__.py
+├── prompt.txt
+└── parameters.json
+```
+
 ---
 
 ## Class: `RefactorFrontEnd`
@@ -86,4 +97,87 @@ All outputs are saved in a timestamped directory named as:
 * The `oolama` strategy raises `NotImplementedError`.
 * Prompt and refactoring logic rely on external modules (`PromptCreator`, `OpenAIResponse`).
 
+Here’s documentation for `tester.py` written in the same style as your `refactorer.py` doc:
+
+---
+
+# `tester.py` – Automated Testing Tool for Refactored Code
+
+## Overview
+
+`tester.py` is a command-line utility for running tests on refactored Python code. It automatically prepares a test environment, executes the tests using `pytest`, and generates both JSON and CSV reports. This tool helps validate that refactored code maintains functional correctness.
+
+---
+
+## Features
+
+* Validates input paths for refactored code and tests.
+* Automatically creates a structured test directory.
+* Executes tests with `pytest` using `--json-report`.
+* Saves test results in both JSON and CSV formats.
+* Maintains isolation via environment configuration and `PYTHONPATH` setup.
+
+---
+
+## Dependencies
+
+* Python 3.8+
+* `pytest`
+* `pytest-json-report`
+* `config` module (used but not detailed in this script)
+* Custom module: `codetester` (contains `CodeTester` class)
+
+Install dependencies:
+
+```bash
+pip install pytest pytest-json-report
+```
+
+---
+
+## Usage
+
+```bash
+python3 tester.py refactored_code_path refactored_test_path
+```
+
+### Arguments
+
+| Argument               | Type | Description                                                |
+| ---------------------- | ---- | ---------------------------------------------------------- |
+| `refactored_code_path` | str  | Path to the refactored Python code file.                   |
+| `refactored_test_path` | str  | Path to the test file compatible with the refactored code. |
+
+---
+
+## Outputs
+
+The tool creates the following outputs in a subdirectory of the code's parent directory:
+
+* `test_refactored/` – Contains the copied test file and `__init__.py`.
+* `<project>_report.json` – JSON report from `pytest`.
+* `<project>_test_results.csv` – Summary of tests including name, outcome, and duration.
+
+### Example Output Structure
+
+```
+<source_filename>_<pattern>_<model_name>_<timestamp>/
+├── refactored/
+├── ...
+├── test_refactored/
+│   ├── test_refactored_code.py
+│   └── __init__.py
+├── myproject_report.json
+└── myproject_test_results.csv
+```
+
+---
+
+## Notes
+
+* The tool assumes test files are written using the `pytest` framework.
+* The directory name under which results are saved is derived from the parent of the parent of the code path.
+* The script modifies `PYTHONPATH` temporarily to ensure correct module resolution.
+
+---
 

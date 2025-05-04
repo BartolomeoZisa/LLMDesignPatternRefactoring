@@ -10,26 +10,26 @@ class Stall:
     
     def assign(self): 
         self.state.assign()
-    
+
     def end_market(self):
         self.state.end_market()
-    
+
     def report_issue(self):
         self.state.report_issue()
-    
+
     def finish_maintenance(self):
         self.state.finish_maintenance()
 
 
-# State Classes
+# State Interface
 class StallState(ABC):
     def __init__(self, stall):
         self.stall = stall
-
+    
     @abstractmethod
     def assign(self):
         pass
-
+    
     @abstractmethod
     def end_market(self):
         pass
@@ -44,6 +44,9 @@ class StallState(ABC):
 
 
 class FreeState(StallState):
+    def __init__(self, stall):
+        super().__init__(stall)
+
     def assign(self):
         print("Stall assigned.")
         self.stall.set_state(OccupiedState(self.stall))
@@ -60,6 +63,9 @@ class FreeState(StallState):
 
 
 class OccupiedState(StallState):
+    def __init__(self, stall):
+        super().__init__(stall)
+
     def assign(self):
         raise Exception("Cannot assign while occupied.")
 
@@ -76,12 +82,15 @@ class OccupiedState(StallState):
 
 
 class FreeMaintenanceState(StallState):
+    def __init__(self, stall):
+        super().__init__(stall)
+
     def assign(self):
         raise Exception("Cannot assign. Stall is under maintenance.")
 
     def end_market(self):
         raise Exception("Market is not running.")
-
+    
     def report_issue(self):
         raise Exception("Already under maintenance.")
 
@@ -91,6 +100,9 @@ class FreeMaintenanceState(StallState):
 
 
 class OccupiedMaintenanceState(StallState):
+    def __init__(self, stall):
+        super().__init__(stall)
+
     def assign(self):
         raise Exception("Cannot assign while occupied.")
 
@@ -100,7 +112,7 @@ class OccupiedMaintenanceState(StallState):
 
     def report_issue(self):
         raise Exception("Already under maintenance.")
-
+    
     def finish_maintenance(self):
         print("Maintenance finished. Moving to occupied state.")
         self.stall.set_state(OccupiedState(self.stall))
