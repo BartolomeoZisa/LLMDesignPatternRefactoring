@@ -58,7 +58,7 @@ python3 refactorer.py [-h] [--temperature TEMPERATURE] [--model_name MODEL_NAME]
 * `refactored/<filename>` – The refactored source code.
 * `parameters.json` – Metadata about the run (input paths, settings, etc.).
 
-All outputs are saved in a timestamped directory named as:
+All outputs are saved in a timestamped directory inside save_folder_path named as:
 
 ```
 <source_filename>_<pattern>_<model_name>_<timestamp>

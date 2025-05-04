@@ -116,22 +116,29 @@ Model name 🗸
 Context length (In Openai it's not settable, max token is settable) 🗸
 csv with parameters should be created? 🗸 (json for now)
 Saving result is necessary, so a folder is needed as input 🗸
+
+
+
 Change openai signature. 🗸 ?
 Add __init__.py in tester 🗸
+change naming convention in the tester 🗸
+
+The settings should be set by command line for the CLI
+These can be changed in the options settings for the tool that makes multiple executions
 
 Best to put the file creation in the backend or frontend?
 
+Select headers to exclude from the description
+Select parts of the prompt to exclude (?)
 
-scegliere header da escludere nella descrizione
-scegliere parti del prompt da escludere (?)
 
-change naming convention in the tester
 
 
 prompt creation and response (not testing) should be handled in a class called RefactorFrontEnd, which should be called by itself by command line passing arguments code_path, refactored_tests_path, pattern_name, prompt_file_path: optional args should be parsed  for Temperature, Model name, Context length, if not present put the default 
 
 What do I put in the frontend class?
-What is a command line option, what should be set by settings
 Reloading from prompt necessary???
 
-
+Example: (change tester)
+python3 refactorer.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/base_folder/base/Stall.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/refactored_folder/test_refactored/test_Stall.py state /home/bartolomeo/projects/Tesi/refactoringsystem/prompts/promptxml.txt /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/llm2
+python3 tester.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/llm2/Stall_state_gpt-4o-mini-2024-07-18_20250504_143206/refactored/Stall.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/refactored_folder/test_refactored/test_Stall.py

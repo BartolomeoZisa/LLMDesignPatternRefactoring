@@ -7,7 +7,7 @@ PATTERNDESCRIPTIONPATH = "../patternGOFjson"
 #this is for the main
 PROMPTFILE = "../prompts/promptxml.txt"
 NUMITERATIONS = 1
-REFACTOREDCODEDIR = "llm2"
+SAVEFOLDERPATH = "llm2"
 ASKSKIP = False
 PROJECT_ROOT = "../../examples"
 TEMPERATURE = 1

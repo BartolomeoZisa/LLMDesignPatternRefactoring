@@ -37,12 +37,12 @@ def main():
 
         # Call RefactorFrontEnd
         refactor_cmd = [
-            sys.executable, "refactor_frontend.py",  # Adjust if file is named differently
+            sys.executable, "refactorer.py",
             code_path,
             test_path,
             pattern,
             config.PROMPTFILE,
-            config.SAVEFOLDERPATH,
+            os.path.join(parentfolder, config.SAVEFOLDERPATH),
             "--temperature", str(config.TEMPERATURE),
             "--model_name", config.MODEL_NAME,
             "--max_length", str(config.MAX_LENGTH),
@@ -62,7 +62,7 @@ def main():
 
         # Call TesterFrontEnd
         tester_cmd = [
-            sys.executable, "tester_frontend.py",  # Adjust if file is named differently
+            sys.executable, "tester.py", 
             refactored_file_path,
             refactored_test_path
         ]
