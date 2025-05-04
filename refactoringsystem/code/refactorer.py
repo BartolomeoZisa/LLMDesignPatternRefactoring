@@ -7,6 +7,7 @@ from promptcreator import PromptCreator
 from responseStrategies import OpenAIResponse
 import config
 
+
 class RefactorFrontEnd:
     def __init__(self, code_path, refactored_tests_path, pattern_name, prompt_file_path,
                  temperature, model_name, max_length, strategy, save_folder_path):
@@ -29,14 +30,15 @@ class RefactorFrontEnd:
         if self.strategy not in ["openai", "oolama"]:
             raise ValueError(f"Unsupported strategy: {self.strategy}")
 
-    def generate_prompt(self):
+    def generate_prompt(self, ignore_keys=None):
         print("[INFO] Generating prompt...", file=sys.stderr)
         prompt_creator = PromptCreator(
             prompt_template_path=self.prompt_file_path,
             code_path=self.code_path,
             tests_path=self.refactored_tests_path,
             design_pattern_name=self.pattern_name,
-            design_pattern_description_folder=config.PATTERNDESCRIPTIONPATH
+            design_pattern_description_folder=config.PATTERNDESCRIPTIONPATH,
+            ignore_keys=ignore_keys
         )
         self.prompt = prompt_creator.generate_prompt()
         self.prompt_length = len(self.prompt.split())
@@ -67,7 +69,9 @@ class RefactorFrontEnd:
         print(f"[INFO] Response length: {self.response_length} words", file=sys.stderr)
         print(f"[INFO] Total token length: {self.prompt_length + self.response_length}", file=sys.stderr)
 
-    def save_outputs(self):
+    def save_outputs(self, ignore_keys=None):
+        ignore_keys = set(ignore_keys or [])
+
         with open(os.path.join(self.full_save_path, "prompt.txt"), "w") as f:
             f.write(self.prompt)
 
@@ -93,20 +97,21 @@ class RefactorFrontEnd:
             "response_length": self.response_length
         }
 
+        filtered_metadata = {k: v for k, v in metadata.items() if k not in ignore_keys}
+
         with open(os.path.join(self.full_save_path, "parameters.json"), "w") as f:
-            json.dump(metadata, f, indent=4)
+            json.dump(filtered_metadata, f, indent=4)
 
         print(f"[INFO] Files saved to: {self.full_save_path}", file=sys.stderr)
 
-        # Return the final refactored file path for stdout output
         return refactored_file
 
-    def run(self):
-        self.generate_prompt()
+    def run(self, ignore_keys=None):
+        self.generate_prompt(ignore_keys=ignore_keys)
         self.prepare_save_directory()
         self.generate_refactored_code()
-        refactored_file = self.save_outputs()
-        print(refactored_file)  # Final output to stdout only
+        refactored_file = self.save_outputs(ignore_keys=ignore_keys)
+        print(refactored_file)
 
 
 if __name__ == "__main__":
@@ -121,8 +126,11 @@ if __name__ == "__main__":
     parser.add_argument("--max_length", type=int, default=2048, help="Max token length")
     parser.add_argument("--strategy", type=str, default="openai", choices=["openai", "oolama"],
                         help="Strategy to use for LLM response")
+    parser.add_argument("--ignore_keys", type=str, default="",
+                        help="Comma-separated keys to ignore in metadata and prompt generation")
 
     args = parser.parse_args()
+    ignore_keys = [key.strip() for key in args.ignore_keys.split(",")] if args.ignore_keys else []
 
     frontend = RefactorFrontEnd(
         code_path=args.code_path,
@@ -135,5 +143,6 @@ if __name__ == "__main__":
         strategy=args.strategy,
         save_folder_path=args.save_folder_path
     )
-    frontend.run()
+    frontend.run(ignore_keys=ignore_keys)
+
 

@@ -15,14 +15,17 @@ class TxtReader(ReaderStrategy):
 
 # === Concrete Strategy for JSON (returns flat text) ===
 class JsonReader(ReaderStrategy):
-    def read(self, filepath, ignore_keys=None, **kwargs) -> str:
+    def __init__(self, ignore_keys=None):
+        self.ignore_keys = ignore_keys if ignore_keys else []
+
+    def read(self, filepath) -> str:
         with open(filepath, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
-        if ignore_keys:
+        if self.ignore_keys:
             def remove_keys(obj):
                 if isinstance(obj, dict):
-                    return {k: remove_keys(v) for k, v in obj.items() if k not in ignore_keys}
+                    return {k: remove_keys(v) for k, v in obj.items() if k not in self.ignore_keys}
                 elif isinstance(obj, list):
                     return [remove_keys(item) for item in obj]
                 else:

@@ -8,7 +8,8 @@ class PromptCreator:
         code_path="",
         design_pattern_name="",
         design_pattern_description_folder="",
-        tests_path=""
+        tests_path="",
+        ignore_keys=None
     ):
         self.file_reader = FileReader(TxtReader())
 
@@ -18,6 +19,7 @@ class PromptCreator:
         self.tests_path = tests_path
         self.design_pattern_description_folder = design_pattern_description_folder
         self.design_pattern_name = design_pattern_name
+        self.ignore_keys = ignore_keys if ignore_keys else []
 
         # Content
         self.prompt_template = self.read_txt_file(prompt_template_path)
@@ -47,7 +49,7 @@ class PromptCreator:
         return self.file_reader.read(path) if path else ""
 
     def read_json_file(self, path):
-        self.file_reader.set_strategy(JsonReader())
+        self.file_reader.set_strategy(JsonReader(ignore_keys=self.ignore_keys))
         return self.file_reader.read(path) if path else ""
 
     def read_design_pattern_description(self):
