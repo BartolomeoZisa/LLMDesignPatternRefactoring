@@ -73,6 +73,9 @@ class RefactorFrontEnd:
         refactored_file = os.path.join(self.full_save_path, "refactored", original_file_name)
         with open(refactored_file, "w") as f:
             f.write(self.refactored_code)
+        # Create init.py files to mark directories as Python packages
+        with open(os.path.join(self.full_save_path, "__init__.py"), 'w') as f:
+            pass
 
         # should add prompt length and response length
 
