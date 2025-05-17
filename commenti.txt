@@ -148,13 +148,25 @@ Report test per test di quanti sono stati passati
 
 errori
 
-analisi con funzioni higher order
+analisys with higher order functions
+
+
+Is separating input from output a good idea?
+Should I remove behavioural/creatonal/structural?
+
+I should add documentation for the pattern descriptions and structure
+
 
 fix ignore headers X
 command line options being used in the code 🗸
 
 How do i put packages for import? Importing from parent dir is not very easy. Using a command from the dir above is not easy.
+Also the main should do some tricks with changing dirs if it's not in root
+putting tester.py in tests subfolder may be a problem for the main, if it has relative paths
+
 Maybe I should use toml, but I still couldn't use the command easily.
 There may be some problems with tests if I put a package on the root 
 
 if extensibility check is used to check if the pattern is implemented correctly what about adapter?
+
+Should i remove past work?

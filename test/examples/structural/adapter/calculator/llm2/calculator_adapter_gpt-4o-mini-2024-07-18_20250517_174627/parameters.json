@@ -1,0 +1,13 @@
+{
+    "code_path": "test/examples/structural/adapter/calculator/base_folder/base/calculator.py",
+    "refactored_tests_path": "test/examples/structural/adapter/calculator/refactored_folder/test_refactored/test_calculator.py",
+    "pattern_name": "adapter",
+    "prompt_file_path": "src/prompts/promptxml.txt",
+    "temperature": 1.0,
+    "model_name": "gpt-4o-mini-2024-07-18",
+    "max_length": 2048,
+    "strategy": "openai",
+    "timestamp": "20250517_174627",
+    "prompt_length": 2129,
+    "response_length": 267
+}

@@ -1,0 +1,458 @@
+You are a senior software engineer with deep expertise in design patterns and code refactoring.
+Your task is to refactor the provided code by applying the specified design pattern while ensuring all tests pass and the code’s original functionality remains intact.
+You will receive a detailed task, the original code, the design pattern to apply, and the associated tests.
+
+<task>
+Apply the factorymethod design pattern based on the description provided.
+Preserve the original behavior; all tests must pass after refactoring.
+Do not rename any classes, functions, or modules in a way that would break existing import statements in the tests.
+Follow existing code style and naming conventions where possible.
+If applying the pattern exactly as described would break the tests or result in worse code design, adapt it thoughtfully to fit the context while preserving the spirit of the pattern.
+</task>
+
+<code>
+from abc import ABC, abstractmethod
+
+# ------------------------------
+# Abstract Base Classes
+# ------------------------------
+
+class Leg(ABC):
+    def __init__(self, base_speed, speed_modifier):
+        self.base_speed = base_speed
+        self.speed_modifier = speed_modifier
+
+    def get_speed(self):
+        return self.base_speed * self.speed_modifier
+
+    def __str__(self):
+        return f"Speed: {self.get_speed():.2f}"
+
+
+class Arm(ABC):
+    def __init__(self, base_attack, attack_modifier):
+        self.base_attack = base_attack
+        self.attack_modifier = attack_modifier
+
+    def get_attack_power(self):
+        return self.base_attack * self.attack_modifier
+
+    def __str__(self):
+        return f"Attack: {self.get_attack_power():.2f}"
+
+# ------------------------------
+# Concrete Leg Classes
+# ------------------------------
+
+class ZombieLeg(Leg):
+    def __init__(self):
+        super().__init__(base_speed=5, speed_modifier=0.75)
+
+class SkeletonLeg(Leg):
+    def __init__(self):
+        super().__init__(base_speed=8, speed_modifier=1.00)
+
+# ------------------------------
+# Concrete Arm Classes
+# ------------------------------
+
+class ZombieArm(Arm):
+    def __init__(self):
+        super().__init__(base_attack=10, attack_modifier=0.85)
+
+class SkeletonArm(Arm):
+    def __init__(self):
+        super().__init__(base_attack=15, attack_modifier=1.25)
+
+# ------------------------------
+# Monster Class
+# ------------------------------
+
+class Monster:
+    def __init__(self, name, legs, arms):
+        self.name = name
+        self.legs = legs
+        self.arms = arms
+
+    def get_total_speed(self):
+        return sum(leg.get_speed() for leg in self.legs) / len(self.legs)
+
+    def get_total_attack(self):
+        return sum(arm.get_attack_power() for arm in self.arms)
+
+    def __str__(self):
+        legs_str = ", ".join(str(leg) for leg in self.legs)
+        arms_str = ", ".join(str(arm) for arm in self.arms)
+        return (f"{self.name}:\n"
+                f"  Legs: {legs_str}\n"
+                f"  Arms: {arms_str}\n"
+                f"  Total Speed: {self.get_total_speed():.2f}\n"
+                f"  Total Attack: {self.get_total_attack():.2f}")
+
+
+
+
+</code>
+
+<designPatternName>
+factorymethod
+</designPatternName>
+
+<designPatternDescription>
+Intent
+Define an interface for creating an object, but let subclasses decide which class
+to instantiate. Factory Method lets a class defer instantiation to subclasses.
+Motivation
+Frameworks use abstract classes to define and maintain relationships between
+objects. A framework is often responsible for creating these objects as well.
+Consider a framework for applications that can present multiple documents to the
+user. Two key abstractions in this framework are the classes Application and
+Document. Both classes are abstract, and clients have to subclass them to realize
+their application-specific implementations. To create a drawing application, for
+example, we define the classes DrawingApplication and DrawingDocument. The
+Application class is responsible for managing Documents and will create them as
+required—when the user selects Open or New from a menu, for example.
+Because the particular Document subclass to instantiate is application-specific,
+the Application class can't predict the subclass of Document to instantiate—the
+Application class only knows when a new document should be created, not what kind
+of Document to create. This creates a dilemma: The framework must instantiate
+classes, but it only knows about abstract classes, which it cannot instantiate.
+The Factory Method pattern offers a solution. It encapsulates the knowledge of
+which Document subclass to create and moves this knowledge out of the framework.
+Application subclasses redefine an abstract CreateDocument operation on
+Application to return the appropriate Document subclass. Once an Application
+subclass is instantiated, it can then instantiate application-specific Documents
+without knowing their class. We call CreateDocument a factory method because it's
+responsible for "manufacturing" an object.
+Structure
+@startuml
+title Factory Method Pattern
+' Abstract Product
+interface Product {
+    +use(): void
+}
+' Concrete Products
+class ConcreteProductA implements Product {
+    +use(): void
+}
+class ConcreteProductB implements Product {
+    +use(): void
+}
+' Creator (Factory)
+abstract class Creator {
+    +factoryMethod(): Product
+    +someOperation(): void
+}
+' Concrete Creators
+class ConcreteCreatorA extends Creator {
+    +factoryMethod(): Product
+}
+class ConcreteCreatorB extends Creator {
+    +factoryMethod(): Product
+}
+' Relationships
+Creator --> Product : "creates"
+ConcreteCreatorA --> ConcreteProductA : "creates"
+ConcreteCreatorB --> ConcreteProductB : "creates"
+@enduml
+Participants
+· Product (Document)
+o defines the interface of objects the factory method creates.
+· ConcreteProduct (MyDocument)
+o implements the Product interface.
+· Creator (Application)
+o declares the factory method, which returns an object of type Product.
+Creator may also define a default implementation of the factory
+method that returns a default ConcreteProduct object.
+o may call the factory method to create a Product object.
+· ConcreteCreator (MyApplication)
+o overrides the factory method to return an instance of a
+ConcreteProduct.
+Collaborations
+· Creator relies on its subclasses to define the factory method so that it
+returns an instance of the appropriate ConcreteProduct.
+Implementation
+Consider the following issues when applying the Factory Method pattern:
+1. Two major varieties. The two main variations of the Factory Method pattern
+are (1) the case when the Creator class is an abstract class and does not
+provide an implementation for the factory method it declares, and (2) the
+case when the Creator is a concrete class and provides a default
+implementation for the factory method. It's also possible to have an
+abstract class that defines a default implementation, but this is less
+common.
+The first case requires subclasses to define an implementation, because
+there's no reasonable default. It gets around the dilemma of having to
+instantiate unforeseeable classes. In the second case, the concrete Creator
+uses the factory method primarily for flexibility. It's following a rule
+that says, "Create objects in a separate operation so that subclasses can
+override the way they're created." This rule ensures that designers of
+subclasses can change the class of objects their parent class instantiates
+if necessary.
+2. Parameterized factory methods. Another variation on the pattern lets the
+factory method create multiple kinds of products. The factory method takes
+a parameter that identifies the kind of object to create. All objects the
+factory method creates will share the Product interface. In the Document
+example, Application might support different kinds of Documents. You pass
+CreateDocument an extra parameter to specify the kind of document to create.
+The Unidraw graphical editing framework [VL90] uses this approach for
+reconstructing objects saved on disk. Unidraw defines a Creator class with
+a factory method Create that takes a class identifier as an argument. The
+class identifier specifies the class to instantiate. When Unidraw saves
+an object to disk, it writes out the class identifier first and then its
+instance variables. When it reconstructs the object from disk, it reads
+the class identifier first.
+Once the class identifier is read, the framework calls Create, passing the
+identifier as the parameter. Create looks up the constructor for the
+corresponding class and uses it to instantiate the object. Last, Create
+calls the object's Read operation, which reads the remaining information
+on the disk and initializes the object's instance variables.
+A parameterized factory method has the following general form, where
+MyProduct and YourProduct are subclasses of Product:
+ class Creator {
+ public:
+ virtual Product* Create(ProductId);
+ };
+ Product* Creator::Create (ProductId id) {
+ if (id == MINE) return new MyProduct;
+ if (id == YOURS) return new YourProduct;
+ // repeat for remaining products...
+ return 0;
+ }
+Overriding a parameterized factory method lets you easily and selectively
+extend or change the products that a Creator produces. You can introduce
+new identifiers for new kinds of products, or you can associate existing
+identifiers with different products.
+For example, a subclass MyCreator could swap MyProduct and YourProduct and
+support a new TheirProduct subclass:
+ Product* MyCreator::Create (ProductId id) {
+ if (id == YOURS) return new MyProduct;
+ if (id == MINE) return new YourProduct;
+ // N.B.: switched YOURS and MINE
+ if (id == THEIRS) return new TheirProduct;
+ return Creator::Create(id); // called if all others fail
+ }
+Notice that the last thing this operation does is call Create on the parent
+class. That's because MyCreator::Create handles only YOURS, MINE, and
+THEIRS differently than the parent class. It isn't interested in other
+classes. Hence MyCreator extends the kinds of products created, and it
+defers responsibility for creating all but a few products to its parent.
+3. Language-specific variants and issues. Different languages lend themselves
+to other interesting variations and caveats.
+Smalltalk programs often use a method that returns the class of the object
+to be instantiated. A Creator factory method can use this value to create
+a product, and a ConcreteCreator may store or even compute this value. The
+result is an even later binding for the type of ConcreteProduct to be
+instantiated.
+A Smalltalk version of the Document example can define a documentClass
+method on Application. The documentClass method returns the proper Document
+class for instantiating documents. The implementation of documentClass in
+MyApplication returns the MyDocument class. Thus in class Application we
+have
+ clientMethod
+ document := self documentClass new.
+ documentClass
+ self subclassResponsibility
+In class MyApplication we have
+ documentClass
+ ^ MyDocument
+which returns the class MyDocument to be instantiated to Application.
+An even more flexible approach akin to parameterized factory methods is
+to store the class to be created as a class variable of Application. That
+way you don't have to subclass Application to vary the product.
+Factory methods in C++ are always virtual functions and are often pure
+virtual. Just be careful not to call factory methods in the Creator's
+constructor—the factory method in the ConcreteCreator won't be available
+yet.
+You can avoid this by being careful to access products solely through
+accessor operations that create the product on demand. Instead of creating
+the concrete product in the constructor, the constructor merely initializes
+it to 0. The accessor returns the product. But first it checks to make sure
+the product exists, and if it doesn't, the accessor creates it. This
+technique is sometimes called lazy initialization. The following code shows
+a typical implementation:
+ class Creator {
+ public:
+ Product* GetProduct();
+ protected:
+ virtual Product* CreateProduct();
+ private:
+ Product* _product;
+ };
+ Product* Creator::GetProduct () {
+ if (_product == 0) {
+ _product = CreateProduct();
+ }
+ return _product;
+ }
+4. Using templates to avoid subclassing. As we've mentioned, another potential
+problem with factory methods is that they might force you to subclass just
+to create the appropriate Product objects. Another way to get around this
+in C++ is to provide a template subclass of Creator that's parameterized
+by the Product class:
+ class Creator {
+ public:
+ virtual Product* CreateProduct() = 0;
+ };
+ template <class TheProduct>
+ class StandardCreator: public Creator {
+ public:
+ virtual Product* CreateProduct();
+ };
+ template <class TheProduct>
+ Product* StandardCreator<TheProduct>::CreateProduct () {
+ return new TheProduct;
+ }
+With this template, the client supplies just the product class—no
+subclassing of Creator is required.
+ class MyProduct : public Product {
+ public:
+ MyProduct();
+ // ...
+ };
+ StandardCreator<MyProduct> myCreator;
+5. Naming conventions. It's good practice to use naming conventions that make
+it clear you're using factory methods. For example, the MacApp Macintosh
+application framework [App89] always declares the abstract operation that
+defines the factory method as Class* DoMakeClass(), where Class is the
+Product class.
+Sample Code
+---
+The function `CreateMaze` builds and returns a maze. One problem with this function is that it hard-codes the classes of maze, rooms, doors, and walls. We'll introduce factory methods to let subclasses choose these components.  
+First we'll define factory methods in `MazeGame` for creating the maze, room, wall, and door objects:
+```cpp
+class MazeGame {
+public:
+    Maze* CreateMaze();
+    // factory methods:
+    virtual Maze* MakeMaze() const {
+        return new Maze;
+    }
+    virtual Room* MakeRoom(int n) const {
+        return new Room(n);
+    }
+    virtual Wall* MakeWall() const {
+        return new Wall;
+    }
+    virtual Door* MakeDoor(Room* r1, Room* r2) const {
+        return new Door(r1, r2);
+    }
+};
+```
+Each factory method returns a maze component of a given type. `MazeGame` provides default implementations that return the simplest kinds of maze, rooms, walls, and doors.  
+Now we can rewrite `CreateMaze` to use these factory methods:
+```cpp
+Maze* MazeGame::CreateMaze() {
+    Maze* aMaze = MakeMaze();
+    Room* r1 = MakeRoom(1);
+    Room* r2 = MakeRoom(2);
+    Door* theDoor = MakeDoor(r1, r2);
+    aMaze->AddRoom(r1);
+    aMaze->AddRoom(r2);
+    r1->SetSide(North, MakeWall());
+    r1->SetSide(East, theDoor);
+    r1->SetSide(South, MakeWall());
+    r1->SetSide(West, MakeWall());
+    r2->SetSide(North, MakeWall());
+    r2->SetSide(East, MakeWall());
+    r2->SetSide(South, MakeWall());
+    r2->SetSide(West, theDoor);
+    return aMaze;
+}
+```
+Different games can subclass `MazeGame` to specialize parts of the maze. `MazeGame` subclasses can redefine some or all of the factory methods to specify variations in products. For example, a `BombedMazeGame` can redefine the `Room` and `Wall` products to return the bombed varieties:
+```cpp
+class BombedMazeGame : public MazeGame {
+public:
+    BombedMazeGame();
+    virtual Wall* MakeWall() const {
+        return new BombedWall;
+    }
+    virtual Room* MakeRoom(int n) const {
+        return new RoomWithABomb(n);
+    }
+};
+```
+An `EnchantedMazeGame` variant might be defined like this:
+```cpp
+class EnchantedMazeGame : public MazeGame {
+public:
+    EnchantedMazeGame();
+    virtual Room* MakeRoom(int n) const {
+        return new EnchantedRoom(n, CastSpell());
+    }
+    virtual Door* MakeDoor(Room* r1, Room* r2) const {
+        return new DoorNeedingSpell(r1, r2);
+    }
+protected:
+    Spell* CastSpell() const;
+};
+```
+---
+</description>
+</designPatternDescription>
+
+<tests>
+import pytest
+from refactored.monster import (
+    ZombieFactory, SkeletonFactory, GhoulFactory,
+    ZombieLeg, SkeletonLeg, ZombieArm, SkeletonArm
+)
+
+def test_zombie_factory_creates_correct_monster():
+    factory = ZombieFactory()
+    monster = factory.create_monster("Zombie")
+
+    # Assert all legs and arms are of Zombie types
+    assert all(isinstance(leg, ZombieLeg) for leg in monster.legs)
+    assert all(isinstance(arm, ZombieArm) for arm in monster.arms)
+
+    # Speed: base=5, modifier=0.75 -> 3.75 per leg
+    assert monster.get_total_speed() == pytest.approx(3.75)
+    # Attack: base=10, modifier=0.85 -> 8.5 per arm
+    assert monster.get_total_attack() == pytest.approx(17.0)
+
+def test_skeleton_factory_creates_correct_monster():
+    factory = SkeletonFactory()
+    monster = factory.create_monster("Skeleton")
+
+    # Assert all legs and arms are of Skeleton types
+    assert all(isinstance(leg, SkeletonLeg) for leg in monster.legs)
+    assert all(isinstance(arm, SkeletonArm) for arm in monster.arms)
+
+    # Speed: base=8, modifier=1.0 -> 8.0 per leg
+    assert monster.get_total_speed() == pytest.approx(8.0)
+    # Attack: base=15, modifier=1.25 -> 18.75 per arm
+    assert monster.get_total_attack() == pytest.approx(37.5)
+
+def test_ghoul_factory_creates_mixed_monster():
+    factory = GhoulFactory()
+    monster = factory.create_monster("Ghoul")
+
+    # Assert one leg is ZombieLeg and one is SkeletonLeg
+    assert any(isinstance(leg, ZombieLeg) for leg in monster.legs)
+    assert any(isinstance(leg, SkeletonLeg) for leg in monster.legs)
+
+    # Assert one arm is ZombieArm and one is SkeletonArm
+    assert any(isinstance(arm, ZombieArm) for arm in monster.arms)
+    assert any(isinstance(arm, SkeletonArm) for arm in monster.arms)
+
+    # Speed: (ZombieLeg = 3.75, SkeletonLeg = 8.0) -> average
+    expected_speed = (3.75 + 8.0) / 2
+    assert monster.get_total_speed() == pytest.approx(expected_speed)
+
+    # Attack: (ZombieArm = 8.5, SkeletonArm = 18.75) -> sum
+    expected_attack = 8.5 + 18.75
+    assert monster.get_total_attack() == pytest.approx(expected_attack)
+
+</tests>
+
+<language>
+python 
+</language>
+
+<output>
+Return only the fully refactored code.
+Do not include tests, explanations, comments, or any additional text.
+</output>
+
+Your code:

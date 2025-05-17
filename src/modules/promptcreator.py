@@ -1,5 +1,5 @@
 import os
-from filereader import FileReader, TxtReader, JsonReader  
+from src.modules.filereader import FileReader, TxtReader, JsonReader  
 
 class PromptCreator:
     def __init__(

@@ -1,0 +1,13 @@
+{
+    "code_path": "test/examples/structural/decorator/icecream/base_folder/base/icecream.py",
+    "refactored_tests_path": "test/examples/structural/decorator/icecream/refactored_folder/test_refactored/test_icecream.py",
+    "pattern_name": "decorator",
+    "prompt_file_path": "src/prompts/promptxml.txt",
+    "temperature": 1.0,
+    "model_name": "gpt-4o-mini-2024-07-18",
+    "max_length": 2048,
+    "strategy": "openai",
+    "timestamp": "20250517_174633",
+    "prompt_length": 2040,
+    "response_length": 375
+}

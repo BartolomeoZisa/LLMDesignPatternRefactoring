@@ -1,15 +1,15 @@
 # config.py
 
 #this is for the refactorer
-PATTERNDESCRIPTIONPATH = "../patternGOFjson"
+PATTERNDESCRIPTIONPATH = "src/patterns/patternGOFjson"
 
 
 #this is for the main
-PROMPTFILE = "../prompts/promptxml.txt"
+PROMPTFILE = "src/prompts/promptxml.txt"
 NUMITERATIONS = 1
 SAVEFOLDERPATH = "llm2"
 ASKSKIP = False
-PROJECT_ROOT = "../../examples"
+PROJECT_ROOT = "test/examples"
 TEMPERATURE = 1
 MODEL_NAME = "gpt-4o-mini-2024-07-18"
 MAX_LENGTH = 2048
