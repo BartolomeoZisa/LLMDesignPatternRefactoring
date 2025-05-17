@@ -7,7 +7,7 @@ from collections import defaultdict
 import math
 
 ROOTDIR = "../../examples/"
-NAMEDIR = "llm2"  # example: "metrics"
+NAMEDIR = "llm1"  # example: "metrics"
 
 def find_namedir_and_collect_csvs(root_dir, name_dir):
     results = []

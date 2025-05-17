@@ -1,0 +1,337 @@
+You are a senior software engineer with deep expertise in design patterns and code refactoring.
+Your task is to refactor the provided code by applying the specified design pattern while ensuring all tests pass and the code’s original functionality remains intact.
+You will receive a detailed task, the original code, the design pattern to apply, and the associated tests.
+
+<task>
+Apply the decorator design pattern based on the description provided.
+Preserve the original behavior; all tests must pass after refactoring.
+Do not rename any classes, functions, or modules in a way that would break existing import statements in the tests.
+Follow existing code style and naming conventions where possible.
+If applying the pattern exactly as described would break the tests or result in worse code design, adapt it thoughtfully to fit the context while preserving the spirit of the pattern.
+</task>
+
+<code>
+class IceCream:
+    # Prices for containers and flavors
+    CONTAINER_PRICES = {
+        "cone": 1.00,
+        "cup": 1.50
+    }
+    
+    FLAVOR_PRICES = {
+        "chocolate": 0.50,
+        "strawberry": 0.75,
+        "vanilla": 0.60
+    }
+    
+    def __init__(self, container, scoops):
+        """
+        Initialize an IceCream object.
+        
+        Parameters:
+        - container (str): either 'cone' or 'cup'
+        - scoops (list of str): list of flavors (e.g., ['chocolate', 'vanilla'])
+        """
+        # Validate container choice
+        if container not in IceCream.CONTAINER_PRICES:
+            raise ValueError(f"Invalid container type '{container}'. Choose 'cone' or 'cup'.")
+        
+        # Validate scoop flavors
+        for flavor in scoops:
+            if flavor not in IceCream.FLAVOR_PRICES:
+                raise ValueError(f"Invalid flavor '{flavor}'. Choose from {list(IceCream.FLAVOR_PRICES.keys())}.")
+        
+        self.container = container
+        self.scoops = scoops
+        self.description = f"Icecream {self.container.capitalize()}, {', '.join(flavor.capitalize() for flavor in self.scoops)}"
+
+
+    def cost(self):
+        """Calculate and return the total cost of the ice cream."""
+        total_cost = IceCream.CONTAINER_PRICES[self.container]
+        for flavor in self.scoops:
+            total_cost += IceCream.FLAVOR_PRICES[flavor]
+        return total_cost
+    
+    def getDescription(self):
+        """Return a simplified description in the format 'Icecream Container, Flavor1, Flavor2'."""
+        return self.description
+</code>
+
+<designPatternName>
+decorator
+</designPatternName>
+
+<designPatternDescription>
+Intent
+Attach additional responsibilities to an object dynamically. Decorators provide
+a flexible alternative to subclassing for extending functionality.
+Motivation
+Sometimes we want to add responsibilities to individual objects, not to an entire
+class. A graphical user interface toolkit, for example, should let you add
+properties like borders or behaviors like scrolling to any user interface
+component.
+One way to add responsibilities is with inheritance. Inheriting a border from
+another class puts a border around every subclass instance. This is inflexible,
+however, because the choice of border is made statically. A client can't control
+how and when to decorate the component with a border.
+A more flexible approach is to enclose the component in another object that adds
+the border. The enclosing object is called a decorator. The decorator conforms
+to the interface of the component it decorates so that its presence is transparent
+to the component's clients. The decorator forwards requests to the component and
+may perform additional actions (such as drawing a border) before or after
+forwarding. Transparency lets you nest decorators recursively, thereby allowing
+an unlimited number of added responsibilities.
+For example, suppose we have a TextView object that displays text in a window.
+TextView has no scroll bars by default, because we might not always need them.
+When we do, we can use a ScrollDecorator to add them. Suppose we also want to
+add a thick black border around the TextView. We can use a BorderDecorator to
+add this as well. We simply compose the decorators with the TextView to produce
+the desired result.
+The following object diagram shows how to compose a TextView object with
+BorderDecorator and ScrollDecorator objects to produce a bordered, scrollable
+text view:
+The ScrollDecorator and BorderDecorator classes are subclasses of Decorator, an
+abstract class for visual components that decorate other visual components.
+VisualComponent is the abstract class for visual objects. It defines their drawing
+and event handling interface. Note how the Decorator class simply forwards draw
+requests to its component, and how Decorator subclasses can extend this operation.
+Decorator subclasses are free to add operations for specific functionality. For
+example, ScrollDecorator's ScrollTo operation lets other objects scroll the
+interface if they know there happens to be a ScrollDecorator object in the interface.
+The important aspect of this pattern is that it lets decorators appear anywhere
+a VisualComponent can. That way clients generally can't tell the difference between
+a decorated component and an undecorated one, and so they don't depend at all
+on the decoration.
+Structure
+@startuml
+title Decorator Pattern
+interface Component {
+    +operation(): void
+}
+class ConcreteComponent implements Component {
+    +operation(): void
+}
+abstract class Decorator implements Component {
+    -component: Component
+    +Decorator(component: Component)
+    +operation(): void
+}
+class ConcreteDecoratorA extends Decorator {
+    +operation(): void
+    -addedBehaviorA(): void
+}
+class ConcreteDecoratorB extends Decorator {
+    +operation(): void
+    -addedBehaviorB(): void
+}
+// Relationships
+Component <|.. ConcreteComponent
+Component <|.. Decorator
+Decorator <|-- ConcreteDecoratorA
+Decorator <|-- ConcreteDecoratorB
+Decorator --> Component : wraps
+@enduml
+Participants
+· Component (VisualComponent)
+o defines the interface for objects that can have responsibilities
+added to them dynamically.
+· ConcreteComponent (TextView)
+o defines an object to which additional responsibilities can be
+attached.
+· Decorator
+o maintains a reference to a Component object and defines an interface
+that conforms to Component's interface.
+· ConcreteDecorator (BorderDecorator, ScrollDecorator)
+o adds responsibilities to the component.
+Collaborations
+· Decorator forwards requests to its Component object. It may optionally
+perform additional operations before and after forwarding the request.
+Implementation
+Several issues should be considered when applying the Decorator pattern:
+1. Interface conformance. A decorator object's interface must conform to the
+interface of the component it decorates. ConcreteDecorator classes must
+therefore inherit from a common class (at least in C++).
+2. Omitting the abstract Decorator class. There's no need to define an abstract
+Decorator class when you only need to add one responsibility. That's often
+the case when you're dealing with an existing class hierarchy rather than
+designing a new one. In that case, you can merge Decorator's responsibility
+for forwarding requests to the component into the ConcreteDecorator.
+3. Keeping Component classes lightweight. To ensure a conforming interface,
+components and decorators must descend from a common Component class. It's
+important to keep this common class lightweight; that is, it should focus
+on defining an interface, not on storing data. The definition of the data
+representation should be deferred to subclasses; otherwise the complexity
+of the Component class might make the decorators too heavyweight to use
+in quantity. Putting a lot of functionality into Component also increases
+the probability that concrete subclasses will pay for features they don't
+need.
+4. Changing the skin of an object versus changing its guts. We can think of
+a decorator as a skin over an object that changes its behavior. An
+alternative is to change the object's guts. The Strategy (349) pattern is
+a good example of a pattern for changing the guts.
+Strategies are a better choice in situations where the Component class is
+intrinsically heavyweight, thereby making the Decorator pattern too costly
+to apply. In the Strategy pattern, the component forwards some of its
+behavior to a separate strategy object. The Strategy pattern lets us alter
+or extend the component's functionality by replacing the strategy object.
+For example, we can support different border styles by having the component
+defer border-drawing to a separate Border object. The Border object is a
+Strategy object that encapsulates a border-drawing strategy. By extending
+the number of strategies from just one to an open-ended list, we achieve
+the same effect as nesting decorators recursively.
+In MacApp 3.0 [App89] and Bedrock [Sym93a], for example, graphical
+components (called "views") maintain a list of "adorner" objects that can
+attach additional adornments like borders to a view component. If a view
+has any adorners attached, then it gives them a chance to draw additional
+embellishments. MacApp and Bedrock must use this approach because the View
+class is heavyweight. It would be too expensive to use a full-fledged View
+just to add a border.
+Since the Decorator pattern only changes a component from the outside, the
+component doesn't have to know anything about its decorators; that is, the
+decorators are transparent to the component:
+With strategies, the component itself knows about possible extensions. So
+it has to reference and maintain the corresponding strategies:
+The Strategy-based approach might require modifying the component to
+accommodate new extensions. On the other hand, a strategy can have its own
+specialized interface, whereas a decorator's interface must conform to the
+component's. A strategy for rendering a border, for example, need only
+define the interface for rendering a border (DrawBorder, GetWidth, etc.),
+which means that the strategy can be lightweight even if the Component class
+is heavyweight.
+MacApp and Bedrock use this approach for more than just adorning views.
+They also use it to augment the event-handling behavior of objects. In both
+systems, a view maintains a list of "behavior" objects that can modify and
+intercept events. The view gives each of the registered behavior objects
+a chance to handle the event before nonregistered behaviors, effectively
+overriding them. You can decorate a view with special keyboard-handling
+support, for example, by registering a behavior object that intercepts and
+handles key events.
+Sample Code
+---
+The following code shows how to implement user interface decorators in C++. We'll assume there's a `Component` class called `VisualComponent`.
+```cpp
+class VisualComponent {
+public:
+    VisualComponent();
+    virtual void Draw();
+    virtual void Resize();
+    // ...
+};
+```
+We define a subclass of `VisualComponent` called `Decorator`, which we'll subclass to obtain different decorations.
+```cpp
+class Decorator : public VisualComponent {
+public:
+    Decorator(VisualComponent*);
+    virtual void Draw();
+    virtual void Resize();
+    // ...
+private:
+    VisualComponent* _component;
+};
+```
+`Decorator` decorates the `VisualComponent` referenced by the `_component` instance variable, which is initialized in the constructor. For each operation in `VisualComponent`'s interface, `Decorator` defines a default implementation that passes the request on to `_component`:
+```cpp
+void Decorator::Draw() {
+    _component->Draw();
+}
+void Decorator::Resize() {
+    _component->Resize();
+}
+```
+Subclasses of `Decorator` define specific decorations. For example, the class `BorderDecorator` adds a border to its enclosing component. `BorderDecorator` is a subclass of `Decorator` that overrides the `Draw` operation to draw the border. `BorderDecorator` also defines a private `DrawBorder` helper operation that does the drawing. The subclass inherits all other operation implementations from `Decorator`.
+```cpp
+class BorderDecorator : public Decorator {
+public:
+    BorderDecorator(VisualComponent*, int borderWidth);
+    virtual void Draw();
+private:
+    void DrawBorder(int);
+private:
+    int _width;
+};
+void BorderDecorator::Draw() {
+    Decorator::Draw();
+    DrawBorder(_width);
+}
+```
+A similar implementation would follow for `ScrollDecorator` and `DropShadowDecorator`, which would add scrolling and drop shadow capabilities to a visual component.
+Now we can compose instances of these classes to provide different decorations. The following code illustrates how we can use decorators to create a bordered scrollable `TextView`.
+First, we need a way to put a visual component into a window object. We'll assume our `Window` class provides a `SetContents` operation for this purpose:
+```cpp
+void Window::SetContents(VisualComponent* contents) {
+    // ...
+}
+```
+Now we can create the text view and a window to put it in:
+```cpp
+Window* window = new Window;
+TextView* textView = new TextView;
+```
+`TextView` is a `VisualComponent`, which lets us put it into the window:
+```cpp
+window->SetContents(textView);
+```
+But we want a bordered and scrollable `TextView`. So we decorate it accordingly before putting it in the window.
+```cpp
+window->SetContents(
+    new BorderDecorator(
+        new ScrollDecorator(textView), 1
+    )
+);
+```
+Because `Window` accesses its contents through the `VisualComponent` interface, it's unaware of the decorator's presence. You, as the client, can still keep track of the text view if you have to interact with it directly, for example, when you need to invoke operations that aren't part of the `VisualComponent` interface. Clients that rely on the component's identity should refer to it directly as well.
+</description>
+</designPatternDescription>
+
+<tests>
+import pytest
+from refactored.icecream import *
+
+def test_cone():
+    cone = Cone()
+    assert cone.cost() == 1.00
+    assert cone.getDescription() == "Icecream Cone"
+
+def test_cup():
+    cup = Cup()
+    assert cup.cost() == 1.50
+    assert cup.getDescription() == "Icecream Cup"
+
+def test_chocolate_decorator():
+    icecream = Chocolate(Cone())
+    assert icecream.getDescription() == "Icecream Cone, Chocolate"
+    assert icecream.cost() == 1.50
+
+def test_strawberry_decorator():
+    icecream = Strawberry(Cone())
+    assert icecream.getDescription() == "Icecream Cone, Strawberry"
+    assert icecream.cost() == 1.75
+
+def test_vanilla_decorator():
+    icecream = Vanilla(Cup())
+    assert icecream.getDescription() == "Icecream Cup, Vanilla"
+    assert icecream.cost() == 2.10
+
+def test_multiple_decorators():
+    icecream = Vanilla(Chocolate(Cone()))
+    assert icecream.getDescription() == "Icecream Cone, Chocolate, Vanilla"
+    assert icecream.cost() == 2.10
+
+    icecream = Strawberry(Vanilla(Cup()))
+    assert icecream.getDescription() == "Icecream Cup, Vanilla, Strawberry"
+    assert icecream.cost() == 2.85
+
+</tests>
+
+<language>
+python 
+</language>
+
+<output>
+Return only the fully refactored code.
+Do not include tests, explanations, comments, or any additional text.
+</output>
+
+Your code:

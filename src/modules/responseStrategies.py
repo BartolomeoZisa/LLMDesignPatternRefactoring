@@ -55,11 +55,12 @@ class OpenAIResponse(ResponseStrategy):
         # Call OpenAI API with a single prompt, no conversation history or batching
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4o-mini-2024-07-18",  # You can adjust the model as needed
+                model=self.model_name,  # You can adjust the model as needed
                 messages=[
                     {"role": "user", "content": prompt}
                 ],
-                max_tokens=2000  # You can adjust this value depending on the output length
+                max_tokens=self.max_length,  # You can adjust this value depending on the output length
+                temperature=self.temperature  # Adjust the temperature for randomness
             )
             # Extract the generated response from OpenAI's API response
             refactored_code = response.choices[0].message.content

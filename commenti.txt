@@ -116,6 +116,7 @@ Model name 🗸
 Context length (In Openai it's not settable, max token is settable) 🗸
 csv with parameters should be created? 🗸 (json for now)
 Saving result is necessary, so a folder is needed as input 🗸
+Select headers to exclude from the description 🗸
 
 
 
@@ -133,7 +134,6 @@ Select parts of the prompt to exclude (?)
 
 
 
-
 prompt creation and response (not testing) should be handled in a class called RefactorFrontEnd, which should be called by itself by command line passing arguments code_path, refactored_tests_path, pattern_name, prompt_file_path: optional args should be parsed  for Temperature, Model name, Context length, if not present put the default 
 
 What do I put in the frontend class?
@@ -142,3 +142,19 @@ Reloading from prompt necessary???
 Example: (change tester)
 python3 refactorer.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/base_folder/base/Stall.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/refactored_folder/test_refactored/test_Stall.py state /home/bartolomeo/projects/Tesi/refactoringsystem/prompts/promptxml.txt /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/llm2
 python3 tester.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/llm2/Stall_state_gpt-4o-mini-2024-07-18_20250504_143206/refactored/Stall.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/refactored_folder/test_refactored/test_Stall.py
+
+-----------
+Report test per test di quanti sono stati passati
+
+errori
+
+analisi con funzioni higher order
+
+fix ignore headers X
+command line options being used in the code 🗸
+
+How do i put packages for import? Importing from parent dir is not very easy. Using a command from the dir above is not easy.
+Maybe I should use toml, but I still couldn't use the command easily.
+There may be some problems with tests if I put a package on the root 
+
+if extensibility check is used to check if the pattern is implemented correctly what about adapter?
