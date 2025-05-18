@@ -155,6 +155,7 @@ Is separating input from output a good idea?
 Should I remove behavioural/creatonal/structural?
 
 I should add documentation for the pattern descriptions and structure
+I should also add documentation for the info on how to write the code, using pytest in the mode where you specify root is important!!!!
 
 
 fix ignore headers X
@@ -168,5 +169,60 @@ Maybe I should use toml, but I still couldn't use the command easily.
 There may be some problems with tests if I put a package on the root 
 
 if extensibility check is used to check if the pattern is implemented correctly what about adapter?
+Maybe I can check if the adapter extends an interface, aneddotically, this is an example of the pattern not being properly executed
+Also maybe I can check dynamically if I can add another class to that interface
+
+Why shouldn't I give these tests in input?
+
+How do I check handle import errors in reports???
 
 Should i remove past work?
+
+
+refactoring-system/
+│
+├── refactorer.py                # Entry point del sistema (main script)
+├── tester.py
+├── main.py
+│
+├── src/                         # Codice sorgente del sistema
+│   ├── modules/                    # Moduli centrali per il refactoring
+│   │   ├── 
+│   │   ├── 
+│   │   └── ...
+│   │
+│   ├── prompt/                  # Prompt o template prompt usati dal sistema
+│   │   ├── 
+│   │   └── 
+│   │
+│   ├── patterns/                # Descrizioni di pattern (diversi formati)
+│   │   ├── txt/
+│   │   └── JSON/
+│   │
+│   └── utils/                   # Moduli di utilità generali
+│       └── helpers.py
+│
+├── test/                        # Tutto ciò che riguarda i test
+│   ├── modules/                 # Moduli usati da tester.py
+│   │   └── codetester.py
+│   │
+│   ├── examples/                    # Dati di input/output per test
+│   │   └── patterntype/
+│   │       └── pattern/
+│   │           └── patternexample/
+│   │               ├── refactored_folder/
+│   │               ├── base_folder/
+│   │               ├── pattern.txt
+│   │               ├── specification.txt
+│   │               └── llm/
+                        └── patternexample_patternname_model_timestamp/
+                            ├── refactored/
+                            ├── test_refactored/
+                            ├── prompt.txt
+                            ├── parameters.json
+                            └── testreport.csv
+│   │
+│   └── report/                  # Script e risultati dei report
+│       └── generate_report.py
+│
+└── README.md
