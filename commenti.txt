@@ -146,20 +146,22 @@ python3 tester.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simp
 -----------
 Report test per test di quanti sono stati passati
 
-errori
+errors  X
 
-analisys with higher order functions
+analisys with higher order functions 🗸 
 
-
-Is separating input from output a good idea?
-Should I remove behavioural/creatonal/structural?
-
-I should add documentation for the pattern descriptions and structure
-I should also add documentation for the info on how to write the code, using pytest in the mode where you specify root is important!!!!
-
+I should add documentation for the pattern descriptions and structure X
+I should also add documentation for the info on how to write the code, using pytest in the mode where you specify root is important!!!! X
 
 fix ignore headers X
 command line options being used in the code 🗸
+
+Added function to check heuristics with higher order 🗸
+For extension I should add the code for the testing of a proper refactoring
+
+Is separating input from output a good idea? 
+Should I remove behavioural/creatonal/structural?
+How do I check handle import errors in reports???
 
 How do i put packages for import? Importing from parent dir is not very easy. Using a command from the dir above is not easy.
 Also the main should do some tricks with changing dirs if it's not in root
@@ -174,7 +176,7 @@ Also maybe I can check dynamically if I can add another class to that interface
 
 Why shouldn't I give these tests in input?
 
-How do I check handle import errors in reports???
+
 
 Should i remove past work?
 

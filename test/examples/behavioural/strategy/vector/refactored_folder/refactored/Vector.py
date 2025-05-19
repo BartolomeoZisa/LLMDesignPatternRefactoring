@@ -32,12 +32,12 @@ class Vector:
         return str(self.__elements)
 
 
-class sortStrategy:
+class SortStrategy:
     @abstractmethod
     def sort(self, vector):
         pass
 
-class SelectionSort(sortStrategy):
+class SelectionSort(SortStrategy):
 
     def sort(self, array):
 

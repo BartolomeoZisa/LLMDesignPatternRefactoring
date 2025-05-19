@@ -11,7 +11,7 @@ occupied maintenance -> end_market = free maintanance
 
 free maintanance -> end_maintenance = free 
 
-If wrong stay in the same state 
+If wrong throw error 
 
 Simplified from 
 
@@ -41,3 +41,7 @@ If the technician reports the problem as unsolvable, the house remains in the ma
 
 #should rename to avoid hints
 Refactoring with state pattern Stall Class
+
+Extension:
+
+broken -> report_issue = free maintanance
