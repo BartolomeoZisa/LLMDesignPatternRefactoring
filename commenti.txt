@@ -143,7 +143,7 @@ Example: (change tester)
 python3 refactorer.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/base_folder/base/Stall.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/refactored_folder/test_refactored/test_Stall.py state /home/bartolomeo/projects/Tesi/refactoringsystem/prompts/promptxml.txt /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/llm2
 python3 tester.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/llm2/Stall_state_gpt-4o-mini-2024-07-18_20250504_143206/refactored/Stall.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/refactored_folder/test_refactored/test_Stall.py
 
------------
+-------------------------------------------------------------------
 Report test per test di quanti sono stati passati
 
 errors  X
@@ -159,6 +159,8 @@ command line options being used in the code 🗸
 Added function to check heuristics with higher order 🗸
 For extension I should add the code for the testing of a proper refactoring
 
+I should add an automatic tester for my refactoring to save time when I change something
+
 Is separating input from output a good idea? 
 Should I remove behavioural/creatonal/structural?
 How do I check handle import errors in reports???
@@ -173,6 +175,7 @@ There may be some problems with tests if I put a package on the root
 if extensibility check is used to check if the pattern is implemented correctly what about adapter?
 Maybe I can check if the adapter extends an interface, aneddotically, this is an example of the pattern not being properly executed
 Also maybe I can check dynamically if I can add another class to that interface
+could check 'MyClass' in inspect.getmembers(my_module) to check existance of interfaces
 
 Why shouldn't I give these tests in input?
 

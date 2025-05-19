@@ -4,6 +4,7 @@ import os
 #check a heuristic on code (given as a string) and print if true or false
 #the heuristic is a function that takes a string and returns a boolean
 #check all the code in directories called refactored, but their parent directory is not called refactored_folder
+#maybe i should put the option to multiple custom heuristics and their parameters, based on the name of the file
 
 ROOTDIR = "../examples/"
 

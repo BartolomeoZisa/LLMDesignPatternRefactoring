@@ -1,1 +1,0 @@
-ResourceManager shared by various clients (in this case Factories), implements thread safe requests
