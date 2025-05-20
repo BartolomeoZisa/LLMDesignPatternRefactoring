@@ -97,7 +97,6 @@ All outputs are saved in a timestamped directory inside save_folder_path named a
 * The `oolama` strategy raises `NotImplementedError`.
 * Prompt and refactoring logic rely on external modules (`PromptCreator`, `OpenAIResponse`).
 
-Here’s documentation for `tester.py` written in the same style as your `refactorer.py` doc:
 
 ---
 
