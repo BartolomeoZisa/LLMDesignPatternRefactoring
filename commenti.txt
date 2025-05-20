@@ -207,7 +207,7 @@ refactoring-system/
 │   └── utils/                   # Moduli di utilità generali
 │       └── helpers.py
 │
-├── test/                        # Tutto ciò che riguarda i test
+├── data/                        # Tutto ciò che riguarda i test
 │   ├── modules/                 # Moduli usati da tester.py
 │   │   └── codetester.py
 │   │
@@ -220,14 +220,27 @@ refactoring-system/
 │   │               ├── pattern.txt
 │   │               ├── specification.txt
 │   │               └── llm/
-                        └── patternexample_patternname_model_timestamp/
-                            ├── refactored/
-                            ├── test_refactored/
-                            ├── prompt.txt
-                            ├── parameters.json
-                            └── testreport.csv
+│   ├── examples/                    # Dati di input/output per test
+│   │   └── patterntype/
+│   │       └── pattern/
+│   │           └── patternexample/
+│   │               └── llm/
+│   │                   └── patternexample_patternname_model_timestamp/
+│   │                       ├── refactored/
+│   │                       ├── test_refactored/
+│   │                       ├── uml/
+│   │                       ├── parameters.json
+│   │                       └── testreport.csv
 │   │
 │   └── report/                  # Script e risultati dei report
 │       └── generate_report.py
 │
 └── README.md
+
+----------------------------------------------
+
+Added a pyreverse and graphviz for uml support
+I need a way to check multiple umls.
+automatically: networkx natively reads .dot files
+
+I want a script that, in every folder marked as patternexample_patternname_model_timestamp in results, filters out files where there's no tests or not all tests are passed in *_report.csv, then shows me the .png files in the uml folder. by clicking y or n I can accept the refactoring, and then passed to the next .png. then a refactor_result.csv is created with values correct and reason. passed is true or false, and reason, is test or human
