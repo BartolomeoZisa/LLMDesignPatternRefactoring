@@ -35,6 +35,9 @@ def main():
         test_path = refactored_tests[0]
         pattern = pattern_name[0]
 
+        #save in parentfolder sibling (substitute examples with results)
+        save_folder = os.path.join(parentfolder.replace("examples", "results"), config.SAVEFOLDERPATH)
+
         # Call RefactorFrontEnd
         refactor_cmd = [
             sys.executable, "refactorer.py",
@@ -42,7 +45,7 @@ def main():
             test_path,
             pattern,
             config.PROMPTFILE,
-            os.path.join(parentfolder, config.SAVEFOLDERPATH),
+            save_folder,
             "--temperature", str(config.TEMPERATURE),
             "--model_name", config.MODEL_NAME,
             "--max_length", str(config.MAX_LENGTH),
