@@ -1,8 +1,9 @@
 import os
 import shutil
+import sys
 
 ROOTDIR = "../../data/"
-FOLDERTODELETE = "llm2"
+FOLDERTODELETE = sys.argv[1] if len(sys.argv) > 1 else "llm2"  # Default to "llm2" if no argument is provided
 
 def delete_folder_by_name(root_path, folder_name_to_delete):
     """

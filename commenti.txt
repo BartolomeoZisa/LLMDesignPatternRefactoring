@@ -244,3 +244,10 @@ I need a way to check multiple umls.
 automatically: networkx natively reads .dot files
 
 I want a script that, in every folder marked as patternexample_patternname_model_timestamp in results, filters out files where there's no tests or not all tests are passed in *_report.csv, then shows me the .png files in the uml folder. by clicking y or n I can accept the refactoring, and then passed to the next .png. then a refactor_result.csv is created with values correct and reason. passed is true or false, and reason, is test or human
+done, i'm creating a validation csv
+
+using a gui created with tktinker to choose if properly implemented
+Should make a graph-based approach
+
+I need to solve pytest error not populating the csv
+a solution might be putting a row with error written as result and then handling it separately
