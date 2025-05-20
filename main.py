@@ -1,6 +1,7 @@
 import subprocess
 import os
 import sys
+import shutil
 from src.modules.explore import explore_folder_for_triples
 import src.modules.config as config
  
@@ -59,6 +60,40 @@ def main():
         except subprocess.CalledProcessError as e:
             print(f"[ERROR] Refactor step failed:\n{e.stderr}")
             continue
+
+        # === UML generation ===
+        print("[INFO] Generating UML in DOT, PlantUML, and Mermaid formats...")
+
+        # uml_output_dir is parent of parent of refactored_file_path + "uml"
+        refactored_parent = os.path.dirname(os.path.dirname(refactored_file_path))
+        uml_output_dir = os.path.join(refactored_parent, "uml")
+        os.makedirs(uml_output_dir, exist_ok=True)
+
+
+        # Define the desired formats and corresponding file extensions
+        formats = {
+            "dot": ".dot",
+            "puml": ".puml",
+            "mmd": ".mmd",
+            "png": ".png"
+        }
+
+        for fmt, ext in formats.items():
+            try:
+                # Build the pyreverse command for each format
+                uml_cmd = [
+                    "pyreverse",
+                    "--output", fmt,                  # select output format
+                    "--output-directory", uml_output_dir,  # set output dir
+                    "-p", os.path.splitext(os.path.basename(refactored_file_path))[0],  # project name
+                    os.path.dirname(refactored_file_path)  # input module/package
+                ]
+                print(f"[INFO] Running pyreverse for format '{fmt}'...")
+                subprocess.run(uml_cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                print(f"[INFO] {fmt.upper()} UML saved to {uml_output_dir}{ext}")
+            except subprocess.CalledProcessError as e:
+                print(f"[ERROR] UML generation for format '{fmt}' failed:\n{e.stderr}")
+
 
         # Construct path to test file (already known)
         refactored_test_path = test_path
