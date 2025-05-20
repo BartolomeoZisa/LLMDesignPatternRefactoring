@@ -1,7 +1,0 @@
-test,outcome,duration
-examples/structural/decorator/icecream/llm2/icecream_decorator_gpt-4o-mini-2024-07-18_20250504_182844/test_refactored/test_icecream.py::test_cone,passed,0
-examples/structural/decorator/icecream/llm2/icecream_decorator_gpt-4o-mini-2024-07-18_20250504_182844/test_refactored/test_icecream.py::test_cup,passed,0
-examples/structural/decorator/icecream/llm2/icecream_decorator_gpt-4o-mini-2024-07-18_20250504_182844/test_refactored/test_icecream.py::test_chocolate_decorator,passed,0
-examples/structural/decorator/icecream/llm2/icecream_decorator_gpt-4o-mini-2024-07-18_20250504_182844/test_refactored/test_icecream.py::test_strawberry_decorator,passed,0
-examples/structural/decorator/icecream/llm2/icecream_decorator_gpt-4o-mini-2024-07-18_20250504_182844/test_refactored/test_icecream.py::test_vanilla_decorator,passed,0
-examples/structural/decorator/icecream/llm2/icecream_decorator_gpt-4o-mini-2024-07-18_20250504_182844/test_refactored/test_icecream.py::test_multiple_decorators,passed,0

@@ -1,4 +1,0 @@
-test,outcome,duration
-examples/creational/factory/monster/llm2/monster_factorymethod_gpt-4o-mini-2024-07-18_20250504_182913/test_refactored/test_monster.py::test_zombie_factory_creates_correct_monster,failed,0
-examples/creational/factory/monster/llm2/monster_factorymethod_gpt-4o-mini-2024-07-18_20250504_182913/test_refactored/test_monster.py::test_skeleton_factory_creates_correct_monster,failed,0
-examples/creational/factory/monster/llm2/monster_factorymethod_gpt-4o-mini-2024-07-18_20250504_182913/test_refactored/test_monster.py::test_ghoul_factory_creates_mixed_monster,passed,0

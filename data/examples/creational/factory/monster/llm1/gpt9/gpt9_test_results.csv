@@ -1,4 +1,0 @@
-test,outcome,duration
-examples/creational/factory/monster/llm1/gpt9/test_refactored/test_gpt9_monster.py::test_zombie_factory_creates_correct_monster,passed,0
-examples/creational/factory/monster/llm1/gpt9/test_refactored/test_gpt9_monster.py::test_skeleton_factory_creates_correct_monster,passed,0
-examples/creational/factory/monster/llm1/gpt9/test_refactored/test_gpt9_monster.py::test_ghoul_factory_creates_mixed_monster,passed,0

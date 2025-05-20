@@ -1,7 +1,0 @@
-test,outcome,duration
-test/examples/behavioural/strategy/vector/llm2/Vector_strategy_gpt-4o-mini-2024-07-18_20250517_174659/test_refactored/test_Vector.py::test_add,passed,0
-test/examples/behavioural/strategy/vector/llm2/Vector_strategy_gpt-4o-mini-2024-07-18_20250517_174659/test_refactored/test_Vector.py::test_pop,passed,0
-test/examples/behavioural/strategy/vector/llm2/Vector_strategy_gpt-4o-mini-2024-07-18_20250517_174659/test_refactored/test_Vector.py::test_sort,passed,0
-test/examples/behavioural/strategy/vector/llm2/Vector_strategy_gpt-4o-mini-2024-07-18_20250517_174659/test_refactored/test_Vector.py::test_get,passed,0
-test/examples/behavioural/strategy/vector/llm2/Vector_strategy_gpt-4o-mini-2024-07-18_20250517_174659/test_refactored/test_Vector.py::test_to_string,passed,0
-test/examples/behavioural/strategy/vector/llm2/Vector_strategy_gpt-4o-mini-2024-07-18_20250517_174659/test_refactored/test_Vector.py::test_set_sort_strategy,passed,0

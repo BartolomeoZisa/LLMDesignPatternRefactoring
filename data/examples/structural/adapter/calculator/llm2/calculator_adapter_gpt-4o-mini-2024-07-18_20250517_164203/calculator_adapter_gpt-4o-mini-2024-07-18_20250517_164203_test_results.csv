@@ -1,7 +1,0 @@
-test,outcome,duration
-examples/structural/adapter/calculator/llm2/calculator_adapter_gpt-4o-mini-2024-07-18_20250517_164203/test_refactored/test_calculator.py::test_add,passed,0
-examples/structural/adapter/calculator/llm2/calculator_adapter_gpt-4o-mini-2024-07-18_20250517_164203/test_refactored/test_calculator.py::test_sub,passed,0
-examples/structural/adapter/calculator/llm2/calculator_adapter_gpt-4o-mini-2024-07-18_20250517_164203/test_refactored/test_calculator.py::test_mul,passed,0
-examples/structural/adapter/calculator/llm2/calculator_adapter_gpt-4o-mini-2024-07-18_20250517_164203/test_refactored/test_calculator.py::test_div,passed,0
-examples/structural/adapter/calculator/llm2/calculator_adapter_gpt-4o-mini-2024-07-18_20250517_164203/test_refactored/test_calculator.py::test_division_by_zero,passed,0
-examples/structural/adapter/calculator/llm2/calculator_adapter_gpt-4o-mini-2024-07-18_20250517_164203/test_refactored/test_calculator.py::test_unsupported_operation,passed,0
