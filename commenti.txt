@@ -249,5 +249,11 @@ done, i'm creating a validation csv
 using a gui created with tktinker to choose if properly implemented
 Should make a graph-based approach
 
+sudo apt install graphviz graphviz-dev
+pip install pygraphviz
+
+could use a python decorator to extend automatically the graph factories
+the python decorator could also be used to expand the cli
+
 I need to solve pytest error not populating the csv
 a solution might be putting a row with error written as result and then handling it separately
