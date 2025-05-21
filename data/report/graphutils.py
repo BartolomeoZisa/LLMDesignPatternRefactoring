@@ -1,8 +1,11 @@
 import networkx as nx
 from networkx.algorithms import isomorphism
+import matplotlib.pyplot as plt
+
 
 
 graph_paths = {
+    "uml_factory": "../results/creational/factory/monster/llm/monster_factorymethod_gpt-4o-mini-2024-07-18_20250521_180751/uml/classes_monster.dot",
     "uml_vector": "../results/behavioural/strategy/vector/llm/Vector_strategy_gpt-4o-mini-2024-07-18_20250520_225946/uml/classes_Vector.dot",
 }
 
@@ -22,26 +25,33 @@ class GraphParser:
         for name, path in path_dict.items():
             graphs[name] = GraphParser.read_graph(path)
         return graphs
+    
+    @staticmethod
+    def convert_multidigraph_to_digraph(multi_digraph):
+        G = nx.DiGraph()
+        for u, v, data in multi_digraph.edges(data=True):
+            G.add_edge(u, v, **data)
+        return G
+
 
 
 class SubgraphChecker:
-    def __init__(self):
-        self.subgraph_classes = {}
+    
+    subgraph_classes = {}
 
-    def register(self, cls):
-        name = cls.__name__
-        self.subgraph_classes[name] = cls
-        return cls
+    @classmethod
+    def register(cls, pattern_cls):
+        name = pattern_cls.__name__.lower()
+        cls.subgraph_classes[name] = pattern_cls
+        return pattern_cls
 
-    def get_subgraph(self, name):
-        if name not in self.subgraph_classes:
+    @classmethod
+    def get_subgraph(cls, name):
+        if name not in cls.subgraph_classes:
             raise ValueError(f"Subgraph '{name}' is not registered.")
-        return self.subgraph_classes[name]().build()
+        return cls.subgraph_classes[name]().build()
 
     def check(self, graph, pattern_names):
-        # graph: a single nx.Graph or nx.DiGraph
-        # pattern_names: list or single string of pattern class names to check
-
         if isinstance(pattern_names, str):
             pattern_names = [pattern_names]
 
@@ -53,9 +63,51 @@ class SubgraphChecker:
         return results
 
 
-checker = SubgraphChecker()
+class GraphVisualizer:
+    def __init__(self, graph):
+        """
+        Initialize with a NetworkX graph (DiGraph, MultiDiGraph, etc.)
+        """
+        self.graph = graph
 
-@checker.register
+    def draw(self, title=None, node_color='lightblue', node_size=1500, font_size=12,
+             edge_color='gray', arrows=True, save_path=None):
+        """
+        Visualize the graph.
+        
+        Args:
+            title (str): Optional title for the plot.
+            node_color (str or list): Color(s) of nodes.
+            node_size (int): Size of nodes.
+            font_size (int): Size of node labels.
+            edge_color (str or list): Color(s) of edges.
+            arrows (bool): Show arrows for directed graphs.
+            save_path (str): If provided, save the plot to this path instead of showing.
+        """
+        plt.figure(figsize=(8, 6))
+
+        # Use spring layout for nice spacing
+        pos = nx.spring_layout(self.graph)
+
+        nx.draw_networkx_nodes(self.graph, pos, node_color=node_color, node_size=node_size)
+        nx.draw_networkx_edges(self.graph, pos, edge_color=edge_color, arrows=arrows)
+        nx.draw_networkx_labels(self.graph, pos, font_size=font_size)
+
+        if title:
+            plt.title(title)
+        plt.axis('off')
+        plt.tight_layout()
+
+        if save_path:
+            plt.savefig(save_path)
+            plt.close()
+        else:
+            plt.show()
+
+
+
+
+@SubgraphChecker.register
 class Strategy:
     def build(self):
         G = nx.DiGraph()
@@ -63,24 +115,22 @@ class Strategy:
         G.add_edge("ConcreteStrategy", "Strategy")
         return G
 
-@checker.register
+@SubgraphChecker.register
 class FactoryMethod:
     def build(self):
         G = nx.DiGraph()
-        G.add_edge("Creator", "Product")
         G.add_edge("ConcreteCreator", "Creator")
         G.add_edge("ConcreteProduct", "Product")
         return G
 
-@checker.register
+@SubgraphChecker.register
 class Adapter:
     def build(self):
         G = nx.DiGraph()
-        G.add_edge("Adapter", "Adaptee")
         G.add_edge("Adapter", "Target")
         return G
 
-@checker.register
+@SubgraphChecker.register
 class State:
     def build(self):
         G = nx.DiGraph()
@@ -88,11 +138,14 @@ class State:
         G.add_edge("ConcreteState", "State")
         return G
 
-@checker.register
+@SubgraphChecker.register
 class Decorator:
     def build(self):
         G = nx.DiGraph()
         G.add_edge("Decorator", "Component")
         G.add_edge("ConcreteDecorator", "Decorator")
+        G.add_edge("ConcreteComponent", "Component")
         return G
+
+
 

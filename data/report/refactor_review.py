@@ -3,6 +3,10 @@ import csv
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
+from graphutils import *
+import json
+import glob
+import networkx as nx
 
 # --- CONFIG ---
 FOLDERTOSEARCH = "../results"
@@ -178,6 +182,64 @@ def test_report_passed(info):
 
 def no_validation(info):
     return not os.path.exists(os.path.join(os.path.dirname(info["parent"]), "validation.csv"))
+
+
+
+def check_pattern_in_folder(info):
+    """
+    For a given folder info dict, parse the .dot graph and check if it contains
+    the pattern(s) specified in parameters.json under 'pattern_name' key.
+    
+    return True if all patterns are found, False otherwise.
+    """
+    # Locate .dot file (first classes*.dot)
+    dot_files = glob.glob(os.path.join(info["uml_folder"], "classes*.dot"))
+    if not dot_files:
+        print(f"No classes*.dot files found in {info['uml_folder']}")
+        return None
+    dot_path = dot_files[0]
+
+    # Read parameters.json
+    params_path = os.path.join(info["parent"], "parameters.json")
+    if not os.path.exists(params_path):
+        print(f"No parameters.json found in {info['parent']}")
+        return None
+
+    with open(params_path, "r") as f:
+        params = json.load(f)
+
+    pattern_names = params.get("pattern_name")
+    if not pattern_names:
+        print(f"No 'pattern_name' key in {params_path}")
+        return None
+
+    if isinstance(pattern_names, str):
+        pattern_names = [pattern_names]
+
+    # Load graph from .dot
+    graph = GraphParser.read_graph(dot_path)
+
+    if isinstance(graph, nx.MultiDiGraph):
+        graph = GraphParser.convert_multidigraph_to_digraph(graph)
+    #print(graph)
+    visualizer = GraphVisualizer(graph)
+    visualizer.draw()
+
+    checker = SubgraphChecker()
+    #print(checker.subgraph_classes)
+    # Check patterns
+    #print(f"Checking patterns: {pattern_names}")
+    results = checker.check(graph, pattern_names)
+
+    #print(results)
+
+    #all keys must be true
+    for pattern_name, result in results.items():
+        if not result:
+            print(f"Pattern '{pattern_name}' not found in {dot_path}")
+            return False
+    return True
+
 
 # --- 5. MAIN ---
 def main():

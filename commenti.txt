@@ -248,6 +248,9 @@ done, i'm creating a validation csv
 
 using a gui created with tktinker to choose if properly implemented
 Should make a graph-based approach
+It may prove difficult to make it work, some problems:  
+for a parser it's difficult to represent creation relantionships (factory)
+and use relationships (adapter)
 
 sudo apt install graphviz graphviz-dev
 pip install pygraphviz
