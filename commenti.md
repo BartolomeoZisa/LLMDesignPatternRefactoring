@@ -109,6 +109,7 @@ Changed the prompt to use xml to properly discern the parts, added the line
 This seemed to make the adapter work (gpt 8-9)
 I have a feeling putting the tests after the descriptions, or the lengthy descriptions in general, could make it perform worse???
 
+WEEK 5
 -------------------------------------------------------
 For the LLMs we want to set
 Temperature 🗸
@@ -143,6 +144,7 @@ Example: (change tester)
 python3 refactorer.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/base_folder/base/Stall.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/refactored_folder/test_refactored/test_Stall.py state /home/bartolomeo/projects/Tesi/refactoringsystem/prompts/promptxml.txt /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/llm2
 python3 tester.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/llm2/Stall_state_gpt-4o-mini-2024-07-18_20250504_143206/refactored/Stall.py /home/bartolomeo/projects/Tesi/examples/behavioural/state/simplemarket/refactored_folder/test_refactored/test_Stall.py
 
+WEEK 6
 -------------------------------------------------------------------
 Report test per test di quanti sono stati passati
 
@@ -237,6 +239,7 @@ refactoring-system/
 │
 └── README.md
 
+WEEK 7
 ----------------------------------------------
 
 Added a pyreverse and graphviz for uml support
@@ -260,3 +263,21 @@ the python decorator could also be used to expand the cli
 
 I need to solve pytest error not populating the csv
 a solution might be putting a row with error written as result and then handling it separately
+
+I've updated the pipeline to generate UML reports in various formats. (The Refactorer has remained unchanged to avoid complicating it and adding more dependencies.)
+
+I've created a GUI tool that allows one to approve a refactoring by viewing the UML. I've also sketched out a tool that parses the UML into a dependency graph and tries to find subgraphs that are isomorphic to typical pattern structures.
+
+However, I'm running into several issues.
+
+The UML generation isn't perfect, possibly due to the lack of type annotations in the Python code. The most evident example is with the Strategy pattern: in vector, the default implementation for SortStrategy is SelectionSort, which gets interpreted as the interface, even though in the code it can be changed via set_sort_strategy. (See attached UML example.)
+
+Additionally, usage and instantiation relationships are not captured by pyreverse.
+
+Due to these limitations, I’ve defined the structures to look for using the following graphs:
+
+However, in the case of GPT-4-0 mini, they don’t seem particularly useful in filtering out examples that don’t implement design patterns. Adapter examples are excluded because they don’t implement interfaces, and all Strategy examples are excluded because the generated UML differs from what is expected.
+
+--
+I created a tool that looks for instantions and usage relationships, however there's still a problem with default values, 
+in state and vector
