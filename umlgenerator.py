@@ -26,13 +26,13 @@ def main():
     visitor = ClassDependencyVisitor()
 
     if os.path.isdir(args.input_path):
-        dependencies = visitor.collect_dependencies_from_directory(args.input_path)
+        dependencies, class_attrs, class_methods = visitor.collect_dependencies_from_directory(args.input_path)
     elif os.path.isfile(args.input_path) and args.input_path.endswith('.py'):
         try:
             with open(args.input_path, 'r', encoding='utf-8') as f:
                 tree = ast.parse(f.read(), filename=args.input_path)
                 visitor.visit(tree)
-            dependencies = visitor.dependencies
+            dependencies, class_attrs, class_methods = visitor.dependencies
         except SyntaxError:
             print(f"Syntax error in file {args.input_path}", file=sys.stderr)
             sys.exit(1)
@@ -42,7 +42,8 @@ def main():
 
     project_name = args.project_name or os.path.splitext(os.path.basename(args.input_path))[0]
 
-    drawer = UMLDiagramDrawer(dependencies,
+    drawer = UMLDiagramDrawer(dependencies, class_methods=class_methods,
+                                class_attrs=class_attrs,
                              output_dir=args.output_directory,
                              project_name=project_name,
                              output_format=args.output)

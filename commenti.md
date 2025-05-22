@@ -272,6 +272,8 @@ However, I'm running into several issues.
 
 The UML generation isn't perfect, possibly due to the lack of type annotations in the Python code. The most evident example is with the Strategy pattern: in vector, the default implementation for SortStrategy is SelectionSort, which gets interpreted as the interface, even though in the code it can be changed via set_sort_strategy. (See attached UML example.)
 
+
+
 Additionally, usage and instantiation relationships are not captured by pyreverse.
 
 Due to these limitations, I’ve defined the structures to look for using the following graphs:
@@ -281,3 +283,7 @@ However, in the case of GPT-4-0 mini, they don’t seem particularly useful in f
 --
 I created a tool that looks for instantions and usage relationships and creates uml, however there's still a problem with default values, 
 in state and vector, since the interface is never mentioned explicitly
+(Trying to add type annotations fixes the interpretation by pyreverse, and I changed my tool to consider types)
+Types are needed for a uml based approach, no dependencies in pyreverse, but there are in mine
+python3 umlgenerator.py data/results/behavioural/state/simplemarket/llm/Stall_state_gpt-4o-mini-2024-07-18_20250522_200354/
+python3 umlgenerator.py data/results/structural/decorator/icecream/llm/icecream_decorator_gpt-4o-mini-2024-07-18_20250522_203626/refactored

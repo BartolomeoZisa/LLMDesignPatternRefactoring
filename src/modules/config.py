@@ -5,7 +5,7 @@ PATTERNDESCRIPTIONPATH = "src/patterns/patternGOFjson"
 
 
 #this is for the main
-PROMPTFILE = "src/prompts/promptxml.txt"
+PROMPTFILE = "src/prompts/promptxmltypes.txt"
 NUMITERATIONS = 1
 SAVEFOLDERPATH = "llm"
 ASKSKIP = False
