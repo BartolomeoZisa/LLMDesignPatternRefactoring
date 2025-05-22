@@ -122,6 +122,11 @@ class UMLDiagramDrawer:
 
         dot = Digraph('UML', format=self.output_format)
         dot.attr(rankdir='BT')
+        dot.attr(ratio="1")              # Force square aspect ratio
+        dot.attr(nodesep="0.5")          # Reduce horizontal spacing
+        dot.attr(ranksep="0.5")          # Reduce vertical spacing
+
+        
         dot.attr('node', shape='record', fontsize='10', fontname='Helvetica', style='filled', fillcolor='white')
 
         all_classes = set(self.dependencies.keys())

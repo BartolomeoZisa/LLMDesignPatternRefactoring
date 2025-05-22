@@ -287,3 +287,9 @@ in state and vector, since the interface is never mentioned explicitly
 Types are needed for a uml based approach, no dependencies in pyreverse, but there are in mine
 python3 umlgenerator.py data/results/behavioural/state/simplemarket/llm/Stall_state_gpt-4o-mini-2024-07-18_20250522_200354/
 python3 umlgenerator.py data/results/structural/decorator/icecream/llm/icecream_decorator_gpt-4o-mini-2024-07-18_20250522_203626/refactored
+
+How do i separate reports in folders base on different things?
+Also, the results seem poor for decorator icecream and some of monster.
+I have a feeling it depends on the complexity of the prompt, maybe put less headers?
+Isomorphism matching is NP-complete, even worse with multigraphs, but not a problem for small graphs
+A uml diagram is a multigraph, what should I use?
