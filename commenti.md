@@ -222,7 +222,7 @@ refactoring-system/
 │   │               ├── pattern.txt
 │   │               ├── specification.txt
 │   │               └── llm/
-│   ├── examples/                    # Dati di input/output per test
+│   ├── results/                    # Dati di input/output per test
 │   │   └── patterntype/
 │   │       └── pattern/
 │   │           └── patternexample/
@@ -232,7 +232,7 @@ refactoring-system/
 │   │                       ├── test_refactored/
 │   │                       ├── uml/
 │   │                       ├── parameters.json
-│   │                       └── testreport.csv
+│   │                       └── name_test_results.csv
 │   │
 │   └── report/                  # Script e risultati dei report
 │       └── generate_report.py
@@ -279,5 +279,5 @@ Due to these limitations, I’ve defined the structures to look for using the fo
 However, in the case of GPT-4-0 mini, they don’t seem particularly useful in filtering out examples that don’t implement design patterns. Adapter examples are excluded because they don’t implement interfaces, and all Strategy examples are excluded because the generated UML differs from what is expected.
 
 --
-I created a tool that looks for instantions and usage relationships, however there's still a problem with default values, 
-in state and vector
+I created a tool that looks for instantions and usage relationships and creates uml, however there's still a problem with default values, 
+in state and vector, since the interface is never mentioned explicitly

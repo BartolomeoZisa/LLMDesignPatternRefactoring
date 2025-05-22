@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 import math
 
-ROOTDIR = "../examples/"
-NAMEDIR = "llm1"  # example: "metrics"
+ROOTDIR = "../results/"
+NAMEDIR = "llm"  # example: "metrics"
 
 def find_namedir_and_collect_csvs(root_dir, name_dir):
     results = []
