@@ -122,27 +122,26 @@ class UMLDiagramDrawer:
 
         dot = Digraph('UML', format=self.output_format)
         dot.attr(rankdir='BT')
-        dot.attr(ratio="1")              # Force square aspect ratio
-        dot.attr(nodesep="0.5")          # Reduce horizontal spacing
-        dot.attr(ranksep="0.5")          # Reduce vertical spacing
+        dot.attr(ratio="1")
+        dot.attr(nodesep="0.5")
+        dot.attr(ranksep="0.5")
 
-        
         dot.attr('node', shape='record', fontsize='10', fontname='Helvetica', style='filled', fillcolor='white')
 
         all_classes = set(self.dependencies.keys())
 
-        for cls in all_classes:
+        for cls in sorted(all_classes):
             attrs = "\\l".join(sorted(self.class_attrs.get(cls, []))) + "\\l" if self.class_attrs.get(cls) else ""
             methods = "\\l".join(sorted(self.class_methods.get(cls, []))) + "\\l" if self.class_methods.get(cls) else ""
             label = f"{{ {cls} | {attrs} | {methods} }}"
             dot.node(cls, label=label)
 
-        for cls, relations in self.dependencies.items():
-            for rel_type, target in relations:
+        for cls in sorted(self.dependencies.keys()):
+            for rel_type, target in sorted(self.dependencies[cls], key=lambda x: (x[0], x[1])):
                 if target not in all_classes or cls == target:
                     continue
                 if rel_type == 'inherits':
-                    dot.edge(cls, target,  arrowhead='empty')
+                    dot.edge(cls, target, arrowhead='empty')
                 elif rel_type == 'composes':
                     dot.edge(cls, target, arrowhead='diamond')
                 elif rel_type == 'uses':

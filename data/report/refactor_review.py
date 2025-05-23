@@ -242,6 +242,7 @@ def check_pattern_in_folder(info):
 
 
 # --- 5. MAIN ---
+#I should divide the main from the other code, also I should add an option to not check what was already checked
 def main():
     candidates = find_candidate_folders(FOLDERTOSEARCH)
     if not candidates:
