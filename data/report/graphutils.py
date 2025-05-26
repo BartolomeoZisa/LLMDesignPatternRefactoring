@@ -111,7 +111,7 @@ class GraphVisualizer:
 class Strategy:
     def build(self):
         G = nx.DiGraph()
-        G.add_edge("Context", "Strategy")
+        G.add_edge("Strategy", "Context")
         G.add_edge("ConcreteStrategy", "Strategy")
         return G
 
@@ -128,14 +128,16 @@ class Adapter:
     def build(self):
         G = nx.DiGraph()
         G.add_edge("Adapter", "Target")
+        G.add_edge("Adaptee", "Adapter")    
         return G
 
 @SubgraphChecker.register
 class State:
     def build(self):
         G = nx.DiGraph()
-        G.add_edge("Context", "State")
+        #G.add_edge("Context", "State") is this always true?
         G.add_edge("ConcreteState", "State")
+        G.add_edge("State", "Context") 
         return G
 
 @SubgraphChecker.register
@@ -145,6 +147,7 @@ class Decorator:
         G.add_edge("Decorator", "Component")
         G.add_edge("ConcreteDecorator", "Decorator")
         G.add_edge("ConcreteComponent", "Component")
+        G.add_edge("Component", "Decorator")
         return G
 
 

@@ -71,7 +71,7 @@ def filter_folders_by_criteria(folders, criteria_funcs):
                 with open(output_path, "w", newline='') as csvfile:
                     writer = csv.DictWriter(csvfile, fieldnames=["filename", "passed", "reason"])
                     writer.writeheader()
-                    reason_text = ", ".join(f"failed: {name}" for name in failed_funcs)
+                    reason_text = " ".join(f"{name}" for name in failed_funcs)
                     for img in folder_info["png_files"]:
                         writer.writerow({
                             "filename": img,

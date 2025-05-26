@@ -109,22 +109,20 @@ class ClassDependencyVisitor(ast.NodeVisitor):
 
 
 class UMLDiagramDrawer:
-    def __init__(self, dependencies, class_attrs, class_methods, output_dir='uml_output', project_name=None, output_format='png'):
+    def __init__(self, dependencies, class_attrs, class_methods, output_dir='uml_output', project_name=None, output_format='png', include_uses = True):
         self.dependencies = dependencies
         self.class_attrs = class_attrs
         self.class_methods = class_methods
         self.output_dir = output_dir
         self.project_name = project_name or "uml_class_diagram"
         self.output_format = output_format
+        self.include_uses = include_uses
 
     def draw(self):
         os.makedirs(self.output_dir, exist_ok=True)
 
         dot = Digraph('UML', format=self.output_format)
         dot.attr(rankdir='BT')
-        dot.attr(ratio="1")
-        dot.attr(nodesep="0.5")
-        dot.attr(ranksep="0.5")
 
         dot.attr('node', shape='record', fontsize='10', fontname='Helvetica', style='filled', fillcolor='white')
 
@@ -140,11 +138,12 @@ class UMLDiagramDrawer:
             for rel_type, target in sorted(self.dependencies[cls], key=lambda x: (x[0], x[1])):
                 if target not in all_classes or cls == target:
                     continue
+                #composes has been swapped, this might be important if i want to avoid the drawer
                 if rel_type == 'inherits':
                     dot.edge(cls, target, arrowhead='empty')
                 elif rel_type == 'composes':
-                    dot.edge(cls, target, arrowhead='diamond')
-                elif rel_type == 'uses':
+                    dot.edge(target, cls, arrowhead='diamond')
+                elif rel_type == 'uses' and self.include_uses:
                     dot.edge(cls, target, arrowhead='vee', style='dashed')
 
         dot_file_path = os.path.join(self.output_dir, f'{self.project_name}.dot')

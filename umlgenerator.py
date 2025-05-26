@@ -16,6 +16,8 @@ def main():
                         help='Directory to save UML diagrams (default: uml_output)')
     parser.add_argument('-p', '--project-name', default="classes_diagram",
                         help='Project name prefix for output files')
+    parser.add_argument('--include-uses', '-u', action='store_false',
+                        help='Include "uses" relationships in the diagram')
 
     args = parser.parse_args()
 
@@ -24,6 +26,8 @@ def main():
         sys.exit(1)
 
     visitor = ClassDependencyVisitor()
+    
+    #TODO: fix file
 
     if os.path.isdir(args.input_path):
         dependencies, class_attrs, class_methods = visitor.collect_dependencies_from_directory(args.input_path)
@@ -46,7 +50,7 @@ def main():
                                 class_attrs=class_attrs,
                              output_dir=args.output_directory,
                              project_name=project_name,
-                             output_format=args.output)
+                             output_format=args.output, include_uses=args.include_uses)
     drawer.draw()
 
 

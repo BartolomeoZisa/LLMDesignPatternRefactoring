@@ -115,7 +115,8 @@ def main():
         print("\nDone with this pattern.\nYou can enter another refactored version or type 'SKIP' to move to the next pattern.")
 
 if __name__ == "__main__":
-    main()
+    for _ in range(config.NUMITERATIONS):
+        main()
 
         
         
