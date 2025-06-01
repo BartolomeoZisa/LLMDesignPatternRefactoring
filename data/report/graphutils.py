@@ -106,7 +106,7 @@ class GraphVisualizer:
 
 
 
-
+#In dot the composition is reversed, so we need to swap the edges
 @SubgraphChecker.register
 class Strategy:
     def build(self):

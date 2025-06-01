@@ -222,8 +222,8 @@ def check_pattern_in_folder(info):
     if isinstance(graph, nx.MultiDiGraph):
         graph = GraphParser.convert_multidigraph_to_digraph(graph)
     #print(graph)
-    visualizer = GraphVisualizer(graph)
-    visualizer.draw()
+    #visualizer = GraphVisualizer(graph)
+    #visualizer.draw()
 
     checker = SubgraphChecker()
     #print(checker.subgraph_classes)
@@ -250,7 +250,7 @@ def main():
         return
 
     # Choose your active criteria here:
-    criteria = [test_report_passed]
+    criteria = [test_report_passed, check_pattern_in_folder]
     qualified = filter_folders_by_criteria(candidates, criteria)
 
     if not qualified:
