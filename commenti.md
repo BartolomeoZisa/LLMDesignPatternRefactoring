@@ -306,3 +306,12 @@ As for the test results, I created a tool that visualizes the number of tests pa
 It’s a histogram with one column per test, with the height representing the number of executions: green for passed, red for failed, and gray for syntax or import errors.
 The data is collected in a dictionary (also JSON-parsable) and then passed to a class that visualizes it. An example is attached.
 
+------------------
+WEEK 8
+State:
+created traffic light
+I don't know if elevator is good, it has an internal state for current floor
+
+strategy:
+created graph traversal
+created format validator (inspired from java spring)

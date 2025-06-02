@@ -1,0 +1,11 @@
+| From State          | Method          | To State                         |
+| ------------------- | --------------- | -------------------------------- |
+| `IdleState`         | `call()`        | `DoorsOpeningState` (same floor) |
+| `IdleState`         | `call()`        | `MovingState` (different floor)  |
+| `MovingState`       | `move()`        | `DoorsOpeningState`              |
+| `DoorsOpeningState` | `open_doors()`  | `DoorsOpenState`                 |
+| `DoorsOpenState`    | `close_doors()` | `DoorsClosingState`              |
+| `DoorsClosingState` | `open_doors()`  | `DoorsOpeningState`              |
+| `DoorsClosingState` | `close_doors()` | `IdleState`                      |
+
+Else error
