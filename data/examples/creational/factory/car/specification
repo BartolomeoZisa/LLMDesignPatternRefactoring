@@ -1,0 +1,3 @@
+Factory method to create cars made out of engines and tanks
+the engine has a speed and fuel usage per km, the tank has a max fuel capacity
+the car can travel, if there's not enough fuel to travel the desired distance it won't move. 

@@ -1,0 +1,5 @@
+4 base types of coffee optionally enriched with 4 condiments 
+More than 1 condiment can be added, the cost is the sum of the ingredients
+Also, a description of the coffe should be given. 
+
+refactoring with decorator

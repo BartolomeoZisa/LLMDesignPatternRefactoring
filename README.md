@@ -96,7 +96,7 @@ All outputs are saved in a timestamped directory inside save_folder_path named a
 * Currently, only the `openai` strategy is implemented.
 * The `oolama` strategy raises `NotImplementedError`.
 * Prompt and refactoring logic rely on external modules (`PromptCreator`, `OpenAIResponse`).
-
+* To use openAI from command line a OPENAI_API_KEY environment variable must be set.
 
 ---
 

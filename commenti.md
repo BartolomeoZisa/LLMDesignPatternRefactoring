@@ -313,5 +313,16 @@ created traffic light
 I don't know if elevator is good, it has an internal state for current floor
 
 strategy:
-created graph traversal
+created graph traversal (BFS, DFS) #should handle empty graph and invalid start node
 created format validator (inspired from java spring)
+
+factory method:
+car with engine and tank and kms travelled and travel method (adapted to be more meaningful)
+wand with 3 components, wood, core and gem attack caculated as mana*(attack**power)
+
+
+decorator:
+cafecito (from classroom)
+sword with upgrades
+
+adapter:
