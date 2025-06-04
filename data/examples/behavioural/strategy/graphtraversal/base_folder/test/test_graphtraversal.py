@@ -83,3 +83,41 @@ def test_graph_visitor_strategy_switch():
     assert bfs_result == ['A', 'B', 'C', 'D', 'E']
 
     assert dfs_result != bfs_result
+
+def test_empty_graph_dfs():
+    graph = {}
+    visitor = GraphVisitor(strategy="dfs")
+    result = visitor.visit(graph, 'A')
+    assert result == [], "DFS should return an empty list for an empty graph"
+
+def test_empty_graph_bfs():
+    graph = {}
+    visitor = GraphVisitor(strategy="bfs")
+    result = visitor.visit(graph, 'A')
+    assert result == [], "BFS should return an empty list for an empty graph"
+
+def test_invalid_start_node_dfs():
+    graph = {'A': ['B'], 'B': []}
+    visitor = GraphVisitor(strategy="dfs")
+    result = visitor.visit(graph, 'Z')  # 'Z' is not in the graph
+    assert result == [], "DFS should return an empty list for an invalid start node"
+
+def test_invalid_start_node_bfs():
+    graph = {'A': ['B'], 'B': []}
+    visitor = GraphVisitor(strategy="bfs")
+    result = visitor.visit(graph, 'Z')  # 'Z' is not in the graph
+    assert result == [], "BFS should return an empty list for an invalid start node"
+
+def test_graph_with_cycle():
+    graph = {
+        'A': ['B'],
+        'B': ['C'],
+        'C': ['A']  # Cycle here
+    }
+    visitor = GraphVisitor(strategy="dfs")
+    result = visitor.visit(graph, 'A')
+    assert result == ['A', 'B', 'C'], "DFS should handle cycles correctly"
+
+    visitor.set_strategy("bfs")
+    result = visitor.visit(graph, 'A')
+    assert result == ['A', 'B', 'C'], "BFS should handle cycles correctly"

@@ -45,6 +45,8 @@ class GraphVisitor:
         self.strategy = strategy
 
     def visit(self, graph, start_node):
+        if not graph or start_node not in graph:
+            return []
         return self.strategy.traverse(graph, start_node)
 
         

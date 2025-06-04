@@ -10,8 +10,9 @@ class GraphVisitor:
         self.strategy = strategy_name
 
     def visit(self, graph, start_node):
-        if start_node not in graph:
-            raise ValueError(f"Start node '{start_node}' not in graph.")
+        if start_node not in graph or not graph:
+            # If the start node is not in the graph or the graph is empty, return an empty list
+            return []
 
         if self.strategy == "dfs":
             return self._dfs(graph, start_node)

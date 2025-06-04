@@ -311,7 +311,7 @@ WEEK 8
 State:
 created traffic light, cycles the colors of a traffic light
 I don't know if elevator is good, 
-context has an internal state for current floor
+context has an internal state (int) for current floor
 IdleState -> DoorsOpeningState (on call() to same floor)
 IdleState -> MovingState (on call() to different floor)
 MovingState -> DoorsOpeningState (on move())
@@ -321,7 +321,7 @@ DoorsClosingState -> DoorsOpeningState (on open_doors())
 DoorsClosingState -> IdleState (on close_doors())
 
 strategy:
-created format validator (telephone, number, alphanumeric) (inspired from java spring)
+created format validator (telephone, number, alphanumeric) (inspired from classroom java spring)
 created graph traversal (BFS, DFS) #should handle empty graph and invalid start node
 
 
