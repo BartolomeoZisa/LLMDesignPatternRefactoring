@@ -309,20 +309,31 @@ The data is collected in a dictionary (also JSON-parsable) and then passed to a 
 ------------------
 WEEK 8
 State:
-created traffic light
-I don't know if elevator is good, it has an internal state for current floor
+created traffic light, cycles the colors of a traffic light
+I don't know if elevator is good, 
+context has an internal state for current floor
+IdleState -> DoorsOpeningState (on call() to same floor)
+IdleState -> MovingState (on call() to different floor)
+MovingState -> DoorsOpeningState (on move())
+DoorsOpeningState -> DoorsOpenState (on open_doors())
+DoorsOpenState -> DoorsClosingState (on close_doors())
+DoorsClosingState -> DoorsOpeningState (on open_doors())
+DoorsClosingState -> IdleState (on close_doors())
 
 strategy:
+created format validator (telephone, number, alphanumeric) (inspired from java spring)
 created graph traversal (BFS, DFS) #should handle empty graph and invalid start node
-created format validator (inspired from java spring)
+
 
 factory method:
-car with engine and tank and kms travelled and travel method (adapted to be more meaningful)
+car with engine and tank and kms travelled and travel method that consideres fuel (adapted to be more meaningful)
 wand with 3 components, wood, core and gem attack caculated as mana*(attack**power)
 
 
 decorator:
-cafecito (from classroom)
-sword with upgrades
+cafecito  4 base condiments and 4 base coffees  (from classroom)
+sword with stackable upgrades
 
 adapter:
+round hole and round peg, and adapter to fit square peg, almost identical to web example, in non refactored put radius in square 
+gridmovement, with KeyboardController, that executes command strings, then in refactored added TouchAdapter that uses different commands

@@ -8,4 +8,19 @@
 | `DoorsClosingState` | `open_doors()`  | `DoorsOpeningState`              |
 | `DoorsClosingState` | `close_doors()` | `IdleState`                      |
 
+IdleState -> DoorsOpeningState (on call() to same floor)
+
+IdleState -> MovingState (on call() to different floor)
+
+MovingState -> DoorsOpeningState (on move())
+
+DoorsOpeningState -> DoorsOpenState (on open_doors())
+
+DoorsOpenState -> DoorsClosingState (on close_doors())
+
+DoorsClosingState -> DoorsOpeningState (on open_doors())
+
+DoorsClosingState -> IdleState (on close_doors())
+
+
 Else error
