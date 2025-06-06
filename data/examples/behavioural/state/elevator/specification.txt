@@ -1,26 +1,21 @@
-| From State          | Method          | To State                         |
-| ------------------- | --------------- | -------------------------------- |
-| `IdleState`         | `call()`        | `DoorsOpeningState` (same floor) |
-| `IdleState`         | `call()`        | `MovingState` (different floor)  |
-| `MovingState`       | `move()`        | `DoorsOpeningState`              |
-| `DoorsOpeningState` | `open_doors()`  | `DoorsOpenState`                 |
-| `DoorsOpenState`    | `close_doors()` | `DoorsClosingState`              |
-| `DoorsClosingState` | `open_doors()`  | `DoorsOpeningState`              |
-| `DoorsClosingState` | `close_doors()` | `IdleState`                      |
+IdleDownState
+→ call_to_up() → MovingUpwardsState
 
-IdleState -> DoorsOpeningState (on call() to same floor)
+MovingUpwardsState
+→ notify_arrived() → DoorsOpeningState
 
-IdleState -> MovingState (on call() to different floor)
+DoorsOpeningState
+→ notify_doors_opened() → DoorsClosingState
 
-MovingState -> DoorsOpeningState (on move())
+DoorsClosingState
+→ notify_door_closed_up() → IdleUpState
+→ notify_door_closed_down() → IdleDownState
 
-DoorsOpeningState -> DoorsOpenState (on open_doors())
+IdleUpState
+→ call_to_down() → MovingDownwardsState
 
-DoorsOpenState -> DoorsClosingState (on close_doors())
-
-DoorsClosingState -> DoorsOpeningState (on open_doors())
-
-DoorsClosingState -> IdleState (on close_doors())
+MovingDownwardsState
+→ notify_arrived() → DoorsOpeningState
 
 
 Else error

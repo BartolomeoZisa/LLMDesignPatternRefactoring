@@ -1,120 +1,95 @@
-class ElevatorError(Exception):
-    pass
+from abc import ABC, abstractmethod
 
-class ElevatorState:
-    def call(self, elevator, floor):
-        raise NotImplementedError
+# ---------- Custom Exception ----------
+class InvalidStateTransitionError(Exception):
+    def __init__(self, method, state):
+        super().__init__(f"Invalid operation: {method}() not allowed in {state}.")
 
-    def move(self, elevator, target_floor):
-        raise NotImplementedError
+# ---------- Base State ----------
+class ElevatorState(ABC):
+    def __init__(self, elevator):
+        self.elevator = elevator
 
-    def open_doors(self, elevator):
-        raise NotImplementedError
+    def call_to_up(self):
+        raise InvalidStateTransitionError("call_to_up", self.__class__.__name__)
 
-    def close_doors(self, elevator):
-        raise NotImplementedError
+    def call_to_down(self):
+        raise InvalidStateTransitionError("call_to_down", self.__class__.__name__)
 
-class IdleState(ElevatorState):
-    def call(self, elevator, floor):
-        if floor < 0 or floor >= elevator.floors:
-            raise ElevatorError("Invalid floor.")
-        if elevator.current_floor == floor:
-            elevator.state = DoorsOpeningState()
-            return "Already on floor. " + elevator.state.open_doors(elevator)
-        else:
-            elevator.target_floor = floor
-            elevator.state = MovingState()
-            return "Elevator called to floor " + str(floor)
+    def notify_arrived(self):
+        raise InvalidStateTransitionError("notify_arrived", self.__class__.__name__)
 
-    def move(self, elevator, target_floor):
-        raise ElevatorError("Elevator is idle, not moving.")
+    def notify_doors_opened(self):
+        raise InvalidStateTransitionError("notify_doors_opened", self.__class__.__name__)
 
-    def open_doors(self, elevator):
-        raise ElevatorError("Elevator is idle, doors are closed.")
+    def notify_door_closed_up(self):
+        raise InvalidStateTransitionError("notify_door_closed_up", self.__class__.__name__)
 
-    def close_doors(self, elevator):
-        raise ElevatorError("Elevator is idle, doors are closed.")
+    def notify_door_closed_down(self):
+        raise InvalidStateTransitionError("notify_door_closed_down", self.__class__.__name__)
 
-class MovingState(ElevatorState):
-    def call(self, elevator, floor):
-        raise ElevatorError("Elevator is moving, please wait.")
+# ---------- Elevator Context ----------
+class Elevator:
+    def __init__(self):
+        self.state = IdleDownState(self)
 
-    def move(self, elevator, target_floor):
-        while elevator.current_floor != target_floor:
-            if elevator.current_floor < target_floor:
-                elevator.current_floor += 1
-            else:
-                elevator.current_floor -= 1
-        elevator.state = DoorsOpeningState()
-        return "Arrived at floor " + str(elevator.current_floor) + ". "
+    def set_state(self, new_state):
+        print(f"Transitioning to: {new_state.__class__.__name__}")
+        self.state = new_state
 
-    def open_doors(self, elevator):
-        raise ElevatorError("Cannot open doors while moving.")
+    def call_to_up(self):
+        self.state.call_to_up()
 
-    def close_doors(self, elevator):
-        raise ElevatorError("Doors are already closed while moving.")
+    def call_to_down(self):
+        self.state.call_to_down()
+
+    def sensor_arrival_triggered(self):
+        self.state.notify_arrived()
+
+    def sensor_doors_opened(self):
+        self.state.notify_doors_opened()
+
+    def sensor_door_closed_up(self):
+        self.state.notify_door_closed_up()
+
+    def sensor_door_closed_down(self):
+        self.state.notify_door_closed_down()
+
+# ---------- Concrete States ----------
+class IdleDownState(ElevatorState):
+    def call_to_up(self):
+        print("Going up from bottom floor...")
+        self.elevator.set_state(MovingUpwardsState(self.elevator))
+
+class IdleUpState(ElevatorState):
+    def call_to_down(self):
+        print("Going down from top floor...")
+        self.elevator.set_state(MovingDownwardsState(self.elevator))
+
+class MovingUpwardsState(ElevatorState):
+    def notify_arrived(self):
+        print("Arrived at top floor.")
+        self.elevator.set_state(DoorsOpeningState(self.elevator))
+
+class MovingDownwardsState(ElevatorState):
+    def notify_arrived(self):
+        print("Arrived at bottom floor.")
+        self.elevator.set_state(DoorsOpeningState(self.elevator))
 
 class DoorsOpeningState(ElevatorState):
-    def call(self, elevator, floor):
-        raise ElevatorError("Doors are opening, please wait.")
-
-    def move(self, elevator, target_floor):
-        raise ElevatorError("Cannot move while doors are opening.")
-
-    def open_doors(self, elevator):
-        elevator.state = DoorsOpenState()
-        return "Doors opening at floor " + str(elevator.current_floor) + ". "
-
-    def close_doors(self, elevator):
-        raise ElevatorError("Doors are opening, cannot close now.")
-
-class DoorsOpenState(ElevatorState):
-    def call(self, elevator, floor):
-        raise ElevatorError("Doors are open, please wait.")
-
-    def move(self, elevator, target_floor):
-        raise ElevatorError("Cannot move, doors are open.")
-
-    def open_doors(self, elevator):
-        raise ElevatorError("Doors are already open.")
-
-    def close_doors(self, elevator):
-        elevator.state = DoorsClosingState()
-        return "Closing doors. "
-
+    def notify_doors_opened(self):
+        print("Doors are fully opened.")
+        self.elevator.set_state(DoorsClosingState(self.elevator))
 
 class DoorsClosingState(ElevatorState):
-    def call(self, elevator, floor):
-        raise ElevatorError("Doors are closing, please wait.")
+    def notify_door_closed_up(self):
+        print("Doors closed at top floor.")
+        self.elevator.set_state(IdleUpState(self.elevator))
 
-    def move(self, elevator, target_floor):
-        raise ElevatorError("Cannot move, doors are closing.")
+    def notify_door_closed_down(self):
+        print("Doors closed at bottom floor.")
+        self.elevator.set_state(IdleDownState(self.elevator))
 
-    def open_doors(self, elevator):
-        elevator.state = DoorsOpeningState()
-        return "Re-opening doors. " 
-
-    def close_doors(self, elevator):
-        elevator.state = IdleState()
-        return "Doors closed. Elevator is idle."
-
-class Elevator:
-    def __init__(self, floors):
-        self.floors = floors
-        self.current_floor = 0
-        self.state = IdleState()
-
-    def call(self, floor):
-        return self.state.call(self, floor)
-
-    def move(self, target_floor):  
-        return self.state.move(self, target_floor)
-
-    def open_doors(self):
-        return self.state.open_doors(self)
-
-    def close_doors(self):
-        return self.state.close_doors(self)
 
 
 

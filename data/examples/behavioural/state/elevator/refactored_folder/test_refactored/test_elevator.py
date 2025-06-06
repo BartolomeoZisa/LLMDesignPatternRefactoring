@@ -1,136 +1,83 @@
 import pytest
-from refactored.elevator import Elevator, ElevatorError, IdleState, MovingState, DoorsOpeningState, DoorsOpenState, DoorsClosingState
 
-def test_idle_to_moving_and_opening_doors():
-    elevator = Elevator(floors=5)
-    response = elevator.call(3)
-    assert "Elevator called to floor 3" in response
-    move_response = elevator.move(3)
-    assert "Arrived at floor 3" in move_response
-    door_response = elevator.open_doors()
-    assert "Doors opening at floor 3" in door_response
-    assert isinstance(elevator.state, DoorsOpenState)
-    assert elevator.current_floor == 3
+# Assume elevator code is imported or present here:
+from refactored.elevator import Elevator, InvalidStateTransitionError
 
-def test_opening_doors_to_open_state():
-    elevator = Elevator(floors=5)
-    elevator.call(2)
-    elevator.move(2)
-    response = elevator.open_doors()
-    assert "Doors opening at floor 2" in response
-    assert isinstance(elevator.state, DoorsOpenState)
+@pytest.fixture
+def elevator():
+    return Elevator()
 
-def test_doors_open_to_closing():
-    elevator = Elevator(floors=5)
-    elevator.call(1)
-    elevator.move(1)
-    elevator.open_doors()
-    response = elevator.close_doors()
-    assert "Closing doors." in response
-    assert isinstance(elevator.state, DoorsClosingState)
+def test_idle_down_to_moving_up(elevator):
+    elevator.call_to_up()
+    assert elevator.state.__class__.__name__ == "MovingUpwardsState"
 
+def test_moving_up_to_doors_opening(elevator):
+    elevator.call_to_up()
+    elevator.sensor_arrival_triggered()
+    assert elevator.state.__class__.__name__ == "DoorsOpeningState"
 
-def test_doors_closing_to_opening():
-    elevator = Elevator(floors=5)
-    elevator.call(1)
-    elevator.move(1)
-    elevator.open_doors()
-    elevator.close_doors()
-    response = elevator.open_doors()
-    assert "Re-opening doors." in response
-    assert isinstance(elevator.state, DoorsOpeningState)
+def test_doors_opening_to_doors_closing(elevator):
+    elevator.call_to_up()
+    elevator.sensor_arrival_triggered()
+    elevator.sensor_doors_opened()
+    assert elevator.state.__class__.__name__ == "DoorsClosingState"
 
+def test_doors_closing_to_idle_up(elevator):
+    elevator.call_to_up()
+    elevator.sensor_arrival_triggered()
+    elevator.sensor_doors_opened()
+    elevator.sensor_door_closed_up()
+    assert elevator.state.__class__.__name__ == "IdleUpState"
 
-def test_call_same_floor_opens_doors():
-    elevator = Elevator(floors=5)
-    elevator.current_floor = 2
-    response = elevator.call(2)
-    assert "Already on floor." in response
-    assert isinstance(elevator.state, DoorsOpenState)
+def test_idle_up_to_moving_down(elevator):
+    elevator.call_to_up()
+    elevator.sensor_arrival_triggered()
+    elevator.sensor_doors_opened()
+    elevator.sensor_door_closed_up()
 
-def test_invalid_floor_low():
-    elevator = Elevator(floors=5)
-    with pytest.raises(ElevatorError, match="Invalid floor."):
-        elevator.call(-1)
+    elevator.call_to_down()
+    assert elevator.state.__class__.__name__ == "MovingDownwardsState"
 
-def test_invalid_floor_high():
-    elevator = Elevator(floors=5)
-    with pytest.raises(ElevatorError, match="Invalid floor."):
-        elevator.call(10)
+def test_moving_down_to_doors_opening(elevator):
+    elevator.call_to_up()
+    elevator.sensor_arrival_triggered()
+    elevator.sensor_doors_opened()
+    elevator.sensor_door_closed_up()
 
-def test_call_while_moving():
-    elevator = Elevator(floors=5)
-    elevator.call(4)
-    elevator.move(4)
-    elevator.open_doors()
-    elevator.close_doors()
-    elevator.close_doors()  # Ensure doors are closed before next call
-    elevator.call(3)
-    with pytest.raises(ElevatorError, match="Elevator is moving, please wait."):
-        elevator.call(2)
+    elevator.call_to_down()
+    elevator.sensor_arrival_triggered()
+    assert elevator.state.__class__.__name__ == "DoorsOpeningState"
 
-def test_open_doors_while_moving():
-    elevator = Elevator(floors=5)
-    elevator.call(4)
-    with pytest.raises(ElevatorError, match="Cannot open doors while moving."):
-        elevator.open_doors()
+def test_doors_closing_to_idle_down(elevator):
+    elevator.call_to_up()
+    elevator.sensor_arrival_triggered()
+    elevator.sensor_doors_opened()
+    elevator.sensor_door_closed_up()
 
-def test_move_while_doors_open():
-    elevator = Elevator(floors=5)
-    elevator.call(3)
-    elevator.move(3)
-    elevator.open_doors()
-    with pytest.raises(ElevatorError, match="Cannot move, doors are open."):
-        elevator.move(3)
+    elevator.call_to_down()
+    elevator.sensor_arrival_triggered()
+    elevator.sensor_doors_opened()
+    elevator.sensor_door_closed_down()
+    assert elevator.state.__class__.__name__ == "IdleDownState"
 
-def test_call_while_doors_open():
-    elevator = Elevator(floors=5)
-    elevator.call(2)
-    elevator.move(2)
-    elevator.open_doors()
-    with pytest.raises(ElevatorError, match="Doors are open, please wait."):
-        elevator.call(1)
+def test_invalid_call_to_down_in_idle_down(elevator):
+    with pytest.raises(InvalidStateTransitionError):
+        elevator.call_to_down()
 
-def test_move_while_idle_error():
-    elevator = Elevator(floors=5)
-    with pytest.raises(ElevatorError, match="Elevator is idle, not moving."):
-        elevator.move(5)
+def test_invalid_call_to_up_in_moving_upwards(elevator):
+    elevator.call_to_up()
+    with pytest.raises(InvalidStateTransitionError):
+        elevator.call_to_up()
 
-def test_doors_already_open():
-    elevator = Elevator(floors=5)
-    elevator.call(2)
-    elevator.move(2)
-    elevator.open_doors()
-    with pytest.raises(ElevatorError, match="Doors are already open."):
-        elevator.open_doors()
+def test_invalid_notify_doors_opened_in_idle_down(elevator):
+    with pytest.raises(InvalidStateTransitionError):
+        elevator.sensor_doors_opened()
 
-def test_close_while_opening():
-    elevator = Elevator(floors=5)
-    elevator.call(3)
-    elevator.move(3)
-    # Simulate elevator is in DoorsOpeningState but hasn't transitioned yet
-    with pytest.raises(ElevatorError, match="Doors are opening, cannot close now."):
-        elevator.close_doors()
+def test_invalid_notify_door_closed_down_in_idle_up(elevator):
+    elevator.call_to_up()
+    elevator.sensor_arrival_triggered()
+    elevator.sensor_doors_opened()
+    elevator.sensor_door_closed_up()
+    with pytest.raises(InvalidStateTransitionError):
+        elevator.sensor_door_closed_down()
 
-def test_open_while_opening():
-    elevator = Elevator(floors=5)
-    elevator.call(3)
-    elevator.move(3)
-    response = elevator.open_doors()
-    assert "Doors opening at floor" in response
-
-def test_move_while_closing():
-    elevator = Elevator(floors=5)
-    elevator.call(2)
-    elevator.move(2)
-    elevator.open_doors()
-    elevator.close_doors()
-    with pytest.raises(ElevatorError, match="Cannot move, doors are closing."):
-        elevator.move(2)
-
-def test_idle_door_operations():
-    elevator = Elevator(floors=5)
-    with pytest.raises(ElevatorError, match="Elevator is idle, doors are closed."):
-        elevator.open_doors()
-    with pytest.raises(ElevatorError, match="Elevator is idle, doors are closed."):
-        elevator.close_doors()
