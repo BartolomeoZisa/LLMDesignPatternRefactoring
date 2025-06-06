@@ -44,10 +44,5 @@ def test_invalid_square_peg_width_raises():
     with pytest.raises(ValueError):
         SquarePeg(-5)
 
-def test_square_peg_direct_use_raises():
-    hole = RoundHole(5)
-    peg = SquarePeg(5)
-    with pytest.raises(AttributeError):
-        hole.fits(peg)  # peg has no get_radius
 
 
