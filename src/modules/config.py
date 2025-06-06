@@ -5,12 +5,12 @@ PATTERNDESCRIPTIONPATH = "src/patterns/patternGOFjson"
 
 
 #this is for the main
-PROMPTFILE = "src/prompts/promptxmltypes.txt"
-NUMITERATIONS = 4
+PROMPTFILE = "src/prompts/promptxml.txt"
+NUMITERATIONS = 2
 SAVEFOLDERPATH = "llm"
 ASKSKIP = False
 PROJECT_ROOT = "data/examples"
 TEMPERATURE = 1
 MODEL_NAME = "gpt-4o-mini-2024-07-18"
-MAX_LENGTH = 2048
+MAX_LENGTH = 8192
 STRATEGY = "openai"
