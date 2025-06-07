@@ -5,7 +5,28 @@ from pygments.lexers import PythonLexer
 import os
 import glob
 import json
+import csv
 
+BASEPATH = "../results"
+
+def find_candidate_folders(base_path):
+    folders = []
+    print(f"Searching folders under: {base_path}")
+    for root, dirs, files in os.walk(base_path):
+        result_files = [f for f in files if f.endswith("_results.csv")]
+        parameters_files = [f for f in files if f.endswith("parameters.json")]
+        if not result_files or not parameters_files:
+            continue
+        test_report = os.path.join(root, result_files[0])
+        parameters = os.path.join(root, parameters_files[0])
+        refactored_folder = os.path.join(root, "refactored") 
+        folders.append({
+            "report": test_report,
+            "parameters": parameters,
+            "refactored_folder": refactored_folder,
+            "parent": root
+        })
+    return folders
 
 class HighlightText(tk.Text):
     def __init__(self, *args, **kwargs):
@@ -49,14 +70,15 @@ class CodeReviewApp:
         self.master = master
         master.title("Code Review Tool")
 
+        self.candidate_folders = find_candidate_folders(BASEPATH)
+        self.folder_index = 0
         self.file_index = 0
         self.files = []
-        self.results = {}
+        self.current_folder = None
 
-        self.label = tk.Label(master, text="Select a folder to begin.", font=("Arial", 14))
+        self.label = tk.Label(master, text="Loading candidate folders...", font=("Arial", 14))
         self.label.pack(pady=5)
 
-        # Scrollbar and Text Frame
         frame = tk.Frame(master)
         frame.pack(expand=True, fill=tk.BOTH, padx=10, pady=5)
 
@@ -71,37 +93,43 @@ class CodeReviewApp:
         button_frame = tk.Frame(master)
         button_frame.pack(pady=5)
 
-        self.load_button = tk.Button(button_frame, text="Load Folder", command=self.load_folder)
-        self.load_button.pack(side=tk.LEFT, padx=5)
-
         self.yes_button = tk.Button(button_frame, text="Yes (Good)", command=lambda: self.mark_file("yes"), state=tk.DISABLED)
         self.yes_button.pack(side=tk.LEFT, padx=5)
 
         self.no_button = tk.Button(button_frame, text="No (Needs Fixing)", command=lambda: self.mark_file("no"), state=tk.DISABLED)
         self.no_button.pack(side=tk.LEFT, padx=5)
 
-    def load_folder(self):
-        folder = filedialog.askdirectory()
-        if not folder:
-            return
-        self.files = glob.glob(os.path.join(folder, "*.py"))
-        self.file_index = 0
-        self.results = {}
-        if not self.files:
-            messagebox.showerror("Error", "No .py files found.")
-            return
-        self.label.config(text=f"Loaded {len(self.files)} files.")
-        self.show_file()
+        self.load_next_folder()
 
-    def show_file(self):
-        if self.file_index >= len(self.files):
-            self.label.config(text="Review complete.")
+    def load_next_folder(self):
+        if self.folder_index >= len(self.candidate_folders):
+            self.label.config(text="All folders reviewed.")
             self.text.config(state=tk.NORMAL)
             self.text.delete("1.0", tk.END)
             self.text.config(state=tk.DISABLED)
             self.yes_button.config(state=tk.DISABLED)
             self.no_button.config(state=tk.DISABLED)
-            self.save_results()
+            messagebox.showinfo("Done", "All folders reviewed.")
+            return
+
+        self.current_folder = self.candidate_folders[self.folder_index]
+        refactored_path = self.current_folder["refactored_folder"]
+        #all .py but ignore __init__.py
+        self.files = glob.glob(os.path.join(refactored_path, "*.py"))
+        self.files = [f for f in self.files if "__init__.py" not in f]
+        
+        self.file_index = 0
+        self.folder_index += 1
+
+        if not self.files:
+            self.load_next_folder()
+        else:
+            self.label.config(text=f"Loaded {len(self.files)} files from: {refactored_path}")
+            self.show_file()
+
+    def show_file(self):
+        if self.file_index >= len(self.files):
+            self.load_next_folder()
             return
 
         current_file = self.files[self.file_index]
@@ -114,15 +142,26 @@ class CodeReviewApp:
         self.no_button.config(state=tk.NORMAL)
 
     def mark_file(self, decision):
-        file_name = os.path.basename(self.files[self.file_index])
-        self.results[file_name] = decision
+        current_file = self.files[self.file_index]
+        file_name = os.path.basename(current_file)
+        result_row = {"file": file_name, "decision": decision}
+        self.save_result_to_csv(result_row)
         self.file_index += 1
         self.show_file()
 
-    def save_results(self):
-        with open("code_review_results.json", "w", encoding="utf-8") as f:
-            json.dump(self.results, f, indent=4)
-        messagebox.showinfo("Done", "All files reviewed. Results saved to code_review_results.json")
+    def save_result_to_csv(self, row):
+        if not self.current_folder:
+            return
+
+        csv_path = os.path.join(self.current_folder["parent"], "code_review.csv")
+        file_exists = os.path.isfile(csv_path)
+
+        with open(csv_path, "a", newline='', encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=["file", "decision"])
+            if not file_exists:
+                writer.writeheader()
+            writer.writerow(row)
+
 
 
 if __name__ == "__main__":

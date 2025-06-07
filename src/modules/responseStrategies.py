@@ -76,6 +76,8 @@ class OpenAIResponse(ResponseStrategy):
     def format_response(self, response):
         """Format the OpenAI response to remove markdown"""
         #the input is of type ```{languange} {code}```
+        print("response before formatting:")
+        print(response)
         response = response.split("\n")
         #remove the first line
         response = response[1:]

@@ -63,8 +63,9 @@ class RefactorFrontEnd:
     def generate_refactored_code(self):
         print(f"[INFO] Using strategy: {self.strategy}", file=sys.stderr)
         response = self.get_response_strategy()
+        print("response", response) 
         self.refactored_code = response.process(self.prompt)
-
+        print("processed", self.refactored_code)
         self.response_length = response.length(self.refactored_code)
         print(f"[INFO] Response length: {self.response_length} words", file=sys.stderr)
         print(f"[INFO] Total token length: {self.prompt_length + self.response_length}", file=sys.stderr)

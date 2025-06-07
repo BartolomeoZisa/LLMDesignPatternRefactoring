@@ -337,3 +337,34 @@ sword with stackable upgrades
 adapter:
 round hole and round peg, and adapter to fit square peg, almost identical to web example, in non refactored put radius in square 
 gridmovement, with KeyboardController, that executes command strings, then in refactored added TouchAdapter that uses different commands
+
+RateLimitError("Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-4o-mini in organization org-sawOIkYv5JLF1Pz1wpdcm6lc on requests per day (RPD): Limit 200, Used 200, Requested 1. Please try again in 7m12s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}
+
+
+traffic_light green_to_yellow yellow_to_red 
+display_green display_yellow
+
+validator only the last 2 pass
+
+Faults:
+Adapter
+SquarePegAdapter doesn't extend RoundPeg
+Controls TouchAdapter doesn't extend KeyboardControls
+Calculator doesn't create interface
+
+Decorator
+Icecream: likes to create dictionaries inside icecream for the cost of concrete components, not adhering to open-closed principle
+I think it's a bias due to the first implementation
+Cafecito: perfect
+Sword: Only 1 concrete component, the decorator extends the concrete component, not the base class
+
+States
+All good structure
+
+Strategy
+Graphvisitor: 1 execution didn't create the strategy interface
+All others good
+
+Factory:
+Car In some  no methods to create engine and tank, just the create_car method, probably ok.
+All others good
