@@ -98,10 +98,9 @@ class RefactorFrontEnd:
             "response_length": self.response_length
         }
 
-        filtered_metadata = {k: v for k, v in metadata.items() if k not in ignore_keys}
 
         with open(os.path.join(self.full_save_path, "parameters.json"), "w") as f:
-            json.dump(filtered_metadata, f, indent=4)
+            json.dump(metadata, f, indent=4)
 
         print(f"[INFO] Files saved to: {self.full_save_path}", file=sys.stderr)
 

@@ -50,7 +50,8 @@ def main():
             "--temperature", str(config.TEMPERATURE),
             "--model_name", config.MODEL_NAME,
             "--max_length", str(config.MAX_LENGTH),
-            "--strategy", config.STRATEGY
+            "--strategy", config.STRATEGY,
+            "--ignore_keys", ",".join(config.IGNOREHEADERS)
         ]
 
         try:

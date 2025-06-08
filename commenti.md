@@ -417,6 +417,13 @@ Icecream: 1/3 uses dictionary inside Icecream
 Cafecito: concrete beverage as a class
 Sword: good
 
+For now it's the best (promptxml1)
+
+Fourth try did worse on tests and other stuff
+
+Fifth try did worse on adapter and better on cafecito but worse on ice cream
+
+I can try changing the description maybe
 
 
 Code review
