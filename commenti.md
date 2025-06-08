@@ -343,8 +343,11 @@ RateLimitError("Error code: 429 - {'error': {'message': 'Rate limit reached for 
 
 traffic_light green_to_yellow yellow_to_red 
 display_green display_yellow
+no set_state
+
 
 validator only the last 2 pass
+This was a error in my tests
 
 Is touch adapter a good example??
 
@@ -373,4 +376,14 @@ Factory:
 Car In some  no methods to create engine and tank, just the create_car method, probably ok.
 All others good
 
-Code review, skip when already reviewed
+Code review, add skip when already reviewed
+Should i put another file in results, or just the report sheet?
+
+"
+Follow existing code style and naming conventions where possible.
+If applying the pattern exactly as described would break the tests or result in worse code design, adapt it thoughtfully to fit the context while preserving the spirit of the pattern.
+"
+I think this has a bad impact on the prompt
+
+
+might be useful to put as many arguments as you like (how? in the refactorer)
