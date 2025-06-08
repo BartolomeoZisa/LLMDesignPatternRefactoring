@@ -376,9 +376,6 @@ Factory:
 Car In some  no methods to create engine and tank, just the create_car method, probably ok.
 All others good
 
-Code review, add skip when already reviewed
-Should i put another file in results, or just the report sheet?
-
 "
 Follow existing code style and naming conventions where possible.
 If applying the pattern exactly as described would break the tests or result in worse code design, adapt it thoughtfully to fit the context while preserving the spirit of the pattern.
@@ -386,4 +383,49 @@ If applying the pattern exactly as described would break the tests or result in 
 I think this has a bad impact on the prompt
 
 
+Changed the prompt
+
+Faults:
+Adapter
+SquarePegAdapter doesn't extend RoundPeg
+Controls TouchAdapter doesn't create interface
+Calculator 1 doesn't create interface
+
+Decorator
+Icecream: 1 mixes up decorator and concrete component, also concrete icecream
+Cafecito: concretebeverage as a real class
+Sword: Only 1 concrete component, the decorator extends the concrete component, not the base class 2/3 times
+
+States
+All good structure
+
+Strategy
+All good
+
+Factory:
+All good
+
+Third try
+
+Adapter
+SquarePegAdapter doesn't extend RoundPeg (maybe it's not a good example?)
+Controls TouchAdapter doesn't create interface
+Calculator 1/3 doesn't create interface
+
+Decorator
+Icecream: 1/3 uses dictionary inside Icecream  
+Cafecito: concrete beverage as a class
+Sword: good
+
+
+
+Code review
+ add skip when already reviewed
+ Per tenere traccia dei risultati, creare una tabella (foglio excel?) dove ogni riga indichi: (1) pattern, (2) esempio considerato, (3) standard/custom, (4) iterazione, (5) passa/non passa i test, (6) applica/non applica il design pattern.
+Should i put another file in results folder, or just the report sheet?
+
+
+
+
 might be useful to put as many arguments as you like (how? in the refactorer)
+

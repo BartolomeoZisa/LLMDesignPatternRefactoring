@@ -20,7 +20,6 @@ If applying the pattern exactly as described would break the tests or result in 
 
 <designPatternDescription>
 {design_pattern_description}
-</description>
 </designPatternDescription>
 
 <tests>

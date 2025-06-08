@@ -4,8 +4,9 @@ You will receive a detailed task, the original code, the design pattern to apply
 
 <task>
 Apply the {design_pattern_name} design pattern based on the description provided.
-Try to create a class structure as close as possible to the description: 
-Pay special attention to the creation of abstract classes and/or interfaces, even if they're not mentioned in tests.
+Follow the class structure outlined in the design pattern description as closely as possible, inferring the roles and responsibilities of classes mentioned in the tests where necessary.
+Ensure the inclusion of abstract classes and/or interfaces that are essential to a proper implementation of the pattern, even if they are not explicitly referenced in the tests.
+At the same time, avoid introducing superfluous classes—only include those necessary for a faithful and effective application of the pattern.
 Also pay attention to the presence of attributes and methods typical of the pattern.
 Preserve the original behavior; all tests must pass after refactoring.
 Do not rename any classes, functions, or modules in a way that would break existing import statements in the tests.
@@ -24,7 +25,6 @@ If applying the pattern exactly as described would break the tests or result in 
 
 <designPatternDescription>
 {design_pattern_description}
-</description>
 </designPatternDescription>
 
 <tests>
