@@ -25,32 +25,16 @@ class TelNumberValidator(Validator):
 
 class ValidationContext:
     def __init__(self):
-        self.current_strategy: Validator | None = None
+        self.current_strategy: Validator = None
 
-    def set_strategy(self, strategy_cls: type[Validator]):
-        if not issubclass(strategy_cls, Validator):
-            raise TypeError("Strategy must be a subclass of Validator")
-        self.current_strategy = strategy_cls()  # instantiate the strategy class
-
+    def set_strategy(self, strategy: Validator) -> None:
+        if not isinstance(strategy, Validator):
+            raise TypeError("Strategy must be a subclass of Validator.")
+        self.current_strategy = strategy
     def validate(self, value: str) -> bool:
         if self.current_strategy is None:
             raise RuntimeError("Validation strategy not set.")
         return self.current_strategy.validate(value)
 
-
-# Usage example
-context = ValidationContext()
-
-context.set_strategy(NumericValidator)
-print(context.validate("12345"))  # True
-
-context.set_strategy(AlphanumericValidator)
-print(context.validate("abc123"))  # True
-
-context.set_strategy(TelNumberValidator)
-print(context.validate("+1 (234) 567-8900"))  # True
-
-context.set_strategy(AlphanumericValidator)
-print(context.validate("abc123!"))  # False
 
         

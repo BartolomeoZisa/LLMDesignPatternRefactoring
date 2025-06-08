@@ -346,6 +346,10 @@ display_green display_yellow
 
 validator only the last 2 pass
 
+Is touch adapter a good example??
+
+I need a script to put together the results
+
 Faults:
 Adapter
 SquarePegAdapter doesn't extend RoundPeg
@@ -368,3 +372,5 @@ All others good
 Factory:
 Car In some  no methods to create engine and tank, just the create_car method, probably ok.
 All others good
+
+Code review, skip when already reviewed
