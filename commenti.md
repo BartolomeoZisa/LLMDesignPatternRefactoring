@@ -425,6 +425,7 @@ Fifth try did worse on adapter and better on cafecito but worse on ice cream
 
 I can try changing the description maybe
 
+prompt xml3 + less description did horrible
 
 Code review
  add skip when already reviewed

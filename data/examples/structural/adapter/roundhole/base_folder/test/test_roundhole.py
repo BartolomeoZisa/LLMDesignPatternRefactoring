@@ -10,21 +10,21 @@ def test_round_peg_too_big():
 
 def test_square_peg_fits():
     peg = SquarePeg(5)
-    assert RoundHole(5).fits(peg) is True
+    assert RoundHole(5).fits_other(peg, "square") is True
 
 def test_square_peg_too_big():
     peg = SquarePeg(10)
-    assert RoundHole(5).fits(peg) is False
+    assert RoundHole(5).fits_other(peg, "square") is False
 
 def test_square_peg_exact_fit():
     width = 5 * 2 / math.sqrt(2)
     peg = SquarePeg(width)
-    assert RoundHole(5).fits(peg) is True
+    assert RoundHole(5).fits_other(peg, "square") is True
 
 def test_square_peg_just_over_threshold():
     width = 5 * 2 / math.sqrt(2) + 0.001
     peg = SquarePeg(width)
-    assert RoundHole(5).fits(peg) is False
+    assert RoundHole(5).fits_other(peg, "square") is False
 
 def test_invalid_hole_radius_raises():
     with pytest.raises(ValueError, match="Hole radius must be positive"):

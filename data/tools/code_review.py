@@ -8,6 +8,7 @@ import json
 import csv
 
 BASEPATH = "../results"
+SKIP_REVIEWED = True  # Set to True to skip already reviewed files
 
 def find_candidate_folders(base_path):
     folders = []
@@ -101,31 +102,42 @@ class CodeReviewApp:
 
         self.load_next_folder()
 
-    def load_next_folder(self):
-        if self.folder_index >= len(self.candidate_folders):
-            self.label.config(text="All folders reviewed.")
-            self.text.config(state=tk.NORMAL)
-            self.text.delete("1.0", tk.END)
-            self.text.config(state=tk.DISABLED)
-            self.yes_button.config(state=tk.DISABLED)
-            self.no_button.config(state=tk.DISABLED)
-            messagebox.showinfo("Done", "All folders reviewed.")
-            return
+def load_next_folder(self):
+    if self.folder_index >= len(self.candidate_folders):
+        self.label.config(text="All folders reviewed.")
+        self.text.config(state=tk.NORMAL)
+        self.text.delete("1.0", tk.END)
+        self.text.config(state=tk.DISABLED)
+        self.yes_button.config(state=tk.DISABLED)
+        self.no_button.config(state=tk.DISABLED)
+        messagebox.showinfo("Done", "All folders reviewed.")
+        return
 
-        self.current_folder = self.candidate_folders[self.folder_index]
-        refactored_path = self.current_folder["refactored_folder"]
-        #all .py but ignore __init__.py
-        self.files = glob.glob(os.path.join(refactored_path, "*.py"))
-        self.files = [f for f in self.files if "__init__.py" not in f]
-        
-        self.file_index = 0
-        self.folder_index += 1
+    self.current_folder = self.candidate_folders[self.folder_index]
+    refactored_path = self.current_folder["refactored_folder"]
+    all_files = glob.glob(os.path.join(refactored_path, "*.py"))
+    self.files = [f for f in all_files if "__init__.py" not in f]
 
-        if not self.files:
-            self.load_next_folder()
-        else:
-            self.label.config(text=f"Loaded {len(self.files)} files from: {refactored_path}")
-            self.show_file()
+    # Load reviewed files from CSV if SKIP_REVIEWED is enabled
+    if SKIP_REVIEWED:
+        reviewed_files = set()
+        csv_path = os.path.join(self.current_folder["parent"], "code_review.csv")
+        if os.path.isfile(csv_path):
+            with open(csv_path, newline='', encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    reviewed_files.add(row["file"])
+            self.files = [f for f in self.files if os.path.basename(f) not in reviewed_files]
+
+    self.file_index = 0
+    self.folder_index += 1
+
+    if not self.files:
+        self.load_next_folder()
+    else:
+        self.label.config(text=f"Loaded {len(self.files)} files from: {refactored_path}")
+        self.show_file()
+
 
     def show_file(self):
         if self.file_index >= len(self.files):

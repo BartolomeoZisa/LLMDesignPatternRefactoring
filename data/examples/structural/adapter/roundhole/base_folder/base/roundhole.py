@@ -11,6 +11,13 @@ class RoundHole:
 
     def fits(self, peg):
         return self.get_radius() >= peg.get_radius()
+    
+    def fits_other(self, peg, type):
+        if type == "square":
+            return self.get_radius() >= peg.get_radius() * math.sqrt(2) / 2
+        else:
+            raise ValueError("Unsupported peg type.")
+    
 
 
 class RoundPeg:
@@ -31,7 +38,3 @@ class SquarePeg:
 
     def get_width(self):
         return self._width
-
-    def get_radius(self):
-        # Calculate the radius of the smallest circle that can contain the square peg
-        return self._width * math.sqrt(2) / 2

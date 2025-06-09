@@ -1,21 +1,35 @@
-IdleDownState
-→ call_to_up() → MovingUpwardsState
+Idle States
+IdleDownState → call("up") → MovingUpwardsState
+(Elevator at bottom floor and called to go up.)
 
-MovingUpwardsState
-→ notify_arrived() → DoorsOpeningState
+IdleDownState → call("down") → DoorsOpeningDownState
+(Elevator at bottom floor and called to go down.)
 
-DoorsOpeningState
-→ notify_doors_opened() → DoorsClosingState
+IdleUpState → call("down") → MovingDownwardsState
+(Elevator at top floor and called to go down.)
 
-DoorsClosingState
-→ notify_door_closed_up() → IdleUpState
-→ notify_door_closed_down() → IdleDownState
+IdleUpState → call("up") → DoorsOpeningUpState
+(Elevator at top floor and called to go up.)
 
-IdleUpState
-→ call_to_down() → MovingDownwardsState
+Moving States
+MovingUpwardsState → notify_arrived() → DoorsOpeningUpState
+(Elevator arrives at the top floor.)
 
-MovingDownwardsState
-→ notify_arrived() → DoorsOpeningState
+MovingDownwardsState → notify_arrived() → DoorsOpeningDownState
+(Elevator arrives at the bottom floor.)
+
+Doors Opening
+DoorsOpeningUpState → notify_doors_opened() → DoorsClosingUpState
+(Doors open at the top floor.)
+
+DoorsOpeningDownState → notify_doors_opened() → DoorsClosingDownState
+(Doors open at the bottom floor.)
+
+Doors Closing
+DoorsClosingUpState → notify_door_closed() → IdleUpState
+(Doors close at the top floor.)
+
+DoorsClosingDownState → notify_door_closed() → IdleDownState
+(Doors close at the bottom floor.)
 
 
-Else error
