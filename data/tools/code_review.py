@@ -96,47 +96,50 @@ class CodeReviewApp:
 
         self.yes_button = tk.Button(button_frame, text="Yes (Good)", command=lambda: self.mark_file("yes"), state=tk.DISABLED)
         self.yes_button.pack(side=tk.LEFT, padx=5)
+        self.flawed_button = tk.Button(button_frame, text="Flawed", command=lambda: self.mark_file("flawed"), state=tk.DISABLED)
+        self.flawed_button.pack(side=tk.LEFT, padx=5)
 
         self.no_button = tk.Button(button_frame, text="No (Needs Fixing)", command=lambda: self.mark_file("no"), state=tk.DISABLED)
         self.no_button.pack(side=tk.LEFT, padx=5)
 
         self.load_next_folder()
 
-def load_next_folder(self):
-    if self.folder_index >= len(self.candidate_folders):
-        self.label.config(text="All folders reviewed.")
-        self.text.config(state=tk.NORMAL)
-        self.text.delete("1.0", tk.END)
-        self.text.config(state=tk.DISABLED)
-        self.yes_button.config(state=tk.DISABLED)
-        self.no_button.config(state=tk.DISABLED)
-        messagebox.showinfo("Done", "All folders reviewed.")
-        return
+    def load_next_folder(self):
+        if self.folder_index >= len(self.candidate_folders):
+            self.label.config(text="All folders reviewed.")
+            self.text.config(state=tk.NORMAL)
+            self.text.delete("1.0", tk.END)
+            self.text.config(state=tk.DISABLED)
+            self.yes_button.config(state=tk.DISABLED)
+            self.no_button.config(state=tk.DISABLED)
+            self.flawed_button.config(state=tk.DISABLED)
+            messagebox.showinfo("Done", "All folders reviewed.")
+            return
 
-    self.current_folder = self.candidate_folders[self.folder_index]
-    refactored_path = self.current_folder["refactored_folder"]
-    all_files = glob.glob(os.path.join(refactored_path, "*.py"))
-    self.files = [f for f in all_files if "__init__.py" not in f]
+        self.current_folder = self.candidate_folders[self.folder_index]
+        refactored_path = self.current_folder["refactored_folder"]
+        all_files = glob.glob(os.path.join(refactored_path, "*.py"))
+        self.files = [f for f in all_files if "__init__.py" not in f]
 
-    # Load reviewed files from CSV if SKIP_REVIEWED is enabled
-    if SKIP_REVIEWED:
-        reviewed_files = set()
-        csv_path = os.path.join(self.current_folder["parent"], "code_review.csv")
-        if os.path.isfile(csv_path):
-            with open(csv_path, newline='', encoding="utf-8") as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    reviewed_files.add(row["file"])
-            self.files = [f for f in self.files if os.path.basename(f) not in reviewed_files]
+        # Load reviewed files from CSV if SKIP_REVIEWED is enabled
+        if SKIP_REVIEWED:
+            reviewed_files = set()
+            csv_path = os.path.join(self.current_folder["parent"], "code_review.csv")
+            if os.path.isfile(csv_path):
+                with open(csv_path, newline='', encoding="utf-8") as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        reviewed_files.add(row["file"])
+                self.files = [f for f in self.files if os.path.basename(f) not in reviewed_files]
 
-    self.file_index = 0
-    self.folder_index += 1
+        self.file_index = 0
+        self.folder_index += 1
 
-    if not self.files:
-        self.load_next_folder()
-    else:
-        self.label.config(text=f"Loaded {len(self.files)} files from: {refactored_path}")
-        self.show_file()
+        if not self.files:
+            self.load_next_folder()
+        else:
+            self.label.config(text=f"Loaded {len(self.files)} files from: {refactored_path}")
+            self.show_file()
 
 
     def show_file(self):
@@ -152,11 +155,12 @@ def load_next_folder(self):
         self.label.config(text=f"Reviewing: {os.path.basename(current_file)}")
         self.yes_button.config(state=tk.NORMAL)
         self.no_button.config(state=tk.NORMAL)
+        self.flawed_button.config(state=tk.NORMAL)
 
     def mark_file(self, decision):
         current_file = self.files[self.file_index]
         file_name = os.path.basename(current_file)
-        result_row = {"file": file_name, "decision": decision}
+        result_row = {"file": file_name, "applies_pattern": decision}
         self.save_result_to_csv(result_row)
         self.file_index += 1
         self.show_file()
@@ -169,7 +173,7 @@ def load_next_folder(self):
         file_exists = os.path.isfile(csv_path)
 
         with open(csv_path, "a", newline='', encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=["file", "decision"])
+            writer = csv.DictWriter(f, fieldnames=["file", "applies_pattern"])
             if not file_exists:
                 writer.writeheader()
             writer.writerow(row)
