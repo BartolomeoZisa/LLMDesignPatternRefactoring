@@ -84,6 +84,8 @@ class RefactorFrontEnd:
         with open(os.path.join(self.full_save_path, "refactored", "__init__.py"), 'w') as f:
             pass
 
+        
+
         metadata = {
             "code_path": self.code_path,
             "refactored_tests_path": self.refactored_tests_path,
@@ -95,9 +97,23 @@ class RefactorFrontEnd:
             "strategy": self.strategy,
             "timestamp": self.timestamp,
             "prompt_length": self.prompt_length,
-            "response_length": self.response_length
+            "response_length": self.response_length,
         }
 
+        #info.json is in parent of code_path folder
+        parent_folder = os.path.dirname(os.path.dirname(self.code_path))
+        info_path = os.path.join(parent_folder, "info.json")
+        info = {}
+        try: 
+            if os.path.exists(info_path):
+                with open(info_path, "r") as f:
+                    info = json.load(f)
+        except:
+            print(f"[WARNING] Could not read info.json from {info_path}. It may be malformed or missing.", file=sys.stderr)
+
+        if info is not None:
+            for key in info:
+                metadata[key] = info[key]
 
         with open(os.path.join(self.full_save_path, "parameters.json"), "w") as f:
             json.dump(metadata, f, indent=4)
