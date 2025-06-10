@@ -432,7 +432,15 @@ cafecito has unecessary classes, while ice cream has some unnecessary classes an
 
 prompt xml4 changed the order of input code and part of the prompt, did terrible on adapter pattern and in tests for adapter and state 
 
+prompt xml5 
+cafecito 2/3 good
+icecream 2/3 dictionaries
+sword good
 
+adapter:
+calculator 2/3 good
+gridmovement no interface
+roundhole no
 
 Code review
  add skip when already reviewed

@@ -6,6 +6,25 @@ import pandas as pd
 RESULTS_DIR = "../results"
 OUTPUT_DIR = "../report/summary.csv"
 
+example_types = {
+    "roundhole": "standard",
+    "gridmovement": "custom",
+    "calculator": "custom",
+    "icecream": "custom",
+    "cafecito": "custom",
+    "sword": "standard",
+    "simplemarket": "custom",
+    "trafficlight": "custom",
+    "elevator": "standard",
+    "validator": "standard",
+    "graphtraversal": "custom",
+    "vector": "custom",
+    "monster": "custom",
+    "wand": "custom",
+    "car": "standard"
+}
+
+
 def load_code_review(path):
     """Load code_review.csv into a dictionary: {filename -> 'yes'/'no'/'flawed'}"""
     review_map = {}
@@ -37,13 +56,18 @@ def parse_json_metadata(json_path):
     """Extract metadata from parameters.json."""
     with open(json_path) as f:
         data = json.load(f)
+
+    code_file = os.path.basename(data.get("code_path", ""))
+    base_name = os.path.splitext(code_file)[0].lower()
+
     return {
         "pattern_name": data.get("pattern_name", "Unknown"),
-        "code_file": os.path.basename(data.get("code_path", "")),
+        "code_file": code_file,
         "model_name": data.get("model_name", "Unknown"),
         "timestamp": data.get("timestamp", ""),
-        "type": ""
+        "type": example_types.get(base_name, "unknown")
     }
+
 
 def generate_summary(json_path, test_csv_path, code_review_path, output_path):
     review_data = load_code_review(code_review_path)
@@ -62,6 +86,7 @@ def generate_summary(json_path, test_csv_path, code_review_path, output_path):
         "Timestamp": meta["timestamp"]
     }
 
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     # Append to CSV
     df = pd.DataFrame([row])
     if not os.path.exists(output_path):
@@ -112,6 +137,10 @@ def process_all_iterations(base_dir, output_path=OUTPUT_DIR):
             test_csv_path = os.path.join(root, result_csv)
             review_path = os.path.join(root, review_file)
             generate_summary(json_path, test_csv_path, review_path, output_path)
+
+    if not os.path.exists(output_path):
+        print(f"No valid iterations found in {base_dir}.")
+        return
 
     sort_and_reassign_iterations(output_path)
 

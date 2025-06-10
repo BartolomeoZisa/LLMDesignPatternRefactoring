@@ -100,6 +100,8 @@ class RefactorFrontEnd:
             "response_length": self.response_length,
         }
 
+        '''
+        #I don't think this should be required to run the refactorer
         #info.json is in parent of code_path folder
         parent_folder = os.path.dirname(os.path.dirname(self.code_path))
         info_path = os.path.join(parent_folder, "info.json")
@@ -114,7 +116,7 @@ class RefactorFrontEnd:
         if info is not None:
             for key in info:
                 metadata[key] = info[key]
-
+        '''
         with open(os.path.join(self.full_save_path, "parameters.json"), "w") as f:
             json.dump(metadata, f, indent=4)
 

@@ -4,35 +4,52 @@ class InvalidStateTransitionError(Exception):
         super().__init__(f"Invalid operation: {method}() not allowed in {state}.")
 
 # ---------- Elevator State Classes ----------
-class IdleDownState:
+class ElevatorState:
     def __init__(self, elevator):
         self.elevator = elevator
 
-class IdleUpState:
+    def call(self, direction):
+        raise InvalidStateTransitionError
+
+    def sensor_arrival_triggered(self):
+        raise InvalidStateTransitionError
+
+    def sensor_doors_opened(self):
+        raise InvalidStateTransitionError
+
+    def sensor_door_closed(self):
+        raise InvalidStateTransitionError
+
+
+class IdleDownState(ElevatorState):
     def __init__(self, elevator):
         self.elevator = elevator
 
-class MovingUpwardsState:
+class IdleUpState(ElevatorState):
     def __init__(self, elevator):
         self.elevator = elevator
 
-class MovingDownwardsState:
+class MovingUpwardsState(ElevatorState):
     def __init__(self, elevator):
         self.elevator = elevator
 
-class DoorsOpeningUpState:
+class MovingDownwardsState(ElevatorState):
     def __init__(self, elevator):
         self.elevator = elevator
 
-class DoorsOpeningDownState:
+class DoorsOpeningUpState(ElevatorState):
     def __init__(self, elevator):
         self.elevator = elevator
 
-class DoorsClosingUpState:
+class DoorsOpeningDownState(ElevatorState):
     def __init__(self, elevator):
         self.elevator = elevator
 
-class DoorsClosingDownState:
+class DoorsClosingUpState(ElevatorState):
+    def __init__(self, elevator):
+        self.elevator = elevator
+
+class DoorsClosingDownState(ElevatorState):
     def __init__(self, elevator):
         self.elevator = elevator
 
@@ -41,7 +58,7 @@ class Elevator:
     def __init__(self):
         self.state = IdleDownState(self)
 
-    def set_state(self, new_state_instance):  # Expecting an object, not a class
+    def set_state(self, new_state_instance): 
         print(f"Transitioning to: {type(new_state_instance).__name__}")
         self.state = new_state_instance
 
