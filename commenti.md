@@ -430,6 +430,10 @@ prompt xml3 + less description did horrible
 prompt xml1 + less description did worse on tests
 cafecito has unecessary classes, while ice cream has some unnecessary classes and dictionaries
 
+prompt xml4 changed the order of input code and part of the prompt, did terrible on adapter pattern and in tests for adapter and state 
+
+
+
 Code review
  add skip when already reviewed
  Per tenere traccia dei risultati, creare una tabella (foglio excel?) dove ogni riga indichi: (1) pattern, (2) esempio considerato, (3) standard/custom, (4) iterazione, (5) passa/non passa i test, (6) applica/non applica il design pattern.
