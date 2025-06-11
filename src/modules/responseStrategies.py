@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from openai import OpenAI
 from google import genai
 from google.genai import types
-
+import re
 
 api_key = os.getenv("OPENAI_API_KEY")
 gemini_api_key = os.getenv("GOOGLE_API_KEY")
@@ -114,15 +114,16 @@ class GeminiResponse(ResponseStrategy):
         return self.format_response(response.text) 
     
     def format_response(self, response):
-        """Format the Gemini response to remove markdown"""
+        """Format the OpenAI response to remove markdown"""
         #the input is of type ```{languange} {code}```
         print("response before formatting:")
         print(response)
         response = response.split("\n")
-        #remove the first line
-        response = response[1:]
-        #remove the last line
-        response = response[:-1]
-        #join the lines
+        if response[0].startswith("```") and response[-1].endswith("```"):
+            #remove the first line
+            response = response[1:]
+            #remove the last line
+            response = response[:-1]
+            #join the lines
         response = "\n".join(response)
         return response

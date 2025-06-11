@@ -6,12 +6,13 @@ PATTERNDESCRIPTIONPATH = "src/patterns/patternGOFjson"
 
 #this is for the main
 PROMPTFILE = "src/prompts/promptgeminixml.txt"
-NUMITERATIONS = 3
-SAVEFOLDERPATH = "llm"
+NUMITERATIONS = 12
+SAVEFOLDERPATH = "geminiflash2.5_1"
 ASKSKIP = False
 PROJECT_ROOT = "data/examples"
 TEMPERATURE = 1
 IGNOREHEADERS = []
-MODEL_NAME = "gemini-2.5-flash-preview-05-20"
+#empty string means the default model
+MODEL_NAME = ""
 MAX_LENGTH = 8192
-STRATEGY = "gemini"
+STRATEGY = "gemini"  # or "gemini"

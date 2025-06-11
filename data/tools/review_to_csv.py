@@ -13,7 +13,7 @@ example_types = {
     "icecream": "custom",
     "cafecito": "custom",
     "sword": "standard",
-    "simplemarket": "custom",
+    "stall": "custom",
     "trafficlight": "custom",
     "elevator": "standard",
     "validator": "standard",

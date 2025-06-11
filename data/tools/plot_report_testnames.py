@@ -6,16 +6,22 @@ import json
 
 BASEDIR = "../results/"
 
+PARENTFOLDER = "geminiflash2.5_1"  # This is the name of the parent folder you want to use for grouping results.
+#gpt4o-mini
 
-def gather_full_test_results(base_dir="results"):
-    # Structure: { patternexample: { 'tests': { test_name: {passed, failed} }, 'errors': int } }
-    result = defaultdict(lambda: {'tests': defaultdict(lambda: {'passed': 0, 'failed': 0}), 'errors': 0})
+def gather_full_test_results(base_dir=BASEDIR):
+    # Structure: { parentfoldername: { patternexample: { 'tests': { test_name: {passed, failed} }, 'errors': int } } }
+    result = defaultdict(lambda: defaultdict(lambda: {'tests': defaultdict(lambda: {'passed': 0, 'failed': 0}), 'errors': 0}))
+
+    # Get the parent folder name based on the provided base_dir.
+    # This will be the name of the directory specified in BASEDIR.
 
     for root, dirs, files in os.walk(base_dir):
         for filename in files:
+            parent_folder_name = os.path.basename(os.path.dirname(root))
             if filename.endswith("test_results.csv"):
                 csv_path = os.path.join(root, filename)
-                
+
                 # Locate parameters.json in the same directory or a parent directory
                 params_path = os.path.join(root, "parameters.json")
                 patternexample = None
@@ -35,10 +41,10 @@ def gather_full_test_results(base_dir="results"):
 
                 try:
                     df = pd.read_csv(csv_path)
-                    
+
                     if df.empty:
                         print(f"Empty CSV treated as error: {csv_path}")
-                        result[patternexample]['errors'] += 1
+                        result[parent_folder_name][patternexample]['errors'] += 1
                         continue
 
                     if 'test' in df.columns and 'outcome' in df.columns:
@@ -46,11 +52,12 @@ def gather_full_test_results(base_dir="results"):
                             test_name = row['test'].split("::")[-1]
                             outcome = row['outcome']
                             if outcome in ['passed', 'failed']:
-                                result[patternexample]['tests'][test_name][outcome] += 1
+                                result[parent_folder_name][patternexample]['tests'][test_name][outcome] += 1
                 except Exception as e:
                     print(f"Error reading {csv_path}: {e}")
 
     return result
+
 
 
 def plot_stacked_test_results(results_dict):
@@ -85,7 +92,9 @@ def plot_stacked_test_results(results_dict):
 if __name__ == "__main__":
     
     results = gather_full_test_results(BASEDIR)
-    plot_stacked_test_results(results)
+    plot_stacked_test_results(results[PARENTFOLDER])
+    
+
 
 
 

@@ -456,6 +456,19 @@ roundhole is a bit questionable?
 
 there are some errors either because the code isn't finished 
 or because it's forgetting imports (this is probably a problem in my parsing)
+still problems in formmatting
+
+xml6 openai tried using comments for structure, but there are some errors.
+cafecito is good
+icecream has dictionaries
+sword is bad
+
+xml5 still seems the best for openai
+
+adapter:
+calculator good
+gridmovent 1/3 good
+roundhole 3/3 flawed
 
 Code review
  add skip when already reviewed
