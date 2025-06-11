@@ -1,7 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 import networkx as nx
-import graphutils
+import data.tools.modules.graphutils as graphutils
 
 
 

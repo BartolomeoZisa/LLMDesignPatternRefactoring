@@ -470,6 +470,18 @@ calculator good
 gridmovent 1/3 good
 roundhole 3/3 flawed
 
+geminixml prompt
+Adapter good
+
+Decorator
+cafecito is good
+icecream sometimes has dictionaries 8/15
+sword is good
+
+
+state 
+kinda flawed, traffic light bias from the example, puts singleton, is it ok?.
+
 Code review
  add skip when already reviewed
  Per tenere traccia dei risultati, creare una tabella (foglio excel?) dove ogni riga indichi: (1) pattern, (2) esempio considerato, (3) standard/custom, (4) iterazione, (5) passa/non passa i test, (6) applica/non applica il design pattern.
@@ -478,6 +490,11 @@ Should i put another file in results folder, or just the report sheet?
 should I dirty the refactorer with info?
 
 ADDED GEMINI, CHANGE THE FRONTEND, IT'S TERRIBLE
+Kinda fixed, but maybe make it more modular
 
 might be useful to put as many arguments as you like (how? in the refactorer)
 
+
+
+put language choice in the frontend refactorer tool
+fix iteration in the csv report

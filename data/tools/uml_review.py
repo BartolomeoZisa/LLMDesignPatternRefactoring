@@ -3,7 +3,7 @@ import csv
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
-from graphutils import *
+from data.tools.modules.graphutils import *
 import json
 import glob
 import networkx as nx

@@ -4,7 +4,7 @@ import json
 import pandas as pd
 
 RESULTS_DIR = "../results"
-OUTPUT_DIR = "../report/summary.csv"
+OUTPUT_DIR = "../report/report.csv"
 
 example_types = {
     "roundhole": "standard",
@@ -14,7 +14,7 @@ example_types = {
     "cafecito": "custom",
     "sword": "standard",
     "stall": "custom",
-    "trafficlight": "custom",
+    "traffic_light": "custom",
     "elevator": "standard",
     "validator": "standard",
     "graphtraversal": "custom",
@@ -80,6 +80,7 @@ def generate_summary(json_path, test_csv_path, code_review_path, output_path):
         "Pattern": meta["pattern_name"].capitalize(),
         "Example File": meta["code_file"],
         "Standard/Custom": meta["type"],
+        "Iteration": None,
         "All Tests Passed": "Yes" if test_result else "No",
         "Applies Design Pattern": applies_pattern_status.capitalize(),
         "Model Name": meta["model_name"],
@@ -94,14 +95,14 @@ def generate_summary(json_path, test_csv_path, code_review_path, output_path):
     else:
         df.to_csv(output_path, mode="a", header=False, index=False)
 
-    print(f"Added {meta['code_file']} @ {meta['timestamp']} to {output_path}")
+    #print(f"Added {meta['code_file']} @ {meta['timestamp']} to {output_path}")
 
 def sort_and_reassign_iterations(csv_path=OUTPUT_DIR):
     """Sort CSV by example file and timestamp, and reassign iteration numbers."""
     df = pd.read_csv(csv_path)
 
     # Sort by 'Example File' and 'Timestamp'
-    df.sort_values(by=["Example File", "Timestamp"], inplace=True)
+    df.sort_values(by=["Pattern","Example File", "Timestamp"], inplace=True)
 
     # Reassign Iteration numbers within each Example File group
     df["Iteration"] = df.groupby("Example File").cumcount() + 1
@@ -128,6 +129,10 @@ def process_all_iterations(base_dir, output_path=OUTPUT_DIR):
         os.remove(output_path)
 
     for root, dirs, files in os.walk(base_dir):
+        if root.endswith("__"):
+            continue
+        if root.endswith("refactored"):
+            continue
         result_csv = next((f for f in files if f.endswith("_test_results.csv")), None)
         json_file = next((f for f in files if f == "parameters.json"), None)
         review_file = next((f for f in files if f == "code_review.csv"), None)

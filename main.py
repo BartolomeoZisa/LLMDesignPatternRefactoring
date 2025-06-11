@@ -20,17 +20,15 @@ def main():
         print(f"Pattern name: {pattern_name}")
         print(f"Folder: {parentfolder}")
 
-        if config.ASKSKIP:
-            user_input = input("Do you want to skip this pattern? (y/n): ").strip().lower()
-            if user_input == 'y':
-                print("Skipping this pattern.")
-                continue
-            elif user_input != 'n':
-                print("Invalid input. Please enter 'y' or 'n'.")
-                continue
 
         base_files = [f for f in base_files if "__init__.py" not in f]
         refactored_tests = [f for f in refactored_tests if "__init__.py" not in f]
+
+        if config.FILETOREFACTOR:
+            base_files = [f for f in base_files if os.path.basename(f) in config.FILETOREFACTOR]
+        if not base_files:
+            print("[WARNING] No files to refactor or test found in this match. Skipping...")
+            continue
 
         code_path = base_files[0]
         test_path = refactored_tests[0]

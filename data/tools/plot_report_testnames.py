@@ -60,7 +60,7 @@ def gather_full_test_results(base_dir=BASEDIR):
 
 
 
-def plot_stacked_test_results(results_dict):
+def plot_stacked_test_results(results_dict, parent_folder_name, save_plots=False, save_dir="../report/test_plots"):
     for patternexample, data in results_dict.items():
         tests = data['tests']
         errors = data['errors']
@@ -68,9 +68,8 @@ def plot_stacked_test_results(results_dict):
         test_names = list(tests.keys())
         passed_counts = [tests[t]['passed'] for t in test_names]
         failed_counts = [tests[t]['failed'] for t in test_names]
-        error_counts = [errors] * len(test_names)  # add all errors on top of every bar
+        error_counts = [errors] * len(test_names)
 
-        # Compute bottoms for stacking
         bottom_failed = passed_counts
         bottom_error = [p + f for p, f in zip(passed_counts, failed_counts)]
 
@@ -85,14 +84,23 @@ def plot_stacked_test_results(results_dict):
         plt.xticks(rotation=45, ha='right')
         plt.legend()
         plt.tight_layout()
-        plt.show()
+
+        if save_plots:
+            output_folder = os.path.join(save_dir, parent_folder_name)
+            os.makedirs(output_folder, exist_ok=True)
+            output_path = os.path.join(output_folder, f"{patternexample}.png")
+            plt.savefig(output_path)
+            plt.close()
+            print(f"Saved plot to {output_path}")
+        else:
+            plt.show()
 
 
 
 if __name__ == "__main__":
-    
     results = gather_full_test_results(BASEDIR)
-    plot_stacked_test_results(results[PARENTFOLDER])
+    plot_stacked_test_results(results[PARENTFOLDER], PARENTFOLDER, save_plots=True)
+
     
 
 
