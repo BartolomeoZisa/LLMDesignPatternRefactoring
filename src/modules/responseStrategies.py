@@ -1,8 +1,12 @@
 import os
 from abc import ABC, abstractmethod
 from openai import OpenAI
+from google import genai
+from google.genai import types
+
 
 api_key = os.getenv("OPENAI_API_KEY")
+gemini_api_key = os.getenv("GOOGLE_API_KEY")
 
 
 
@@ -75,6 +79,41 @@ class OpenAIResponse(ResponseStrategy):
 
     def format_response(self, response):
         """Format the OpenAI response to remove markdown"""
+        #the input is of type ```{languange} {code}```
+        print("response before formatting:")
+        print(response)
+        response = response.split("\n")
+        #remove the first line
+        response = response[1:]
+        #remove the last line
+        response = response[:-1]
+        #join the lines
+        response = "\n".join(response)
+        return response
+
+
+class GeminiResponse(ResponseStrategy):
+    def __init__(self, model_name: str = "gemini-2.5-flash-preview-05-20", temperature: float = 1, max_length: int = 2048):
+        super().__init__()
+        self.client = genai.Client(api_key=gemini_api_key)
+        self.model_name = model_name
+        self.temperature = temperature
+        self.max_length = max_length
+        
+    def process(self, prompt):  
+        response = self.client.models.generate_content(
+            model=self.model_name,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                max_output_tokens=self.max_length,
+                temperature=self.temperature,
+            ),
+        )
+
+        return self.format_response(response.text) 
+    
+    def format_response(self, response):
+        """Format the Gemini response to remove markdown"""
         #the input is of type ```{languange} {code}```
         print("response before formatting:")
         print(response)

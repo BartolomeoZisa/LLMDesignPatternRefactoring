@@ -447,8 +447,9 @@ Code review
  Per tenere traccia dei risultati, creare una tabella (foglio excel?) dove ogni riga indichi: (1) pattern, (2) esempio considerato, (3) standard/custom, (4) iterazione, (5) passa/non passa i test, (6) applica/non applica il design pattern.
 Should i put another file in results folder, or just the report sheet?
 
+should I dirty the refactorer with info?
 
-
+ADDED GEMINI, CHANGE THE FRONTEND, IT'S TERRIBLE
 
 might be useful to put as many arguments as you like (how? in the refactorer)
 

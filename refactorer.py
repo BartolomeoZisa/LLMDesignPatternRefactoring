@@ -4,8 +4,28 @@ import datetime
 import json
 import sys
 from src.modules.promptcreator import PromptCreator
-from src.modules.responseStrategies import OpenAIResponse
+from src.modules.responseStrategies import *
 import src.modules.config as config
+
+
+class ResponseFactory:
+    @staticmethod
+    def get_strategy(strategy_name, args):
+        if strategy_name == "openai":
+            return OpenAIResponse(
+                model_name=args.get("model_name", "gpt-4o-mini-2024-07-18"),
+                temperature=args.get("temperature", 1.0),
+                max_length=args.get("max_length", 2048)
+            )
+        elif strategy_name == "gemini":
+            return GeminiResponse(
+                model_name=args.get("model_name", "gemini-2.5-flash-preview-05-20"),
+                temperature=args.get("temperature", 1.0),
+                max_length=args.get("max_length", 2048)
+            )
+        else:
+            raise ValueError(f"Unsupported strategy: {strategy_name}")
+
 
 
 class RefactorFrontEnd:
@@ -27,8 +47,6 @@ class RefactorFrontEnd:
         self.response_length = 0
         self.timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        if self.strategy not in ["openai", "oolama"]:
-            raise ValueError(f"Unsupported strategy: {self.strategy}")
 
     def generate_prompt(self, ignore_keys=None):
         print("[INFO] Generating prompt...", file=sys.stderr)
@@ -51,14 +69,12 @@ class RefactorFrontEnd:
         os.makedirs(os.path.join(self.full_save_path, "refactored"), exist_ok=True)
 
     def get_response_strategy(self):
-        if self.strategy == "openai":
-            return OpenAIResponse(
-                model_name=self.model_name,
-                temperature=self.temperature,
-                max_length=self.max_length
-            )
-        elif self.strategy == "oolama":
-            raise NotImplementedError("Oolama strategy is not yet implemented.")
+        return ResponseFactory.get_strategy(
+            self.strategy,
+            {"model_name": self.model_name,
+             "temperature": self.temperature,
+            "max_length": self.max_length}
+        )
 
     def generate_refactored_code(self):
         print(f"[INFO] Using strategy: {self.strategy}", file=sys.stderr)
@@ -142,8 +158,8 @@ if __name__ == "__main__":
     parser.add_argument("--temperature", type=float, default=1.0, help="Temperature for LLM")
     parser.add_argument("--model_name", type=str, default="gpt-4o-mini-2024-07-18", help="Model name")
     parser.add_argument("--max_length", type=int, default=2048, help="Max token length")
-    parser.add_argument("--strategy", type=str, default="openai", choices=["openai", "oolama"],
-                        help="Strategy to use for LLM response")
+    parser.add_argument("--strategy", type=str, default="openai", choices=["openai", "gemini"],
+                        help="Strategy to use for LLM response, options: openai, gemini")
     parser.add_argument("--ignore_keys", type=str, default="",
                         help="Comma-separated keys to ignore in metadata and prompt generation")
 
