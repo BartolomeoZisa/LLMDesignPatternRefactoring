@@ -83,11 +83,12 @@ class OpenAIResponse(ResponseStrategy):
         print("response before formatting:")
         print(response)
         response = response.split("\n")
-        #remove the first line
-        response = response[1:]
-        #remove the last line
-        response = response[:-1]
-        #join the lines
+        if response[0].startswith("```") and response[-1].endswith("```"):
+            #remove the first line
+            response = response[1:]
+            #remove the last line
+            response = response[:-1]
+            #join the lines
         response = "\n".join(response)
         return response
 

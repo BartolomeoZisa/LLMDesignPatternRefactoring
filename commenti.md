@@ -442,6 +442,21 @@ calculator 2/3 good
 gridmovement no interface
 roundhole no
 
+prompt xml5 with GEMINI is really good, 
+but it's ignoring "don't include comments", or maybe not interpreting comments as "code comments"
+It's pretty verbose, but maybe this helps the ai, I could try it with openai
+cafecito is good
+icecream has dictionaries
+sword is good
+
+adapter:
+calculator good
+gridmovent good
+roundhole is a bit questionable?
+
+there are some errors either because the code isn't finished 
+or because it's forgetting imports (this is probably a problem in my parsing)
+
 Code review
  add skip when already reviewed
  Per tenere traccia dei risultati, creare una tabella (foglio excel?) dove ogni riga indichi: (1) pattern, (2) esempio considerato, (3) standard/custom, (4) iterazione, (5) passa/non passa i test, (6) applica/non applica il design pattern.

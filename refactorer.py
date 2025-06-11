@@ -13,18 +13,19 @@ class ResponseFactory:
     def get_strategy(strategy_name, args):
         if strategy_name == "openai":
             return OpenAIResponse(
-                model_name=args.get("model_name", "gpt-4o-mini-2024-07-18"),
+                model_name=args.get("model_name") or "gpt-4o-mini-2024-07-18",
                 temperature=args.get("temperature", 1.0),
                 max_length=args.get("max_length", 2048)
             )
         elif strategy_name == "gemini":
             return GeminiResponse(
-                model_name=args.get("model_name", "gemini-2.5-flash-preview-05-20"),
+                model_name=args.get("model_name") or "gemini-2.5-flash-preview-05-20",
                 temperature=args.get("temperature", 1.0),
                 max_length=args.get("max_length", 2048)
             )
         else:
             raise ValueError(f"Unsupported strategy: {strategy_name}")
+
 
 
 
@@ -156,7 +157,7 @@ if __name__ == "__main__":
     parser.add_argument("prompt_file_path", help="Path to prompt template file")
     parser.add_argument("save_folder_path", help="Folder where the output will be saved")
     parser.add_argument("--temperature", type=float, default=1.0, help="Temperature for LLM")
-    parser.add_argument("--model_name", type=str, default="gpt-4o-mini-2024-07-18", help="Model name")
+    parser.add_argument("--model_name", type=str, help="Model name")
     parser.add_argument("--max_length", type=int, default=2048, help="Max token length")
     parser.add_argument("--strategy", type=str, default="openai", choices=["openai", "gemini"],
                         help="Strategy to use for LLM response, options: openai, gemini")
