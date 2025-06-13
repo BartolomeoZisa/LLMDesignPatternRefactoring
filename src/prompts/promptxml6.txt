@@ -33,7 +33,7 @@ When possible avoid bad coding practiceses, especially those incoherent with a p
 </tests>
 
 <language>
-python 
+{language} 
 </language>
 
 <output>

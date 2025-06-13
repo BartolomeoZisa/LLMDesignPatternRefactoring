@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 from openai import OpenAI
 from google import genai
 from google.genai import types
+import sys
+import traceback
 import re
 
 api_key = os.getenv("OPENAI_API_KEY")
@@ -24,7 +26,14 @@ class ResponseStrategy(ABC):
         pass
     def length(self, response : str) -> int:
         """Returns the length of the response."""
-        return len(response.split(" "))
+        try:
+            return len(response.split(" "))
+        except AttributeError:
+            print("Error: response is not a string or is None.")
+            return 0
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            return 0
 
 class ResponseFromCLI(ResponseStrategy):
 
@@ -50,6 +59,7 @@ class OpenAIResponse(ResponseStrategy):
         super().__init__()
         # Initialize OpenAI client
         self.client = OpenAI(api_key=api_key)
+        self.client.debug = True  # Enable debug mode for detailed logging
 
 
     def process(self, prompt):
@@ -58,23 +68,23 @@ class OpenAIResponse(ResponseStrategy):
         
         # Call OpenAI API with a single prompt, no conversation history or batching
         try:
-            response = self.client.chat.completions.create(
+            response = self.client.responses.create(
                 model=self.model_name,  # You can adjust the model as needed
-                messages=[
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=self.max_length,  # You can adjust this value depending on the output length
+                input=prompt,
+                max_output_tokens=self.max_length,  # You can adjust this value depending on the output length
                 temperature=self.temperature  # Adjust the temperature for randomness
             )
             # Extract the generated response from OpenAI's API response
-            refactored_code = response.choices[0].message.content
+            refactored_code = response.output[0].content[0].text
             #print(refactored_code)
             refactored_code = self.format_response(refactored_code)
             #print(refactored_code)
             return refactored_code
         
         except Exception as e:
-            print(f"Error during OpenAI API call: {e}")
+            print(f"Error during OpenAI API call: {e} ")
+            traceback.print_exc()
+            sys.exit(1)  # Exit the program if there's an error
             return None
 
     def format_response(self, response):

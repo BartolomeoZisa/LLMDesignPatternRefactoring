@@ -31,7 +31,7 @@ class ResponseFactory:
 
 class RefactorFrontEnd:
     def __init__(self, code_path, refactored_tests_path, pattern_name, prompt_file_path,
-                 temperature, model_name, max_length, strategy, save_folder_path):
+                 temperature, model_name, max_length, strategy, save_folder_path, language):
         self.code_path = code_path
         self.refactored_tests_path = refactored_tests_path
         self.pattern_name = pattern_name
@@ -46,6 +46,7 @@ class RefactorFrontEnd:
         self.prompt = ""
         self.prompt_length = 0
         self.response_length = 0
+        self.language = language
         self.timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
@@ -57,7 +58,8 @@ class RefactorFrontEnd:
             tests_path=self.refactored_tests_path,
             design_pattern_name=self.pattern_name,
             design_pattern_description_folder=config.PATTERNDESCRIPTIONPATH,
-            ignore_keys=ignore_keys
+            ignore_keys=ignore_keys,
+            language= self.language
         )
         self.prompt = prompt_creator.generate_prompt()
         self.prompt_length = len(self.prompt.split())
@@ -156,6 +158,7 @@ if __name__ == "__main__":
     parser.add_argument("pattern_name", help="Design pattern name")
     parser.add_argument("prompt_file_path", help="Path to prompt template file")
     parser.add_argument("save_folder_path", help="Folder where the output will be saved")
+    parser.add_argument("--language", type=str, default="python", help="Programming language of the code")
     parser.add_argument("--temperature", type=float, default=1.0, help="Temperature for LLM")
     parser.add_argument("--model_name", type=str, help="Model name")
     parser.add_argument("--max_length", type=int, default=2048, help="Max token length")
@@ -176,7 +179,8 @@ if __name__ == "__main__":
         model_name=args.model_name,
         max_length=args.max_length,
         strategy=args.strategy,
-        save_folder_path=args.save_folder_path
+        save_folder_path=args.save_folder_path,
+        language=args.language
     )
     frontend.run(ignore_keys=ignore_keys)
 

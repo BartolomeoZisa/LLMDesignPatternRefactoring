@@ -34,7 +34,7 @@ there shouldn't be parts that have to change when adding a potential new class, 
 </tests>
 
 <language>
-python 
+{language} 
 </language>
 
 <output>

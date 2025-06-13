@@ -9,6 +9,7 @@ class PromptCreator:
         design_pattern_name="",
         design_pattern_description_folder="",
         tests_path="",
+        language="python",
         ignore_keys=None
     ):
         self.file_reader = FileReader(TxtReader())
@@ -20,6 +21,7 @@ class PromptCreator:
         self.design_pattern_description_folder = design_pattern_description_folder
         self.design_pattern_name = design_pattern_name
         self.ignore_keys = ignore_keys if ignore_keys else []
+        self.language = language
 
         # Content
         self.prompt_template = self.read_txt_file(prompt_template_path)
@@ -79,7 +81,8 @@ class PromptCreator:
             code=self.code,
             design_pattern_name=self.design_pattern_name,
             design_pattern_description=self.design_pattern_description,
-            tests=self.tests
+            tests=self.tests,
+            language=self.language
         )
 
 
