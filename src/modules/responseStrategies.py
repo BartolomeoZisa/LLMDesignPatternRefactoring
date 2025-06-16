@@ -6,6 +6,7 @@ from google.genai import types
 import sys
 import traceback
 import re
+from responseFactory import ResponseStrategyRegistry
 
 api_key = os.getenv("OPENAI_API_KEY")
 gemini_api_key = os.getenv("GOOGLE_API_KEY")
@@ -52,7 +53,7 @@ class ResponseFromCLI(ResponseStrategy):
         return refactored_code
         
 
-
+@ResponseStrategyRegistry.register("openai")
 class OpenAIResponse(ResponseStrategy):
 
     def __init__(self, model_name: str = "gpt-4o-mini-2024-07-18", temperature: float = 1, max_length: int = 2048):
@@ -103,6 +104,7 @@ class OpenAIResponse(ResponseStrategy):
         return response
 
 
+@ResponseStrategyRegistry.register("gemini")
 class GeminiResponse(ResponseStrategy):
     def __init__(self, model_name: str = "gemini-2.5-flash-preview-05-20", temperature: float = 1, max_length: int = 2048):
         super().__init__()

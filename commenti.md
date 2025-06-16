@@ -505,3 +505,9 @@ might be useful to put as many arguments as you like (how? in the refactorer)
 
 
 put language choice in the frontend refactorer tool (DONE)
+
+-----------------------
+
+try putting the prompt and the jsons in the code
+also try python decorators for factory
+use kwargs

@@ -6,25 +6,7 @@ import sys
 from src.modules.promptcreator import PromptCreator
 from src.modules.responseStrategies import *
 import src.modules.config as config
-
-
-class ResponseFactory:
-    @staticmethod
-    def get_strategy(strategy_name, args):
-        if strategy_name == "openai":
-            return OpenAIResponse(
-                model_name=args.get("model_name") or "gpt-4o-mini-2024-07-18",
-                temperature=args.get("temperature", 1.0),
-                max_length=args.get("max_length", 2048)
-            )
-        elif strategy_name == "gemini":
-            return GeminiResponse(
-                model_name=args.get("model_name") or "gemini-2.5-flash-preview-05-20",
-                temperature=args.get("temperature", 1.0),
-                max_length=args.get("max_length", 2048)
-            )
-        else:
-            raise ValueError(f"Unsupported strategy: {strategy_name}")
+from src.modules.responseFactory import ResponseFactory
 
 
 
@@ -72,12 +54,13 @@ class RefactorFrontEnd:
         os.makedirs(os.path.join(self.full_save_path, "refactored"), exist_ok=True)
 
     def get_response_strategy(self):
-        return ResponseFactory.get_strategy(
-            self.strategy,
-            {"model_name": self.model_name,
+        params = {
+            "model_name": self.model_name,
              "temperature": self.temperature,
-            "max_length": self.max_length}
-        )
+            "max_length": self.max_length
+        }
+        return ResponseFactory.get_strategy(self.strategy, **params)
+
 
     def generate_refactored_code(self):
         print(f"[INFO] Using strategy: {self.strategy}", file=sys.stderr)
