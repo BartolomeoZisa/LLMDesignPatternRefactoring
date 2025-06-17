@@ -6,7 +6,7 @@ from google.genai import types
 import sys
 import traceback
 import re
-from responseFactory import ResponseStrategyRegistry
+from src.modules.responseFactory import ResponseStrategyRegistry
 
 api_key = os.getenv("OPENAI_API_KEY")
 gemini_api_key = os.getenv("GOOGLE_API_KEY")

@@ -11,7 +11,7 @@ df['All Tests Passed'] = df['All Tests Passed'].str.strip().str.capitalize()
 df['Applies Design Pattern'] = df['Applies Design Pattern'].str.strip().str.capitalize()
 
 # Define group keys
-group_keys = ['Pattern', 'Example File', 'Standard/Custom']
+group_keys = ['Pattern', 'Example File', 'Standard/Custom', 'Model Name']
 
 # Group and aggregate (exclude grouping columns explicitly)
 summary_data = []
@@ -26,6 +26,7 @@ for group_values, group_df in df.groupby(group_keys):
         'Pattern': group_values[0],
         'Example File': group_values[1],
         'Standard/Custom': group_values[2],
+        'Model Name': group_values[3],
         'Total Iterations': total,
         'All Tests Passed Count': passed,
         '% All Tests Passed': round(passed / total * 100, 2),

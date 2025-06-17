@@ -1,4 +1,4 @@
-from responseStrategies import * 
+from src.modules.responseStrategies import * 
 import inspect
 
 
@@ -37,7 +37,7 @@ class ResponseFactory:
 
         # Inject default model from class if not provided
         if "model_name" not in kwargs or not kwargs["model_name"]:
-            default_model = getattr(strategy_cls, "default_model", None)
+            default_model = ResponseStrategyRegistry.get_default_model(strategy_name)
             if default_model:
                 kwargs["model_name"] = default_model
 
