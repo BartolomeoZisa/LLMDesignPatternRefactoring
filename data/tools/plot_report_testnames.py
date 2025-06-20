@@ -6,7 +6,7 @@ import json
 
 BASEDIR = "../results/"
 
-PARENTFOLDER = "geminiflash2.5_1"  # This is the name of the parent folder you want to use for grouping results.
+PARENTFOLDER = "gpt4.0"  # This is the name of the parent folder you want to use for grouping results.
 #gpt4o-mini
 
 def gather_full_test_results(base_dir=BASEDIR):

@@ -102,7 +102,7 @@ def sort_and_reassign_iterations(csv_path=OUTPUT_DIR):
     df = pd.read_csv(csv_path)
 
     # Sort by 'Example File' and 'Timestamp'
-    df.sort_values(by=["Pattern","Example File", "Timestamp"], inplace=True)
+    df.sort_values(by=["Model Name", "Pattern","Example File", "Timestamp"], inplace=True)
 
     # Reassign Iteration numbers within each Example File group
     df["Iteration"] = df.groupby("Example File").cumcount() + 1

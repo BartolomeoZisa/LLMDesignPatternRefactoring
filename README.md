@@ -32,23 +32,26 @@
 ## Usage
 
 ```bash
-python3 refactorer.py [-h] [--temperature TEMPERATURE] [--model_name MODEL_NAME] [--max_length MAX_LENGTH] [--strategy {openai,oolama}]
+python3 refactorer.py [-h] [--temperature TEMPERATURE] [--model_name MODEL_NAME] [--max_length MAX_LENGTH] [--strategy]
                      code_path refactored_tests_path pattern_name prompt_file_path save_folder_path
 ```
 
 ### Arguments
 
-| Argument                | Type  | Description                                                                          |
-| ----------------------- | ----- | ------------------------------------------------------------------------------------ |
-| `code_path`             | str   | Path to the source code file to be refactored.                                       |
-| `refactored_tests_path` | str   | Path to the existing test file for reference.                                        |
-| `pattern_name`          | str   | Name of the design pattern to apply (e.g., Singleton, Observer).                     |
-| `prompt_file_path`      | str   | Path to the prompt template to be used.                                              |
-| `save_folder_path`      | str   | Directory where output files will be stored.                                         |
-| `--temperature`         | float | Sampling temperature for model generation (default: 1.0).                            |
-| `--model_name`          | str   | Name of the model to use (default: `gpt-4o-mini-2024-07-18`).                        |
-| `--max_length`          | int   | Maximum number of tokens allowed in the output (default: 2048).                      |
-| `--strategy`            | str   | Strategy to use for LLM response. Supported: `openai`, `oolama` (default: `openai`). |
+| Argument                | Type  | Description                                                                                      |
+| ----------------------- | ----- | ------------------------------------------------------------------------------------------------ |
+| `code_path`             | str   | Path to the original code file to be refactored.                                                 |
+| `refactored_tests_path` | str   | Path to the test file for reference.                                                             |
+| `pattern_name`          | str   | Name of the design pattern to apply (e.g., decorator, factorymethod, adapter, state, strategy).  |
+| `prompt_file_path`      | str   | Path to the prompt template file.                                                                |
+| `save_folder_path`      | str   | Directory where the output files will be saved.                                                  |
+| `--language`            | str   | Programming language of the code (default: `python`).                                            |
+| `--temperature`         | float | Sampling temperature for LLM generation (default: `1.0`).                                        |
+| `--model_name`          | str   | Name of the model to use (default will be used if not specified).                                |
+| `--max_length`          | int   | Maximum number of tokens allowed in the output (default: `2048`).                                |
+| `--strategy`            | str   | Strategy to use for LLM response, supported options: `openai`, `gemini` (default: `openai`).     |
+| `--ignore_keys`         | str   | Comma-separated list of metadata or keys to ignore during prompt generation and output metadata. |
+
 
 ---
 
@@ -93,9 +96,7 @@ All outputs are saved in a timestamped directory inside save_folder_path named a
 
 ## Notes
 
-* Currently, only the `openai` strategy is implemented.
-* The `oolama` strategy raises `NotImplementedError`.
-* Prompt and refactoring logic rely on external modules (`PromptCreator`, `OpenAIResponse`).
+* Currently, only the `openai` `gemini` strategies are implemented.
 * To use openAI from command line a OPENAI_API_KEY environment variable must be set.
 
 ---

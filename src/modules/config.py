@@ -6,7 +6,7 @@ PATTERNDESCRIPTIONPATH = "src/patterns/patternGOFjson"
 
 #this is for the main
 PROMPTFILE = "src/prompts/promptxml5.txt"
-NUMITERATIONS = 3
+NUMITERATIONS = 12
 SAVEFOLDERPATH ="gpt4.0" #"prova_1" #
 FILETOREFACTOR = [] # if empty, all files in the match will be refactored
 PROJECT_ROOT = "data/examples"
