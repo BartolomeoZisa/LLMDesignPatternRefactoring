@@ -5,19 +5,28 @@ import json
 import sys
 from src.modules.promptcreator import PromptCreator
 from src.modules.responseStrategies import *
-import src.modules.config as config
 from src.modules.responseFactory import ResponseFactory
+
+
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "refactor_config.json")
+
+with open(CONFIG_PATH, "r") as f:
+    _config_data = json.load(f)
+
+PROMPT_TEMPLATE_PATH = _config_data["PROMPT_TEMPLATE_PATH"]
+PATTERNDESCRIPTIONPATH = _config_data["PATTERNDESCRIPTIONPATH"]
+
 
 
 
 
 class RefactorFrontEnd:
-    def __init__(self, code_path, refactored_tests_path, pattern_name, prompt_file_path,
+    def __init__(self, code_path, refactored_tests_path, pattern_name,
                  temperature, model_name, max_length, strategy, save_folder_path, language):
         self.code_path = code_path
         self.refactored_tests_path = refactored_tests_path
         self.pattern_name = pattern_name
-        self.prompt_file_path = prompt_file_path
+        self.prompt_file_path = PROMPT_TEMPLATE_PATH
         self.temperature = temperature
         self.model_name = model_name
         self.max_length = max_length
@@ -39,7 +48,7 @@ class RefactorFrontEnd:
             code_path=self.code_path,
             tests_path=self.refactored_tests_path,
             design_pattern_name=self.pattern_name,
-            design_pattern_description_folder=config.PATTERNDESCRIPTIONPATH,
+            design_pattern_description_folder=PATTERNDESCRIPTIONPATH,
             ignore_keys=ignore_keys,
             language= self.language
         )
@@ -139,7 +148,6 @@ if __name__ == "__main__":
     parser.add_argument("code_path", help="Path to the original code file")
     parser.add_argument("refactored_tests_path", help="Path to the test file")
     parser.add_argument("pattern_name", help="Design pattern name")
-    parser.add_argument("prompt_file_path", help="Path to prompt template file")
     parser.add_argument("save_folder_path", help="Folder where the output will be saved")
     parser.add_argument("--language", type=str, default="python", help="Programming language of the code")
     parser.add_argument("--temperature", type=float, default=1.0, help="Temperature for LLM")
@@ -157,7 +165,6 @@ if __name__ == "__main__":
         code_path=args.code_path,
         refactored_tests_path=args.refactored_tests_path,
         pattern_name=args.pattern_name,
-        prompt_file_path=args.prompt_file_path,
         temperature=args.temperature,
         model_name=args.model_name,
         max_length=args.max_length,

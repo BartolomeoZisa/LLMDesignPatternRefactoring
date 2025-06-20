@@ -43,7 +43,6 @@ def main():
             code_path,
             test_path,
             pattern,
-            config.PROMPTFILE,
             save_folder,
             "--temperature", str(config.TEMPERATURE),
             "--model_name", config.MODEL_NAME,

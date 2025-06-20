@@ -1,0 +1,4 @@
+{
+  "PROMPT_TEMPLATE_PATH": "src/prompts/promptxml5.txt",
+  "PATTERNDESCRIPTIONPATH": "src/patterns/patternGOFjson"
+}
