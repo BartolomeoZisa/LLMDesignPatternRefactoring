@@ -514,3 +514,43 @@ try putting the prompt and the jsons in the code !!!
 also try python decorators for factory
 use kwargs
 done
+
+important, change the implementation!!!
+1 less argument, json config
+all tools should be used in the folder they are defined in.
+
+maybe add an image for the pipeline?
+
+change the size of tests!!
+
+say the prompt used for openai4o is a bit different
+
+adapter 
+
+difficulty with interfaces
+
+decorator
+
+icecream has the a lot of dictionaries both in classes and outside
+
+cafecito sometimes has
+concrete beverage
+
+sword has less classes than needed missing abstract sword
+
+state good
+
+factory
+
+monster sometimes defines wrong ways to create (random)
+
+car redifines create_car, not applicating the pattern
+
+
+consistent naming is important
+bias from language
+if you are closer to the right solution it's easier
+benchmarks for big prompt and code change
+balance between too many and too few classes
+comments are the reason why gemini is good? But a lot more tokens are generated
+training biases for car, maybe?
