@@ -515,15 +515,11 @@ also try python decorators for factory
 use kwargs
 done
 
-important, change the implementation!!!
-1 less argument, json config
-all tools should be used in the folder they are defined in.
 
-maybe add an image for the pipeline?
 
-change the size of tests!!
 
-say the prompt used for openai4o is a bit different
+
+
 
 adapter 
 
@@ -547,10 +543,38 @@ monster sometimes defines wrong ways to create (random)
 car redifines create_car, not applicating the pattern
 
 
-consistent naming is important
+important, change the implementation!!!
+1 less argument, json config
+all tools should be used in the folder they are defined in.
+
+maybe add an image for the pipeline?
+
+change the size of tests!!
+
+say the prompt used for openai4o is a bit different
+
+say about plantuml and the github repository
+
+
+
+
+consistent naming is important for tests
+iterative process on prompt and what i learned
 bias from language
 if you are closer to the right solution it's easier
 benchmarks for big prompt and code change
 balance between too many and too few classes
 comments are the reason why gemini is good? But a lot more tokens are generated
 training biases for car, maybe?
+giving instructions to fix something makes the llm not pay attention to other instructions
+gemini sometimes ends too early, or makes spelling mistakes
+gemini makes complex solutions, but this sometimes leads to errors
+gpt makes simpler solutions that pass tests but don't refactor
+custom and standard might influence both in good and bad (car)
+
+reverse engineering might be a problem
+too few examples
+lack of variety
+not many parameters were tried
+too easy
+more patterns together

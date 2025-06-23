@@ -3,10 +3,11 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import json
+import sys
 
 BASEDIR = "../results/"
 
-PARENTFOLDER = "gpt4.0"  # This is the name of the parent folder you want to use for grouping results.
+PARENTFOLDER = sys.argv[1] if len(sys.argv) > 1 else "geminiflash2.5_1"   # This is the name of the parent folder you want to use for grouping results.
 #gpt4o-mini
 
 def gather_full_test_results(base_dir=BASEDIR):
@@ -73,17 +74,23 @@ def plot_stacked_test_results(results_dict, parent_folder_name, save_plots=False
         bottom_failed = passed_counts
         bottom_error = [p + f for p, f in zip(passed_counts, failed_counts)]
 
-        plt.figure(figsize=(10, 5))
-        plt.bar(test_names, passed_counts, label='Passed', color='mediumseagreen')
-        plt.bar(test_names, failed_counts, bottom=bottom_failed, label='Failed', color='lightcoral')
-        plt.bar(test_names, error_counts, bottom=bottom_error, label='Errors', color='gray', alpha=0.5)
+        fig_width = max(10, 0.75 * len(test_names))  # dynamic width
+        plt.figure(figsize=(fig_width, 6))
+        plt.bar(test_names, passed_counts, label='Passed', color='mediumseagreen', width=0.6)
+        plt.bar(test_names, failed_counts, bottom=bottom_failed, label='Failed', color='lightcoral', width=0.6)
+        plt.bar(test_names, error_counts, bottom=bottom_error, label='Errors', color='gray', alpha=0.5, width=0.6)
 
-        plt.xlabel("Test Name")
-        plt.ylabel("Number of Test Runs")
-        plt.title(f"Test Results for Pattern Example: {patternexample}")
-        plt.xticks(rotation=45, ha='right')
-        plt.legend()
+        max_y = max([p + f + e for p, f, e in zip(passed_counts, failed_counts, error_counts)])
+        plt.ylim(0, max_y + 2)
+
+        plt.xlabel("Test Name", fontsize=12)
+        plt.ylabel("Number of Test Runs", fontsize=12)
+        plt.title(f"Test results for pattern example: {patternexample}", fontsize=14)
+        plt.xticks(rotation=45, ha='right', fontsize=10)
+        plt.yticks(fontsize=10)
+        plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
         plt.tight_layout()
+
 
         if save_plots:
             output_folder = os.path.join(save_dir, parent_folder_name)

@@ -1,0 +1,16 @@
+Example File,Type,Pattern,Applied,Flawed,Not Applied,Passed Tests,Perfect
+calculator.py,custom,Adapter,60.0 %,26.67 %,13.33 %,86.67 %,60.0 %
+gridmovement.py,custom,Adapter,0.0 %,100.0 %,0.0 %,100.0 %,0.0 %
+roundhole.py,standard,Adapter,6.67 %,93.33 %,0.0 %,100.0 %,6.67 %
+icecream.py,custom,Decorator,6.67 %,86.67 %,6.67 %,60.0 %,0.0 %
+sword.py,custom,Decorator,26.67 %,0.0 %,73.33 %,93.33 %,26.67 %
+cafecito.py,standard,Decorator,73.33 %,26.67 %,0.0 %,100.0 %,73.33 %
+monster.py,custom,Factorymethod,100.0 %,0.0 %,0.0 %,53.33 %,53.33 %
+wand.py,custom,Factorymethod,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
+car.py,standard,Factorymethod,60.0 %,6.67 %,33.33 %,100.0 %,60.0 %
+Stall.py,custom,State,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
+elevator.py,custom,State,100.0 %,0.0 %,0.0 %,73.33 %,73.33 %
+traffic_light.py,standard,State,100.0 %,0.0 %,0.0 %,60.0 %,60.0 %
+Vector.py,custom,Strategy,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
+graphtraversal.py,custom,Strategy,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
+validator.py,standard,Strategy,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
