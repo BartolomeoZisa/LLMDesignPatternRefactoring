@@ -78,27 +78,14 @@ All outputs are saved in a timestamped directory inside save_folder_path named a
 └── parameters.json
 ```
 
----
-
-## Class: `RefactorFrontEnd`
-
-### Methods
-
-* **`__init__`**: Initializes refactoring configuration and parameters.
-* **`generate_prompt()`**: Builds a prompt using `PromptCreator`.
-* **`prepare_save_directory()`**: Creates output folders with timestamp.
-* **`get_response_strategy()`**: Selects and returns the model strategy.
-* **`generate_refactored_code()`**: Submits the prompt to the model and stores the response.
-* **`save_outputs()`**: Saves all output files.
-* **`run()`**: Executes the full workflow (prompt → response → save).
-
----
-
 ## Notes
 
 * Currently, only the `openai` `gemini` strategies are implemented.
 * To use openAI from command line a OPENAI_API_KEY environment variable must be set.
+* To use Gemini from command line a GOOGLE_API_KEY environment variable must be set.
 
+
+#
 ---
 
 # `tester.py` – Automated Testing Tool for Refactored Code

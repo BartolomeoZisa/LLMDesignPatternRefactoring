@@ -555,26 +555,62 @@ say the prompt used for openai4o is a bit different
 
 say about plantuml and the github repository
 
+about the prompt say you used the strategy to tell its role!!!
 
 
 
 consistent naming is important for tests
-iterative process on prompt and what i learned
+underscore_case is preferred
 bias from language
-if you are closer to the right solution it's easier
-benchmarks for big prompt and code change
-balance between too many and too few classes
-comments are the reason why gemini is good? But a lot more tokens are generated
-training biases for car, maybe?
+iterative process on prompt and what i learned
+less description did horrible (no Motivation and Sample Code) -> learning from examples is important, refer to openai guide
+tests and implementation did worse
+changed the order of input code did terrible (code and tests at the end) refer to openai guide
+tests and implementation did worse
+benchmarks for big prompt and code change (gemini good, what about gpt?)
+balance between too many and too few classes (adapter and decorator)
+comments are the reason why gemini is good? But a lot more tokens are generated sometimes even 3x as much
+training biases for car because common, maybe (gpt that tends to simplicity)?
 giving instructions to fix something makes the llm not pay attention to other instructions
-gemini sometimes ends too early, or makes spelling mistakes
-gemini makes complex solutions, but this sometimes leads to errors
+gemini sometimes ends generation too early, or makes spelling mistakes
+gemini makes complex solutions, but this sometimes leads to errors (singleton added in state)
 gpt makes simpler solutions that pass tests but don't refactor
-custom and standard might influence both in good and bad (car)
+gpt4o mini and gpt4o have very similar results
+custom and standard might influence both in good and bad (car) ways
+if you are closer to the right solution it's easier to implement the pattern
+table with Example File Type Pattern Applied Flawed Not Applied Passed Tests Perfect (both tests and applied) 
+grouped bar charts confronting Applied Passed Tests Perfect
+telling it to only return code maybe made the results bad?
 
-reverse engineering might be a problem
+
+overall performance
+
+should i add a drawing for the pipeline?
+
+
+reverse engineering the already refactored code might be a problem
+
 too few examples
+only 5 design patterns
 lack of variety
+many parameters to consider (how different, how difficult, how many classes?)
 not many parameters were tried
+some start code was closer to the refactor, some was further
 too easy
-more patterns together
+try with real code
+
+try asking the ai to find the pattern to apply
+more patterns together at the same time 
+
+still effort to think of the refactoring 
+but 
+tests edit distance with diff
+
+other studies used metrics that can be calculated easily. difficult to scale -> 
+either do static analysis in typed languages
+or dynamic extension tests in languages such as python
+try LLM as a judge and see if it has the same output as humans
+
+regenerate response???
+
+plantuml!!!! and json change github repo

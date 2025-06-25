@@ -55,13 +55,13 @@ def create_pie_charts(csv_file, name_column, value_columns, output_name_column, 
                               markeredgecolor='black', markeredgewidth=1)
                    for color in full_colors]
 
-        ax.legend(handles=handles, labels=short_labels, title="Design Pattern",
+        '''ax.legend(handles=handles, labels=short_labels, title="Design Pattern",
                   loc='center left', bbox_to_anchor=(1.05, 0.5),
                   fontsize=14, title_fontsize=16,
                   frameon=True, fancybox=True,
                   borderpad=1, borderaxespad=1,
                   edgecolor='gray', facecolor='white', shadow=True)
-
+        '''
         plt.tight_layout()
         chart_path = os.path.join(subdir, f"{output_name}.png")
         plt.savefig(chart_path, bbox_inches='tight')
@@ -69,7 +69,7 @@ def create_pie_charts(csv_file, name_column, value_columns, output_name_column, 
         print(f"Saved chart: {chart_path}")
 
 if __name__ == "__main__":
-    csv_file = "../report/summary.csv"
+    csv_file = "../../report/summary.csv"
     name_column = "Model Name"
     value_columns = ["Applies Design Pattern Yes", "Applies Design Pattern No", "Applies Design Pattern Flawed"]
     output_name_column = "Example File"

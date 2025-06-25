@@ -20,6 +20,8 @@ def get_all_files(folder_path):
     return files
 
 def compare_tests_in_all_dirs(root_dir):
+    avarage_diff = 0
+    total_files = 0
     for subdir, dirs, _ in os.walk(root_dir):
         if "base_folder" in dirs and "refactored_folder" in dirs:
             base_test_dir = os.path.join(subdir, "base_folder", "test")
@@ -44,6 +46,13 @@ def compare_tests_in_all_dirs(root_dir):
                     refactored_file = refactored_files[rel_path]
                     diff = compare_file_contents(base_file, refactored_file)
                     print(f"  {rel_path}: {diff}% different")
+                    avarage_diff += diff
+                    total_files += 1
+    if total_files > 0:
+        avarage_diff /= total_files
+        print(f"\nAverage difference across all compared test files: {avarage_diff:.2f}%")
+    else:
+        print("\nNo test files were compared.")
 
 # Example usage:
 # compare_tests_in_all_dirs("/path/to/root_dir")

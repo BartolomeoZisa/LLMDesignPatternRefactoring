@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import json
 import sys
 
-BASEDIR = "../results/"
+BASEDIR = "../../results/"
 
 PARENTFOLDER = sys.argv[1] if len(sys.argv) > 1 else "geminiflash2.5_1"   # This is the name of the parent folder you want to use for grouping results.
 #gpt4o-mini
@@ -51,6 +51,11 @@ def gather_full_test_results(base_dir=BASEDIR):
                     if 'test' in df.columns and 'outcome' in df.columns:
                         for _, row in df.iterrows():
                             test_name = row['test'].split("::")[-1]
+                            #remove leading test_ from test_name
+                            test_name = test_name.replace("test_", "", 1)
+                            #if test_name > 30 truncate
+                            if len(test_name) > 32:
+                                test_name = test_name[:32] + "..."
                             outcome = row['outcome']
                             if outcome in ['passed', 'failed']:
                                 result[parent_folder_name][patternexample]['tests'][test_name][outcome] += 1
@@ -61,7 +66,10 @@ def gather_full_test_results(base_dir=BASEDIR):
 
 
 
-def plot_stacked_test_results(results_dict, parent_folder_name, save_plots=False, save_dir="../report/test_plots"):
+import os
+import matplotlib.pyplot as plt
+
+def plot_stacked_test_results(results_dict, parent_folder_name, save_plots=False, save_dir="../../report/test_plots"):
     for patternexample, data in results_dict.items():
         tests = data['tests']
         errors = data['errors']
@@ -75,7 +83,8 @@ def plot_stacked_test_results(results_dict, parent_folder_name, save_plots=False
         bottom_error = [p + f for p, f in zip(passed_counts, failed_counts)]
 
         fig_width = max(10, 0.75 * len(test_names))  # dynamic width
-        plt.figure(figsize=(fig_width, 6))
+
+        plt.figure(figsize=(fig_width, 7))
         plt.bar(test_names, passed_counts, label='Passed', color='mediumseagreen', width=0.6)
         plt.bar(test_names, failed_counts, bottom=bottom_failed, label='Failed', color='lightcoral', width=0.6)
         plt.bar(test_names, error_counts, bottom=bottom_error, label='Errors', color='gray', alpha=0.5, width=0.6)
@@ -83,20 +92,62 @@ def plot_stacked_test_results(results_dict, parent_folder_name, save_plots=False
         max_y = max([p + f + e for p, f, e in zip(passed_counts, failed_counts, error_counts)])
         plt.ylim(0, max_y + 2)
 
-        plt.xlabel("Test Name", fontsize=12)
-        plt.ylabel("Number of Test Runs", fontsize=12)
-        plt.title(f"Test results for pattern example: {patternexample}", fontsize=14)
-        plt.xticks(rotation=45, ha='right', fontsize=10)
-        plt.yticks(fontsize=10)
-        plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+        plt.xlabel("Test Name", fontsize=20)            # bigger xlabel
+        plt.ylabel("Test Runs", fontsize=20)  # bigger ylabel
+        plt.title(f"Test results for pattern example: {patternexample}", fontsize=22)  # bigger title
+        plt.xticks(rotation=45, ha='right', fontsize=16)  # bigger x ticks
+        plt.yticks(fontsize=16)                            # bigger y ticks
+           
+        #plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5), fontsize=14)  # bigger legend
         plt.tight_layout()
-
 
         if save_plots:
             output_folder = os.path.join(save_dir, parent_folder_name)
             os.makedirs(output_folder, exist_ok=True)
             output_path = os.path.join(output_folder, f"{patternexample}.png")
             plt.savefig(output_path)
+            plt.close()
+            print(f"Saved plot to {output_path}")
+        else:
+            plt.show()
+
+
+def plot_stacked_test_results_horizontal(results_dict, parent_folder_name, save_plots=False, save_dir="../../report/test_plots"):
+    for patternexample, data in results_dict.items():
+        tests = data['tests']
+        errors = data['errors']
+
+        test_names = list(tests.keys())
+        passed_counts = [tests[t]['passed'] for t in test_names]
+        failed_counts = [tests[t]['failed'] for t in test_names]
+        error_counts = [errors] * len(test_names)
+
+        fig_height = max(8, 0.5 * len(test_names))
+        plt.figure(figsize=(14, fig_height))
+
+        y_pos = range(len(test_names))
+
+        plt.barh(y_pos, passed_counts, label='Passed', color='mediumseagreen', height=0.6)
+        plt.barh(y_pos, failed_counts, left=passed_counts, label='Failed', color='lightcoral', height=0.6)
+        plt.barh(y_pos, error_counts, left=[p + f for p, f in zip(passed_counts, failed_counts)], label='Errors', color='gray', alpha=0.5, height=0.6)
+
+        plt.yticks(y_pos, test_names, fontsize=18)
+        plt.xlabel("Number of Test Runs", fontsize=22, fontweight='bold', labelpad=15)  # space below xlabel
+        plt.title(f"Test results for pattern example: {patternexample}", fontsize=26, fontweight='bold', pad=25)  # space above title
+
+        plt.legend(loc='center left', bbox_to_anchor=(1.02, 0.5), fontsize=18, borderaxespad=0)
+
+        max_total = max([p + f + e for p, f, e in zip(passed_counts, failed_counts, error_counts)])
+        plt.xlim(0, max_total + 2)  # padding on right side
+
+        plt.subplots_adjust(left=0.3)  # space on left for y labels
+        plt.tight_layout()
+
+        if save_plots:
+            output_folder = os.path.join(save_dir, parent_folder_name)
+            os.makedirs(output_folder, exist_ok=True)
+            output_path = os.path.join(output_folder, f"{patternexample}.png")
+            plt.savefig(output_path, bbox_inches='tight')  # bbox_inches to fit legend
             plt.close()
             print(f"Saved plot to {output_path}")
         else:
