@@ -6,7 +6,7 @@
 
 ## Overview
 
-`refactorer.py` is a command-line tool designed to assist with automated code refactoring by leveraging language models (such as OpenAI's GPT). It generates a custom prompt based on a given design pattern and source code, submits the prompt to a selected language model, and saves the refactored output along with metadata.
+`refactorer.py` is a command-line tool designed to assist with automated code refactoring by leveraging language models (such as OpenAI's GPT). It generates a custom prompt based on a given design pattern, source code, and test file, submits the prompt to a selected language model, and saves the refactored output along with metadata.
 
 ---
 
@@ -47,7 +47,7 @@ python3 refactorer.py [-h] [--temperature TEMPERATURE] [--model_name MODEL_NAME]
 | Argument                | Type  | Description                                                                                      |
 | ----------------------- | ----- | ------------------------------------------------------------------------------------------------ |
 | `code_path`             | str   | Path to the original code file to be refactored.                                                 |
-| `refactored_tests_path` | str   | Path to the test file for reference.                                                             |
+| `refactored_tests_path` | str   | Path to the test file with tests the refactored code should pass.                                                             |
 | `pattern_name`          | str   | Name of the design pattern to apply (e.g., decorator, factorymethod, adapter, state, strategy).  |
 | `save_folder_path`      | str   | Directory where the output files will be saved.                                                  |
 | `--language`            | str   | Programming language of the code (default: `python`).                                            |
