@@ -44,7 +44,6 @@ python3 refactorer.py [-h] [--temperature TEMPERATURE] [--model_name MODEL_NAME]
 | `code_path`             | str   | Path to the original code file to be refactored.                                                 |
 | `refactored_tests_path` | str   | Path to the test file for reference.                                                             |
 | `pattern_name`          | str   | Name of the design pattern to apply (e.g., decorator, factorymethod, adapter, state, strategy).  |
-                                                             |
 | `save_folder_path`      | str   | Directory where the output files will be saved.                                                  |
 | `--language`            | str   | Programming language of the code (default: `python`).                                            |
 | `--temperature`         | float | Sampling temperature for LLM generation (default: `1.0`).                                        |
