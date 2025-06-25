@@ -14,6 +14,7 @@
 
 * Generates prompts for code transformation using design patterns.
 * Supports OpenAI-based models (e.g., GPT-4).
+* Supports Gemini models.
 * Modular strategy-based architecture for LLM integration.
 * Automatically creates organized folders with outputs.
 * Saves prompt, refactored code, and metadata for reproducibility.
@@ -33,7 +34,7 @@
 
 ```bash
 python3 refactorer.py [-h] [--temperature TEMPERATURE] [--model_name MODEL_NAME] [--max_length MAX_LENGTH] [--strategy]
-                     code_path refactored_tests_path pattern_name prompt_file_path save_folder_path
+                     code_path refactored_tests_path pattern_name save_folder_path
 ```
 
 ### Arguments
@@ -43,7 +44,7 @@ python3 refactorer.py [-h] [--temperature TEMPERATURE] [--model_name MODEL_NAME]
 | `code_path`             | str   | Path to the original code file to be refactored.                                                 |
 | `refactored_tests_path` | str   | Path to the test file for reference.                                                             |
 | `pattern_name`          | str   | Name of the design pattern to apply (e.g., decorator, factorymethod, adapter, state, strategy).  |
-| `prompt_file_path`      | str   | Path to the prompt template file.                                                                |
+                                                             |
 | `save_folder_path`      | str   | Directory where the output files will be saved.                                                  |
 | `--language`            | str   | Programming language of the code (default: `python`).                                            |
 | `--temperature`         | float | Sampling temperature for LLM generation (default: `1.0`).                                        |
