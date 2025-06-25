@@ -24,9 +24,14 @@
 ## Dependencies
 
 * Python 3.8+
-* `promptcreator` module
-* `responseStrategies` module (e.g., `OpenAIResponse`)
-* `config` module with `PATTERNDESCRIPTIONPATH`
+* google-genai
+* openai
+
+Install dependencies:
+
+```bash
+pip install openai google-genai
+```
 
 ---
 
