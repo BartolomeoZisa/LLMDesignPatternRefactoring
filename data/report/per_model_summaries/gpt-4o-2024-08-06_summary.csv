@@ -7,7 +7,7 @@ sword.py,custom,Decorator,26.67 %,0.0 %,73.33 %,93.33 %,26.67 %
 cafecito.py,standard,Decorator,73.33 %,26.67 %,0.0 %,100.0 %,73.33 %
 monster.py,custom,Factorymethod,100.0 %,0.0 %,0.0 %,53.33 %,53.33 %
 wand.py,custom,Factorymethod,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
-car.py,standard,Factorymethod,60.0 %,6.67 %,33.33 %,100.0 %,60.0 %
+car.py,standard,Factorymethod,60.0 %,0.0 %,40.0 %,100.0 %,60.0 %
 Stall.py,custom,State,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
 elevator.py,custom,State,100.0 %,0.0 %,0.0 %,73.33 %,73.33 %
 traffic_light.py,standard,State,100.0 %,0.0 %,0.0 %,60.0 %,60.0 %

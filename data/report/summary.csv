@@ -12,7 +12,7 @@ Decorator,icecream.py,custom,gpt-4o-2024-08-06,15,9,1,1,13
 Decorator,sword.py,custom,gemini-2.5-flash-preview-05-20,15,15,15,0,0
 Decorator,sword.py,custom,gpt-4o-2024-08-06,15,14,4,11,0
 Factorymethod,car.py,standard,gemini-2.5-flash-preview-05-20,15,15,15,0,0
-Factorymethod,car.py,standard,gpt-4o-2024-08-06,15,15,9,5,1
+Factorymethod,car.py,standard,gpt-4o-2024-08-06,15,15,9,6,0
 Factorymethod,monster.py,custom,gemini-2.5-flash-preview-05-20,15,13,13,2,0
 Factorymethod,monster.py,custom,gpt-4o-2024-08-06,15,8,15,0,0
 Factorymethod,wand.py,custom,gemini-2.5-flash-preview-05-20,15,14,15,0,0

@@ -53,9 +53,13 @@ def gather_full_test_results(base_dir=BASEDIR):
                             test_name = row['test'].split("::")[-1]
                             #remove leading test_ from test_name
                             test_name = test_name.replace("test_", "", 1)
-                            #if test_name > 30 truncate
-                            if len(test_name) > 32:
-                                test_name = test_name[:32] + "..."
+                            
+                            #test name is parsed as an acronym, take the first letter of each word
+                            test_name = ''.join(word[0].upper() for word in test_name.split('_'))
+                            
+                            #add the first part of the report filename as a prefix to the test name
+                            test_name = f"{parent_folder_name}_{test_name}"
+
                             outcome = row['outcome']
                             if outcome in ['passed', 'failed']:
                                 result[parent_folder_name][patternexample]['tests'][test_name][outcome] += 1
@@ -65,9 +69,6 @@ def gather_full_test_results(base_dir=BASEDIR):
     return result
 
 
-
-import os
-import matplotlib.pyplot as plt
 
 def plot_stacked_test_results(results_dict, parent_folder_name, save_plots=False, save_dir="../../report/test_plots"):
     for patternexample, data in results_dict.items():
@@ -82,7 +83,7 @@ def plot_stacked_test_results(results_dict, parent_folder_name, save_plots=False
         bottom_failed = passed_counts
         bottom_error = [p + f for p, f in zip(passed_counts, failed_counts)]
 
-        fig_width = max(10, 0.75 * len(test_names))  # dynamic width
+        fig_width = 10
 
         plt.figure(figsize=(fig_width, 7))
         plt.bar(test_names, passed_counts, label='Passed', color='mediumseagreen', width=0.6)
@@ -90,11 +91,11 @@ def plot_stacked_test_results(results_dict, parent_folder_name, save_plots=False
         plt.bar(test_names, error_counts, bottom=bottom_error, label='Errors', color='gray', alpha=0.5, width=0.6)
 
         max_y = max([p + f + e for p, f, e in zip(passed_counts, failed_counts, error_counts)])
-        plt.ylim(0, max_y + 2)
+        plt.ylim(0, max_y)
 
-        plt.xlabel("Test Name", fontsize=20)            # bigger xlabel
+        #plt.xlabel("Test Name", fontsize=20)            # bigger xlabel
         plt.ylabel("Test Runs", fontsize=20)  # bigger ylabel
-        plt.title(f"Test results for pattern example: {patternexample}", fontsize=22)  # bigger title
+        #plt.title(f"Test results for pattern example: {patternexample}", fontsize=22)  # bigger title
         plt.xticks(rotation=45, ha='right', fontsize=16)  # bigger x ticks
         plt.yticks(fontsize=16)                            # bigger y ticks
            
