@@ -22,10 +22,7 @@ if os.path.isdir(INPUT):
         df = df.drop(columns=[col for col in ignore_columns if col in df.columns], errors='ignore')
 
         # Sort by 'Pattern' and 'Standard/Custom'
-        df.sort_values(by=['Pattern', 'Standard/Custom'], inplace=True)
-
-        # Add a column for the file name
-        df['Example File'] = os.path.basename(filepath)
+        df.sort_values(by=['Pattern', 'Type'], inplace=True)
 
         # Save the modified DataFrame back to the list
         df_list[i] = (df, filepath)

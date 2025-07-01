@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import json
 import sys
 
-BASEDIR = "../../results/"
+BASEDIR = "../results/"
 
 PARENTFOLDER = sys.argv[1] if len(sys.argv) > 1 else "geminiflash2.5_1"   # This is the name of the parent folder you want to use for grouping results.
 #gpt4o-mini
@@ -96,23 +96,23 @@ def plot_stacked_test_results(results_dict, parent_folder_name, save_plots=False
         bottom_failed = passed_counts
         bottom_error = [p + f for p, f in zip(passed_counts, failed_counts)]
 
-        fig_width = 10
+        # === Fixed layout for 15 test slots ===
+        total_slots = 15
+        x_positions = [i * (total_slots / len(test_names)) for i in range(len(test_names))]
+        bar_width = 0.6
+        fig_width = 10  # fixed figure width as if for 15 bars
 
-        plt.figure(figsize=(fig_width, 7))
-        plt.bar(test_names, passed_counts, label='Passed', color='mediumseagreen', width=0.6)
-        plt.bar(test_names, failed_counts, bottom=bottom_failed, label='Failed', color='lightcoral', width=0.6)
-        plt.bar(test_names, error_counts, bottom=bottom_error, label='Errors', color='gray', alpha=0.5, width=0.6)
+        plt.figure(figsize=(fig_width, 6))
+        plt.bar(x_positions, passed_counts, label='Passed', color='mediumseagreen', width=bar_width)
+        plt.bar(x_positions, failed_counts, bottom=bottom_failed, label='Failed', color='lightcoral', width=bar_width)
+        plt.bar(x_positions, error_counts, bottom=bottom_error, label='Errors', color='gray', alpha=0.5, width=bar_width)
 
         max_y = max([p + f + e for p, f, e in zip(passed_counts, failed_counts, error_counts)])
         plt.ylim(0, max_y)
 
-        #plt.xlabel("Test Name", fontsize=20)            # bigger xlabel
-        plt.ylabel("Test Runs", fontsize=20)  # bigger ylabel
-        #plt.title(f"Test results for pattern example: {patternexample}", fontsize=22)  # bigger title
-        plt.xticks(rotation=45, ha='right', fontsize=16)  # bigger x ticks
-        plt.yticks(fontsize=16)                            # bigger y ticks
-           
-        #plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5), fontsize=14)  # bigger legend
+        plt.ylabel("Test Runs", fontsize=20)
+        plt.xticks(x_positions, test_names, rotation=45, ha='right', fontsize=16)
+        plt.yticks(fontsize=16)
         plt.tight_layout()
 
         if save_plots:
