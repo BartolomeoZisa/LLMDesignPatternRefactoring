@@ -47,22 +47,35 @@ def gather_full_test_results(base_dir=BASEDIR):
                         print(f"Empty CSV treated as error: {csv_path}")
                         result[parent_folder_name][patternexample]['errors'] += 1
                         continue
+                    
+                    simple_names = df['test'].apply(lambda x: x.split("::")[-1]).unique()
 
-                    if 'test' in df.columns and 'outcome' in df.columns:
-                        for _, row in df.iterrows():
-                            test_name = row['test'].split("::")[-1]
-                            #remove leading test_ from test_name
-                            test_name = test_name.replace("test_", "", 1)
-                            
-                            #test name is parsed as an acronym, take the first letter of each word
-                            test_name = ''.join(word[0].upper() for word in test_name.split('_'))
-                            
-                            #add the first part of the report filename as a prefix to the test name
-                            test_name = f"{parent_folder_name}_{test_name}"
+                    # 2) build a raw‐to‐tests mapping to find collisions
+                    raw2tests = defaultdict(list)
+                    for name in simple_names:
+                        stripped = name.replace("test_", "", 1)
+                        raw = ''.join(w[0].upper() for w in stripped.split('_'))
+                        raw2tests[raw].append(name)
 
-                            outcome = row['outcome']
-                            if outcome in ['passed', 'failed']:
-                                result[parent_folder_name][patternexample]['tests'][test_name][outcome] += 1
+                    # 3) build your final mapping: original full simple_name -> unique acronym
+                    acronyms = {}
+                    for raw, tests in raw2tests.items():
+                        if len(tests) == 1:
+                            # no collision
+                            acronyms[tests[0]] = f"{raw}"
+                        else:
+                            # collision: suffix _1, _2, ... 
+                            for idx, name in enumerate(tests, start=1):
+                                acronyms[name] = f"{raw}_{idx}"
+
+                    # 4) now aggregate
+                    for _, row in df.iterrows():
+                        simple = row['test'].split("::")[-1]
+                        key = acronyms.get(simple, f"UNKN")
+                        outcome = row['outcome']
+                        if outcome in ('passed', 'failed'):
+                            result[parent_folder_name][patternexample]['tests'][key][outcome] += 1
+
                 except Exception as e:
                     print(f"Error reading {csv_path}: {e}")
 

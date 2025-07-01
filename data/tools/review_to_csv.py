@@ -65,7 +65,10 @@ def parse_json_metadata(json_path):
         "code_file": code_file,
         "model_name": data.get("model_name", "Unknown"),
         "timestamp": data.get("timestamp", ""),
-        "type": example_types.get(base_name, "unknown")
+        "type": example_types.get(base_name, "unknown"),
+        "lines_of_code": data.get("lines_of_code", 0),
+        "response_length": data.get("response_length", 0),
+        "comment_lines": data.get("comment_lines", 0)
     }
 
 
@@ -84,7 +87,10 @@ def generate_summary(json_path, test_csv_path, code_review_path, output_path):
         "All Tests Passed": "Yes" if test_result else "No",
         "Applies Design Pattern": applies_pattern_status.capitalize(),
         "Model Name": meta["model_name"],
-        "Timestamp": meta["timestamp"]
+        "Timestamp": meta["timestamp"],
+        "lines_of_code": meta["lines_of_code"],
+        "response_length": meta["response_length"],
+        "comment_lines": meta["comment_lines"]
     }
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -109,7 +115,7 @@ def sort_and_reassign_iterations(csv_path=OUTPUT_DIR):
 
     # Reorder columns
     cols = ["Pattern", "Example File", "Standard/Custom", "Iteration",
-            "All Tests Passed", "Applies Design Pattern", "Model Name", "Timestamp"]
+            "All Tests Passed", "Applies Design Pattern", "Model Name", "Timestamp", "lines_of_code", "response_length", "comment_lines"]
     df = df[cols]
 
     df.to_csv(csv_path, index=False)

@@ -109,6 +109,7 @@ class RefactorFrontEnd:
             "timestamp": self.timestamp,
             "prompt_length": self.prompt_length,
             "response_length": self.response_length,
+            "lines_of_code": len(self.refactored_code.splitlines()),
         }
 
         '''

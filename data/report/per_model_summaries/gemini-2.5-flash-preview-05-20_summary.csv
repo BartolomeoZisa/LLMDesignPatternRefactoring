@@ -1,16 +1,16 @@
-Example File,Type,Pattern,Applied,Flawed,Not Applied,Passed Tests,Perfect
-calculator.py,custom,Adapter,80.0 %,20.0 %,0.0 %,100.0 %,80.0 %
-gridmovement.py,custom,Adapter,86.67 %,13.33 %,0.0 %,100.0 %,86.67 %
-roundhole.py,standard,Adapter,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
-icecream.py,custom,Decorator,46.67 %,53.33 %,0.0 %,100.0 %,46.67 %
-sword.py,custom,Decorator,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
-cafecito.py,standard,Decorator,100.0 %,0.0 %,0.0 %,86.67 %,86.67 %
-monster.py,custom,Factorymethod,86.67 %,0.0 %,13.33 %,86.67 %,86.67 %
-wand.py,custom,Factorymethod,100.0 %,0.0 %,0.0 %,93.33 %,93.33 %
-car.py,standard,Factorymethod,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
-Stall.py,custom,State,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
-elevator.py,custom,State,93.33 %,0.0 %,6.67 %,93.33 %,93.33 %
-traffic_light.py,standard,State,100.0 %,0.0 %,0.0 %,86.67 %,86.67 %
-Vector.py,custom,Strategy,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
-graphtraversal.py,custom,Strategy,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
-validator.py,standard,Strategy,100.0 %,0.0 %,0.0 %,100.0 %,100.0 %
+Example File,Type,Pattern,Passed Tests,Applied,Flawed,Not Applied,Perfect,LOC,Response Length,CL,Comment Density
+calculator.py,custom,Adapter,100.0 %,80.0 %,20.0 %,0.0 %,80.0 %,36.2,485.47,11.93,24.79 %
+gridmovement.py,custom,Adapter,100.0 %,86.67 %,13.33 %,0.0 %,86.67 %,44.6,674.47,16.73,27.28 %
+roundhole.py,standard,Adapter,100.0 %,100.0 %,0.0 %,0.0 %,100.0 %,34.0,479.0,17.87,34.45 %
+icecream.py,custom,Decorator,100.0 %,46.67 %,53.33 %,0.0 %,46.67 %,58.67,605.07,20.6,25.99 %
+sword.py,custom,Decorator,100.0 %,100.0 %,0.0 %,0.0 %,100.0 %,37.53,509.07,27.93,42.67 %
+cafecito.py,standard,Decorator,86.67 %,100.0 %,0.0 %,0.0 %,86.67 %,76.93,812.2,30.27,28.23 %
+monster.py,custom,Factorymethod,86.67 %,86.67 %,0.0 %,13.33 %,86.67 %,69.13,931.6,49.2,41.58 %
+wand.py,custom,Factorymethod,93.33 %,100.0 %,0.0 %,0.0 %,93.33 %,75.0,793.4,35.07,31.86 %
+car.py,standard,Factorymethod,100.0 %,100.0 %,0.0 %,0.0 %,100.0 %,61.8,738.07,28.53,31.59 %
+Stall.py,custom,State,100.0 %,100.0 %,0.0 %,0.0 %,100.0 %,80.0,859.0,20.8,20.63 %
+elevator.py,custom,State,93.33 %,93.33 %,0.0 %,6.67 %,93.33 %,68.47,817.13,31.33,31.4 %
+traffic_light.py,standard,State,86.67 %,100.0 %,0.0 %,0.0 %,86.67 %,45.27,967.13,60.13,57.05 %
+Vector.py,custom,Strategy,100.0 %,100.0 %,0.0 %,0.0 %,100.0 %,38.73,602.67,21.93,36.15 %
+graphtraversal.py,custom,Strategy,100.0 %,100.0 %,0.0 %,0.0 %,100.0 %,37.47,757.87,32.67,46.58 %
+validator.py,standard,Strategy,100.0 %,100.0 %,0.0 %,0.0 %,100.0 %,29.8,554.33,33.53,52.95 %

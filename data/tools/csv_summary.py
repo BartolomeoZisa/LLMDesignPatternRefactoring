@@ -54,16 +54,23 @@ for model_name, model_df in df.groupby('Model Name'):
         not_applied = (group_df['Applies Design Pattern'] == 'No').sum()
         flawed = (group_df['Applies Design Pattern'] == 'Flawed').sum()
         perfect = ((group_df['All Tests Passed'] == 'Yes') & (group_df['Applies Design Pattern'] == 'Yes')).sum()
+        LOC = group_df['lines_of_code'].mean() 
+        response_length = group_df['response_length'].mean()
+        CL = group_df['comment_lines'].mean() if 'comment_lines' in group_df.columns else 0
 
         model_summary_data.append({
             'Example File': group_values[1],
             'Type': group_values[2],
             'Pattern': group_values[0],
+            'Passed Tests': f"{round(passed / total * 100, 2)} %",
             'Applied': f"{round(applied / total * 100, 2)} %",
             'Flawed': f"{round(flawed / total * 100, 2)} %",
             'Not Applied': f"{round(not_applied / total * 100, 2)} %",
-            'Passed Tests': f"{round(passed / total * 100, 2)} %",
             'Perfect': f"{round(perfect / total * 100, 2)} %",
+            'LOC': f"{round(LOC, 2)}",
+            'Response Length': f"{round(response_length,2)}",
+            'CL' : f"{round(CL, 2)}",
+            'Comment Density': f"{round((CL / (LOC+CL)) * 100, 2)} %"
         })
 
 
